@@ -1065,6 +1065,28 @@ const CHARS = [
 const OLD_OUTFITS = { c_classic:0, c_royal:60, c_lime:90, c_pink:120, c_ninja:250, c_king:450 };
 
 // ================= shop catalogue =================
+// ---- Arcade's first boss (original character, not sold anywhere)
+const COACH = { id:'c_coach', name:'Coach Smash', boss:true, scale:1.22, c:{ body:'#7b4dff', limb:'#5a35c9', foot:'#ff3b5c' }, noEyes:true,
+  deco: k => {
+    const h = k.head;
+    // wraparound shades
+    const sh = k.mk(new THREE.SphereGeometry(0.245, 28, 10, Math.PI * 1.18, Math.PI * 0.64, Math.PI * 0.4, Math.PI * 0.16), k.M('#111522', { roughness: 0.05, metalness: 0.6, clearcoat: 1, side: DS }), 0, 0.012, 0, h); sh.scale.set(1.04, 1, 0.97);
+    const glint = k.mk(box(0.05, 0.012, 0.01), new THREE.MeshBasicMaterial({ color: '#ffffff' }), -0.07, 0.06, -0.232, h); glint.rotation.z = 0.5;
+    // red headband with a gold star
+    const band = k.mk(new THREE.TorusGeometry(0.238, 0.028, 10, 36), k.M('#ff3b5c', { roughness: 0.7, clearcoat: 0 }), 0, 0.12, 0, h); band.rotation.x = Math.PI / 2; band.scale.set(1.02, 0.95, 1);
+    const st = new THREE.Shape(); for (let i = 0; i < 10; i++) { const r = i % 2 ? 0.018 : 0.042, a = Math.PI / 2 + i * Math.PI / 5; i ? st.lineTo(Math.cos(a) * r, Math.sin(a) * r) : st.moveTo(Math.cos(a) * r, Math.sin(a) * r); }
+    k.mk(new THREE.ExtrudeGeometry(st, { depth: 0.012, bevelEnabled: false }), k.M('#ffd23f', { metalness: 0.7, roughness: 0.25 }), 0, 0.12, -0.262, h);
+    // smug lopsided grin with a gold tooth
+    const m = k.mk(new THREE.TorusGeometry(0.062, 0.015, 8, 24, Math.PI * 0.8), '#2a1414', 0.02, -0.07, -0.222, h); m.rotation.z = Math.PI + 0.35; m.rotation.x = -0.25;
+    k.mk(box(0.022, 0.02, 0.01), k.M('#ffd23f', { metalness: 0.8, roughness: 0.2 }), 0.045, -0.115, -0.222, h);
+    // whistle on a lanyard + big "C" on the chest
+    const lan = k.mk(new THREE.TorusGeometry(0.2, 0.01, 6, 30, Math.PI * 1.1), '#ffffff', 0, 1.0, -0.12, k.upper); lan.rotation.x = Math.PI / 2 + 0.55; lan.rotation.z = Math.PI * 0.95;
+    const w = k.mk(cyl(0.035, 0.035, 0.09, 14), k.M('#d8dde6', { metalness: 0.9, roughness: 0.15 }), 0, 0.86, -0.3, k.upper); w.rotation.z = Math.PI / 2;
+    k.mk(new THREE.TorusGeometry(0.075, 0.022, 8, 24, Math.PI * 1.45), '#ffd23f', 0, 0.68, -0.29, k.upper).rotation.z = Math.PI * 0.28;
+    // wristbands
+    for (const a of k.arms) k.mk(cyl(0.05, 0.05, 0.07, 14), '#ff3b5c', 0, -0.33, 0, a);
+  } };
+
 const SHOP = {
   char: CHARS,
   paddle: [
@@ -1966,7 +1988,7 @@ function newGame(m = 'cpu', opts = {}) {
   if (m === 'online' && role === 'guest') { phase = 'serve'; msgT = 0; updateHud(); return; }
   setupServe();
   const who = s => m === 'local' ? (s === 'p' ? 'P1' : 'P2') : s === 'p' ? 'you' : 'they';
-  const vs = arcade ? (arcade.step === 3 ? `👑 BOSS: MEGA ${cpuDef.name.toUpperCase()}` : `Stage ${arcadeStage()} · vs ${cpuDef.name}`) : tour ? `${ROUND_NAMES[tour.round]} · vs ${cpuDef.name}` : doubles ? `Doubles · ${partnerDef.name} & you` : m === 'cpu' ? `vs ${cpuDef.name}` : m === 'local' ? 'P1 vs P2' : 'vs Friend';
+  const vs = arcade ? (arcade.step === 3 ? `👑 BOSS: ${cpuDef.boss ? '' : 'MEGA '}${cpuDef.name.toUpperCase()}` : `Stage ${arcadeStage()} · vs ${cpuDef.name}`) : tour ? `${ROUND_NAMES[tour.round]} · vs ${cpuDef.name}` : doubles ? `Doubles · ${partnerDef.name} & you` : m === 'cpu' ? `vs ${cpuDef.name}` : m === 'local' ? 'P1 vs P2' : 'vs Friend';
   flash(`${vs} · ${who(server)} serve${m === 'local' ? 's' : ''}`, '#e8f542', 1.8);
 }
 function serveSide(who) { const even = score[who] % 2 === 0; return who === 'p' ? (even ? W * 0.75 : W * 0.25) : (even ? W * 0.25 : W * 0.75); }
@@ -2111,7 +2133,7 @@ function updateHud() {
   const me = mySide(), op = otherSide(me);
   $('numP').textContent = score[me]; $('numA').textContent = score[op];
   $('scP').classList.toggle('serving', server === me); $('scA').classList.toggle('serving', server === op);
-  $('cpuName').textContent = arcade && arcade.step === 3 && cpuDef ? `MEGA ${cpuDef.name.toUpperCase()}` : mode === 'local' ? 'P2' : mode === 'online' ? 'FRIEND' : doubles ? 'THEM' : (cpuDef ? cpuDef.name.toUpperCase() : 'CPU');
+  $('cpuName').textContent = arcade && arcade.step === 3 && cpuDef ? (cpuDef.boss ? 'COACH' : `MEGA ${cpuDef.name.toUpperCase()}`) : mode === 'local' ? 'P2' : mode === 'online' ? 'FRIEND' : doubles ? 'THEM' : (cpuDef ? cpuDef.name.toUpperCase() : 'CPU');
   $('midTxt').textContent = arcade ? `FIRST TO ${gameTo}` : doubles ? `${score[server]}-${score[otherSide(server)]}-${serverNum}` : `TO ${gameTo}`;
   $('meName').textContent = mode === 'local' ? 'P1' : 'YOU';
 }
@@ -3326,9 +3348,9 @@ function arcadeOpps() {
   const pool = CHARS.filter(c => c.id !== 'c_blanko' && !c.exclusive && c.id !== SAVE.equip.char);
   const pick = f => { const p = pool.filter(f); return p.splice(Math.floor(Math.random() * p.length), 1)[0]; };
   const a = pick(() => true), b = pick(c => c !== a), c = pick(x => x !== a && x !== b);
-  return [a, b, c, pick(x => x.group === 'myth')];
+  return [a, b, c, arcade && arcade.cycle > 0 ? pick(x => x.group === 'myth') : COACH];
 }
-function startArcade() { arcade = { cycle: 0, step: 0, opps: arcadeOpps() }; showLadder(); }
+function startArcade() { arcade = { cycle: 0, step: 0 }; arcade.opps = arcadeOpps(); showLadder(); }
 function arcadeAdvance() {
   arcade.step++;
   if (arcade.step > 3) { arcade.cycle++; arcade.step = 0; arcade.opps = arcadeOpps(); toast(`Loop ${arcade.cycle + 1}: they're getting tougher!`); }
@@ -3340,7 +3362,7 @@ function showLadder() {
   const L_ = $('ladder'); L_.innerHTML = '';
   arcade.opps.forEach((o, i) => {
     const d = document.createElement('div'); d.className = 'rung' + (i === 3 ? ' boss' : '') + (i === arcade.step ? ' now' : i < arcade.step ? ' done' : '');
-    d.innerHTML = `<img src="${thumb('char', o)}" alt=""><span class="tag">${i === 3 ? '👑 BOSS' : 'STAGE ' + (arcade.cycle * 4 + i + 1)}</span><span>${i === 3 ? 'Mega ' : ''}${o.name}</span>`;
+    d.innerHTML = `<img src="${thumb('char', o)}" alt=""><span class="tag">${i === 3 ? '👑 BOSS' : 'STAGE ' + (arcade.cycle * 4 + i + 1)}</span><span>${i === 3 && !o.boss ? 'Mega ' : ''}${o.name}</span>`;
     L_.appendChild(d);
   });
   $('arcBest').textContent = `Best run: stage ${SAVE.arcadeBest || 0}`;
