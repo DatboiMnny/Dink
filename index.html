@@ -182,6 +182,9 @@
   .crow{display:flex;align-items:center;gap:6px;margin:6px 0}
   .crow span{width:34px;font-size:12px;font-weight:900;opacity:.8;text-align:left}
   .sw{flex:1;aspect-ratio:1;max-width:30px;border-radius:50%;border:2px solid rgba(255,255,255,.3);padding:0}
+  .opt{flex:1;min-width:0;padding:7px 2px;border-radius:10px;background:rgba(255,255,255,.1);color:#fff;font:900 11px Nunito,system-ui;border:2px solid transparent;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .opt.on{border-color:var(--y);background:rgba(255,228,92,.18)}
+  .clab{font-size:11px;font-weight:900;opacity:.6;text-align:left;margin-top:6px;letter-spacing:.06em;text-transform:uppercase}
   .sw.on{border:3px solid var(--y);box-shadow:0 0 8px rgba(255,228,92,.6)}
 
   /* ===== boxes ===== */
@@ -657,9 +660,75 @@ function horn(k, s, color = '#efe6cf', y = 0.14) {
   const b = k.mk(cone(0.045, 0.2, 10), color, s * 0.42, y + 0.08, 0, k.head); b.rotation.z = -s * 0.35;
 }
 
+// ---- Blanko customisation: 4 faces, hair styles, hair + skin colour (free, saved on the phone)
+const FACES = [['😊', 'Happy'], ['😎', 'Cool'], ['😌', 'Chill'], ['😮', 'Wow']];
+const HAIRS = ['None', 'Short', 'Spiky', 'Curly', 'Long', 'Hawk'];
+const SKINS = ['#f6f6f6', '#ffe0c4', '#f0c9a0', '#d39a6a', '#a8714a', '#6e4a30', '#9ad7ff', '#ffb3d1'];
+const HAIR_COLS = ['#1d1a1a', '#5a3a22', '#e8c46a', '#c8562a', '#c4c8ce', '#ff6fb5', '#3d8bff', '#45d17a'];
+const LOOK_DEF = { face: 0, hair: 0, hairCol: '#5a3a22', skin: '#f6f6f6' };
+function look() { return { ...LOOK_DEF, ...((typeof SAVE !== 'undefined' && SAVE && SAVE.look) || {}) }; }
+function blankoLook(k) {
+  const L = look(), h = k.head;
+  const hairM = k.M(L.hairCol, { roughness: 0.62, clearcoat: 0.25 });
+  const dark = '#2a1414';
+  // ---- face
+  const brow = (y, tilt) => { for (const s of [-1, 1]) { const b = k.mk(box(0.075, 0.017, 0.02), hairM, s * 0.088, y, -0.21 + (y - 0.1) * 0.35, h); b.rotation.z = s * tilt; b.castShadow = false; } };
+  if (L.face === 0) { eyes(k); cheeks(k); smile(k); }
+  else if (L.face === 1) {
+    eyes(k, { r: 0.035 }); brow(0.1, 0.32);
+    const m = k.mk(new THREE.TorusGeometry(0.042, 0.013, 8, 20, Math.PI * 0.85), dark, 0.03, -0.078, -0.223, h); m.rotation.z = Math.PI + 0.3; m.rotation.x = -0.25;
+  } else if (L.face === 2) {
+    for (const s of [-1, 1]) { const e = k.mk(new THREE.TorusGeometry(0.032, 0.011, 8, 18, Math.PI), dark, s * 0.085, 0.02, -0.218, h); e.rotation.x = -0.2; e.castShadow = false; }
+    cheeks(k);
+    const m = k.mk(new THREE.TorusGeometry(0.068, 0.015, 8, 24, Math.PI), dark, 0, -0.065, -0.222, h); m.rotation.z = Math.PI; m.rotation.x = -0.25;
+  } else {
+    eyes(k, { r: 0.045, sep: 0.09 }); brow(0.135, -0.12);
+    const o = k.mk(sph(0.03, 16, 12), dark, 0, -0.088, -0.222, h); o.scale.set(0.9, 1.15, 0.35); o.castShadow = false;
+  }
+  // ---- hair
+  if (!L.hair) return;
+  const R0 = 0.25, CY = 0.015;
+  const cap = (front, back, rr = R0) => {
+    const g = new THREE.SphereGeometry(rr, 36, 18, 0, Math.PI * 2, 0, back), p = g.attributes.position, v = new THREE.Vector3();
+    for (let i = 0; i < p.count; i++) {
+      v.fromBufferAttribute(p, i); const th = Math.acos(Math.max(-1, Math.min(1, v.y / rr))), hz = Math.hypot(v.x, v.z);
+      const fr = hz > 1e-5 ? Math.max(0, -v.z / hz) : 0, lim = back - (back - front) * Math.pow(fr, 1.4);
+      if (th > lim) { const ph = Math.atan2(v.x, v.z); v.set(rr * Math.sin(lim) * Math.sin(ph), rr * Math.cos(lim), rr * Math.sin(lim) * Math.cos(ph)); p.setXYZ(i, v.x, v.y, v.z); }
+    }
+    g.computeVertexNormals();
+    const m = k.mk(g, hairM, 0, CY, 0.004, h); m.scale.set(1.03, 1, 0.95); return m;
+  };
+  const onDome = (th, ph, rr = R0) => new THREE.Vector3(rr * Math.sin(th) * Math.sin(ph), CY + rr * Math.cos(th), rr * Math.sin(th) * Math.cos(ph) * 0.95);
+  const stickOut = (m, th, ph) => { const n = onDome(th, ph).sub(new THREE.Vector3(0, CY, 0)).normalize(); m.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), n); };
+  if (L.hair === 1) cap(0.95, 1.5);
+  else if (L.hair === 2) {
+    cap(0.9, 1.45);
+    const sp = [[0, 0], [0.45, Math.PI], [0.45, Math.PI * 0.5], [0.45, -Math.PI * 0.5], [0.5, Math.PI * 0.85], [0.5, -Math.PI * 0.85], [0.55, Math.PI * 0.2], [0.55, -Math.PI * 0.2], [0.85, Math.PI * 0.7], [0.85, -Math.PI * 0.7], [0.75, Math.PI]];
+    for (const [th, ph] of sp) { const c = k.mk(cone(0.055, 0.16, 8), hairM, 0, 0, 0, h); c.position.copy(onDome(th, ph, R0 + 0.05)); stickOut(c, th, ph); }
+  } else if (L.hair === 3) {
+    cap(0.85, 1.45, 0.245);
+    const N = 34;
+    for (let i = 0; i < N; i++) {
+      const th = Math.acos(1 - (i + 0.5) / N * 0.78) * 1.35, ph = i * 2.39996;
+      const fr = Math.max(0, -Math.cos(ph)); if (th > 1.45 - 0.55 * fr) continue;
+      const b = k.mk(sph(0.06 + (i % 3) * 0.008, 12, 9), hairM, 0, 0, 0, h); b.position.copy(onDome(th, ph, R0 + 0.01));
+    }
+  } else if (L.hair === 4) {
+    cap(1.0, 1.75);
+    const back = k.mk(new THREE.CylinderGeometry(0.252, 0.27, 0.36, 24, 1, true, -1.35, 2.7), k.M(L.hairCol, { roughness: 0.62, clearcoat: 0.25, side: DS }), 0, CY - 0.2, 0.005, h);
+    back.scale.z = 0.98;
+    const tips = k.mk(new THREE.TorusGeometry(0.255, 0.03, 8, 24, 2.7), hairM, 0, CY - 0.38, 0.005, h); tips.rotation.x = Math.PI / 2; tips.rotation.z = Math.PI / 2 - 1.35;
+  } else {
+    for (let i = 0; i < 8; i++) {
+      const th = -0.75 + i * 0.29, ph = th < 0 ? Math.PI : 0, at = Math.abs(th);
+      const m = k.mk(sph(0.06, 12, 9), hairM, 0, 0, 0, h); m.position.copy(onDome(at, ph, R0 + 0.02)); m.scale.set(0.45, 1.9 - Math.abs(i - 3) * 0.12, 1.1); stickOut(m, at, ph);
+    }
+  }
+}
+
 const CHARS = [
-  { id:'c_blanko', name:'Blanko', price:0, group:'starter', rarity:'starter', c:{ body:'#f6f6f6', foot:'#d9dde2' },
-    deco: k => { cheeks(k); smile(k); } },
+  { id:'c_blanko', name:'Blanko', price:0, group:'starter', rarity:'starter', c:{ body:'#f6f6f6', foot:'#d9dde2' }, noEyes:true,
+    look: () => ({ body: look().skin }), deco: k => blankoLook(k) },
 
   // ---- animals
   { id:'c_panda', name:'Panda', price:80, group:'animals', rarity:'common', c:{ body:'#f5f5f5', limb:'#1b1b1b' }, noEyes:true,
@@ -1583,7 +1652,7 @@ function makePaddle(p, custom) {
 const BODY_R = 0.32, BODY_L = 0.45, BODY_Y = 0.97;
 function shade(hex, f) { return '#' + new THREE.Color(hex).multiplyScalar(f).getHexString(); }
 function makeCharacter(def, paddle, custom) {
-  const c = { body: '#f6f6f6', ...def.c };
+  const c = { body: '#f6f6f6', ...def.c, ...(def.look ? def.look() : {}) };
   const limb = c.limb || shade(c.body, 0.72), foot = c.foot || limb, hand = c.hand || limb, legC = c.legs || limb;
   const matOpts = def.lowPoly ? { ...(def.matOpts || {}), flatShading: true } : (def.matOpts || {});
   const M = (color, o = {}) => new THREE.MeshPhysicalMaterial({ color, roughness: 0.42, clearcoat: 0.5, clearcoatRoughness: 0.28, envMapIntensity: 0.75, ...o });
@@ -2359,7 +2428,7 @@ function resetIdle() {
 let shopTab = 'char', preview = {}, shopFrom = 'menu';
 const thumbCache = {};
 function thumb(cat, it) {
-  const key = cat + it.id + (cat === 'paddle' ? JSON.stringify(padCustom()) : ''); if (thumbCache[key]) return thumbCache[key];
+  const key = cat + it.id + (cat === 'paddle' ? JSON.stringify(padCustom()) : '') + (it.look ? JSON.stringify(look()) : ''); if (thumbCache[key]) return thumbCache[key];
   const c = document.createElement('canvas'); c.width = c.height = 128; const x = c.getContext('2d');
   if (cat === 'paddle') {
     const cu = padCustom(), [sw, sh] = SHAPES[it.shape || 'std'], pw = sw * 330, ph = sh * 330;
@@ -2411,6 +2480,7 @@ function renderShop() {
   const grid = $('grid'), keepScroll = grid.scrollTop; grid.innerHTML = '';
   grid.classList.toggle('two', shopTab === 'paddle');
   if (shopTab === 'paddle') grid.appendChild(customiser());
+  if (shopTab === 'char') grid.appendChild(lookEditor());
   let lastGroup = null;
   for (const it of SHOP[shopTab]) {
     if (it.group && it.group !== lastGroup) {
@@ -2470,6 +2540,22 @@ function customiser() {
   }));
   return box;
 }
+function lookEditor() {
+  const box = document.createElement('div'); box.className = 'cust';
+  const L = look();
+  const opts = (key, list) => `<div class="crow">${list.map((t, i) => `<button data-k="${key}" data-v="${i}" class="opt${L[key] === i ? ' on' : ''}">${t}</button>`).join('')}</div>`;
+  const sw = (label, key, list) => `<div class="crow"><span>${label}</span>${list.map(c => `<button data-k="${key}" data-c="${c}" class="sw${L[key] === c ? ' on' : ''}" style="background:${c}"></button>`).join('')}</div>`;
+  box.innerHTML = `<div class="ctitle">Customise Blanko · free</div>
+    <div class="clab">Face</div>${opts('face', FACES.map(f => f[0] + ' ' + f[1]))}
+    <div class="clab">Hair</div>${opts('hair', HAIRS)}
+    ${sw('Hair', 'hairCol', HAIR_COLS)}${sw('Skin', 'skin', SKINS)}`;
+  box.querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+    initAudio();
+    SAVE.look = { ...look(), [b.dataset.k]: b.dataset.c || +b.dataset.v }; persist();
+    preview.char = 'c_blanko'; curLook.custom = null; applyLook(); beep(800, 0.04, 0.08); renderShop();
+  }));
+  return box;
+}
 function openShop(from) {
   shopFrom = from; phase = 'shop'; preview = {};
   ['menu', 'over'].forEach(id => $(id).classList.add('hidden'));
@@ -2490,7 +2576,7 @@ let curLook = {};
 function applyLook() {
   const id = c => preview[c] || SAVE.equip[c];
   const ch_ = id('char'), pd = id('paddle'), bl = id('ball'), ar = id('arena');
-  const cus = JSON.stringify(padCustom());
+  const cus = JSON.stringify([padCustom(), look()]);
   if (curLook.char !== ch_ || curLook.paddle !== pd || curLook.custom !== cus) setPlayerModel(findItem('char', ch_), findItem('paddle', pd));
   if (curLook.ball !== bl) applyBallSkin(findItem('ball', bl));
   if (curLook.arena !== ar) buildArena(findItem('arena', ar));
