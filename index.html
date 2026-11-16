@@ -584,8 +584,8 @@ const DIFFS = [
 ];
 
 // ================= character roster =================
-const RARITY = { starter:['Starter','#b9c2cc'], common:['Common','#3ddc84'], rare:['Rare','#3fa9ff'], epic:['Epic','#c27bff'], legendary:['Legendary','#ffc93c'], arcade:['Arcade','#ff4fd8'] };
-const GROUPS = [['starter','Starter'], ['animals','Animals'], ['legends','Legends'], ['aliens','Aliens'], ['myth','Mythology'], ['squad','👑 The Squad'], ['arcade','🕹️ Arcade exclusives']];
+const RARITY = { starter:['Starter','#b9c2cc'], common:['Common','#3ddc84'], rare:['Rare','#3fa9ff'], epic:['Epic','#c27bff'], legendary:['Legendary','#ffc93c'], arcade:['Arcade','#ff4fd8'], secret:['Secret','#00ff66'] };
+const GROUPS = [['starter','Starter'], ['animals','Animals'], ['legends','Legends'], ['aliens','Aliens'], ['myth','Mythology'], ['squad','👑 The Squad'], ['arcade','🕹️ Arcade exclusives'], ['secret','🤫 Secret']];
 const SKIN = '#f0c9a0';
 const sph = (r, w = 18, h = 14) => new THREE.SphereGeometry(r, w, h);
 const cyl = (rt, rb, h, s = 12) => new THREE.CylinderGeometry(rt, rb, h, s);
@@ -949,7 +949,7 @@ const CHARS = [
       }, 0.25, 0.6);
     } },
   // ---- The Squad
-  { id:'c_billynet', name:'Billy Net', price:300, group:'squad', rarity:'rare', c:{ body:'#20262e', limb:'#1f3d2b', hand:'#1f3d2b', foot:'#1f3d2b' },
+  { id:'c_billynet', bean:true, name:'Billy Net', price:300, group:'squad', rarity:'rare', c:{ body:'#20262e', limb:'#1f3d2b', hand:'#1f3d2b', foot:'#1f3d2b' },
     bodyMat: () => squadMat('net'),
     deco: k => {
       smile(k, '#ffffff');
@@ -964,7 +964,7 @@ const CHARS = [
       const m = k.mk(new THREE.TorusGeometry(0.05, 0.012, 6, 16, Math.PI), new THREE.MeshBasicMaterial({ color: '#ff8c2a' }), 0, -0.08, -0.222, k.head); m.rotation.z = Math.PI; m.rotation.x = -0.25;
       for (const [x, y, r] of [[-0.05, 0.27, 0.09], [0.06, 0.33, 0.07], [0, 0.42, 0.06]]) k.mk(sph(r), k.M('#8a8a92', { transparent: true, opacity: 0.55, roughness: 1, clearcoat: 0 }), x, y, 0.02, k.head);
     } },
-  { id:'c_johnpoop', name:'John Poop', price:450, group:'squad', rarity:'epic', c:{ body:'#7a4a24', limb:'#5e3618', foot:'#3a2210' }, noEyes:true,
+  { id:'c_johnpoop', bean:true, name:'John Poop', price:450, group:'squad', rarity:'epic', c:{ body:'#7a4a24', limb:'#5e3618', foot:'#3a2210' }, noEyes:true,
     deco: k => {
       k.torso.visible = false;
       const brown = k.M('#7a4a24', { roughness: 0.35, clearcoat: 0.8 });
@@ -999,23 +999,27 @@ const CHARS = [
     } },
   { id:'c_soph', name:'Soph', price:750, group:'squad', rarity:'legendary', c:{ body:'#ff5fa2', head:SKIN, limb:SKIN, hand:SKIN, legs:SKIN, foot:'#ff8cc6' },
     deco: k => {
-      smile(k, '#e0245e');
-      cheeks(k, '#ff8fb8');
+      const mo = k.mk(new THREE.TorusGeometry(0.048, 0.013, 8, 24, Math.PI), '#7a1830', 0, -0.085, -0.246, k.head); mo.rotation.z = Math.PI; mo.rotation.x = -0.3;
+      for (const s of [-1, 1]) k.mk(sph(0.042), '#ff9ec2', s * 0.135, -0.055, -0.232, k.head).scale.z = 0.35;
+      // lashes flick up and out
+      for (const s of [-1, 1]) for (const [dx, rz] of [[0.03, 0.55], [0.045, 0.95]]) { const l = k.mk(box(0.035, 0.011, 0.01), '#1b1d2e', s * (0.085 + dx), 0.075, -0.25, k.head); l.rotation.z = s * rz; }
       const hair = k.M('#5a3825', { roughness: 0.5, clearcoat: 0.3 });
-      k.mk(new THREE.SphereGeometry(0.262, 24, 16, 0, Math.PI * 2, 0, Math.PI * 0.55), hair, 0, 0.01, 0.02, k.head);
-      k.mk(new THREE.SphereGeometry(0.262, 24, 16, 0, Math.PI, 0, Math.PI), hair, 0, -0.02, 0.03, k.head).scale.set(1.02, 1.15, 1);  // long hair down the back
-      for (const s of [-1, 1]) { const st = k.mk(new THREE.CapsuleGeometry(0.06, 0.32, 4, 10), hair, s * 0.21, -0.17, -0.06, k.head); st.rotation.z = s * 0.12; }
-      for (const s of [-1, 1]) { const lash = k.mk(box(0.07, 0.012, 0.01), '#1b1d2e', s * 0.085, 0.09, -0.245, k.head); lash.rotation.z = -s * 0.25; }
+      k.mk(new THREE.SphereGeometry(0.262, 28, 16, 0, Math.PI * 2, 0, Math.PI * 0.36), hair, 0, 0.012, 0.012, k.head);                 // crown, hairline above the eyes
+      k.mk(new THREE.SphereGeometry(0.266, 28, 16, -0.42, Math.PI + 0.84, 0, Math.PI * 0.95), hair, 0, -0.02, 0.02, k.head).scale.set(1.03, 1.15, 1);   // long hair down the back and framing the face
+      // side-swept fringe
+      for (const [x, y, rz, len] of [[-0.12, 0.135, -0.95, 0.12], [-0.05, 0.155, -1.15, 0.13], [0.03, 0.165, -1.3, 0.12], [0.11, 0.16, -1.45, 0.08]]) {
+        const f = k.mk(new THREE.CapsuleGeometry(0.036, len, 4, 10), hair, x, y, -0.205, k.head); f.rotation.z = rz; f.rotation.x = 0.6; f.scale.z = 0.55;
+      }
+      for (const s of [-1, 1]) { const st = k.mk(new THREE.CapsuleGeometry(0.06, 0.34, 4, 10), hair, s * 0.225, -0.15, -0.04, k.head); st.rotation.z = s * 0.1; }
       // pink bow
-      const bow = new THREE.Group(); bow.position.set(0.12, 0.2, -0.12); k.head.add(bow);
+      const bow = new THREE.Group(); bow.position.set(0.13, 0.2, -0.1); k.head.add(bow);
       for (const s of [-1, 1]) { const w = k.mk(cone(0.06, 0.1, 12), k.M('#ff3d8b', { clearcoat: 1 }), s * 0.055, 0, 0, bow); w.rotation.z = s * Math.PI / 2; }
       k.mk(sph(0.03), k.M('#ff3d8b', { clearcoat: 1 }), 0, 0, 0, bow);
       // pink fit: flared skirt, belt, little handbag
       k.mk(cyl(0.3, 0.42, 0.3, 28), k.M('#ff8cc6', { roughness: 0.5 }), 0, 0.6, 0, k.upper);
       belt(k, '#ffffff', 0.76, 0.31, 0.022);
-      const bag = k.mk(box(0.14, 0.11, 0.06), k.M('#ff3d8b', { clearcoat: 1 }), -0.42, 0.72, -0.02, k.upper);
+      k.mk(box(0.14, 0.11, 0.06), k.M('#ff3d8b', { clearcoat: 1 }), -0.42, 0.72, -0.02, k.upper);
       k.mk(new THREE.TorusGeometry(0.05, 0.008, 6, 16, Math.PI), k.M('#ffd23f', { metalness: 0.9, roughness: 0.2 }), -0.42, 0.78, -0.02, k.upper);
-      void bag;
     } },
   { id:'c_manny', name:'Manny', price:1000, group:'squad', rarity:'legendary', c:{ body:'#5b21b6', head:SKIN, limb:'#5b21b6', hand:SKIN, foot:'#2a0f55' },
     deco: k => {
@@ -1090,6 +1094,38 @@ const CHARS = [
 const OLD_OUTFITS = { c_classic:0, c_royal:60, c_lime:90, c_pink:120, c_ninja:250, c_king:450 };
 
 // ================= shop catalogue =================
+// ---- secret: Buff the strongman, unlocked by reaching level 25 in Arcade (comes with the Matrix sprite)
+CHARS.push({ id:'c_buff', name:'Buff', price:0, exclusive:'secret', group:'secret', rarity:'secret', scale:1.07,
+  c:{ body:'#e63946', head:SKIN, limb:SKIN, hand:SKIN, sleeve:SKIN, legs:'#1d1d24', foot:'#2b2b2b' },
+  deco: k => {
+    const skin = k.M(SKIN), red = k.M('#e63946'), dark = '#3a2414', gold = k.M('#ffd23f', { metalness: 0.9, roughness: 0.2 });
+    // boulder shoulders, huge biceps, wrist bands
+    for (const a of k.arms) {
+      k.mk(sph(0.1, 18, 14), skin, 0, -0.01, 0, a).scale.set(1.05, 0.9, 1.05);
+      const b = k.mk(sph(0.105, 18, 14), skin, 0, -0.12, -0.015, a); b.scale.set(1, 1.15, 1.05);
+      k.mk(cyl(0.06, 0.06, 0.05, 16), '#ffffff', 0, -0.33, 0, a);
+    }
+    // tank top: skin traps + neckline, red pecs
+    for (const s of [-1, 1]) { const tr = k.mk(sph(0.13, 18, 12), skin, s * 0.2, 1.1, 0.01, k.upper); tr.scale.set(1, 0.62, 0.95); }
+    const nl = k.mk(sph(0.12, 18, 12), skin, 0, 1.08, -0.2, k.upper); nl.scale.set(1.15, 0.75, 0.45);
+    for (const s of [-1, 1]) k.mk(sph(0.115, 18, 12), red, s * 0.105, 0.93, -0.22, k.upper).scale.set(1.1, 0.75, 0.45);
+    for (const s of [-1, 1]) k.mk(box(0.06, 0.16, 0.3), red, s * 0.12, 1.1, 0, k.upper).rotation.z = s * 0.12;   // straps
+    // lifting belt
+    belt(k, '#3a2a1a', 0.6, 0.315, 0.06);
+    k.mk(box(0.13, 0.1, 0.03), gold, 0, 0.6, -0.335, k.upper);
+    // buzz cut, sweatband, handlebar moustache, serious brows
+    k.mk(new THREE.SphereGeometry(0.242, 28, 16, 0, Math.PI * 2, 0, Math.PI * 0.42), k.M('#2a1a10', { roughness: 0.95, clearcoat: 0 }), 0, 0.012, 0.005, k.head);
+    const hb = k.mk(new THREE.TorusGeometry(0.24, 0.022, 8, 40), '#e63946', 0, 0.095, 0, k.head); hb.rotation.x = Math.PI / 2 - 0.06;
+    for (const s of [-1, 1]) {
+      const m = k.mk(new THREE.CapsuleGeometry(0.022, 0.07, 4, 8), dark, s * 0.045, -0.078, -0.232, k.head); m.rotation.z = s * 1.25;
+      const tip = k.mk(new THREE.CapsuleGeometry(0.015, 0.045, 4, 8), dark, s * 0.092, -0.108, -0.218, k.head); tip.rotation.z = s * 0.25;
+      const br = k.mk(box(0.085, 0.024, 0.02), dark, s * 0.085, 0.092, -0.236, k.head); br.rotation.z = -s * 0.18;
+    }
+    // dumbbell in the free hand
+    const db = new THREE.Group(); db.position.set(0, -0.43, 0); k.arms[0].add(db);
+    const hd = k.mk(cyl(0.016, 0.016, 0.3, 10), k.M('#9aa3ad', { metalness: 0.9, roughness: 0.3 }), 0, 0, 0, db); hd.rotation.x = Math.PI / 2;
+    for (const z of [-0.13, 0.13]) { const pl = k.mk(cyl(0.075, 0.075, 0.05, 20), k.M('#1d1d24', { roughness: 0.6 }), 0, 0, z, db); pl.rotation.x = Math.PI / 2; }
+  } });
 // ---- Arcade's first boss (original character, not sold anywhere)
 const COACH = { id:'c_coach', name:'Coach Smash', boss:true, scale:1.22, c:{ body:'#7b4dff', limb:'#5a35c9', foot:'#ff3b5c' }, noEyes:true,
   deco: k => {
@@ -1699,7 +1735,8 @@ function makePaddle(p, custom) {
 
 const BODY_R = 0.32, BODY_L = 0.45, BODY_Y = 0.97;
 function shade(hex, f) { return '#' + new THREE.Color(hex).multiplyScalar(f).getHexString(); }
-function makeCharacter(def, paddle, custom) {
+// original one-piece bean body, kept for object-style characters (def.bean)
+function makeBean(def, paddle, custom) {
   const c = { body: '#f6f6f6', ...def.c, ...(def.look ? def.look() : {}) };
   const limb = c.limb || shade(c.body, 0.72), foot = c.foot || limb, hand = c.hand || limb, legC = c.legs || limb;
   const matOpts = def.lowPoly ? { ...(def.matOpts || {}), flatShading: true } : (def.matOpts || {});
@@ -1743,6 +1780,76 @@ function makeCharacter(def, paddle, custom) {
     const arm = new THREE.Group(); arm.position.set(s * 0.31, 0.98, 0); upper.add(arm);
     mk(new THREE.CapsuleGeometry(0.034, 0.34, 4, 10), M(limb, matOpts), 0, -0.2, 0, arm);
     mk(new THREE.SphereGeometry(0.058, 14, 10), M(hand, matOpts), 0, -0.41, 0, arm);
+    arms.push(arm);
+  }
+  const pad = makePaddle(paddle, custom); pad.position.y = -0.43; arms[1].add(pad);
+  const k = { g, upper, head, headMesh, torso, mk, M, c, arms, legs, matOpts, tail: null, wings: null, snakes: null, cape: null };
+  if (!def.noEyes) eyes(k);
+  if (def.deco) def.deco(k);
+  if (def.scale) g.scale.setScalar(def.scale);
+  const blob = new THREE.Mesh(new THREE.PlaneGeometry(1.1, 1.1), new THREE.MeshBasicMaterial({ map: BLOB, transparent: true, depthWrite: false, opacity: 0.7 }));
+  blob.rotation.x = -Math.PI / 2; blob.position.y = 0.012; g.add(blob);
+  const root = new THREE.Group(); root.add(g); root.scale.setScalar(1.15);
+  root.userData = { legs, arms, upper, torso, run: 0, pad, tail: k.tail, wings: k.wings, snakes: k.snakes, cape: k.cape, def, eyes: k.eyes || [], blink: 1 + Math.random() * 3 };
+  return root;
+}
+function makeCharacter(def, paddle, custom) {
+  const c = { body: '#f6f6f6', ...def.c, ...(def.look ? def.look() : {}) };
+  const limb = c.limb || shade(c.body, 0.72), foot = c.foot || limb, hand = c.hand || limb, legC = c.legs || limb;
+  const matOpts = def.lowPoly ? { ...(def.matOpts || {}), flatShading: true } : (def.matOpts || {});
+  const M = (color, o = {}) => new THREE.MeshPhysicalMaterial({ color, roughness: 0.42, clearcoat: 0.5, clearcoatRoughness: 0.28, envMapIntensity: 0.75, ...o });
+  const g = new THREE.Group();
+  const mk = (geo, mat, x = 0, y = 0, z = 0, parent = g) => {
+    const m = new THREE.Mesh(geo, typeof mat === 'string' ? M(mat) : mat); m.position.set(x, y, z); m.castShadow = true; parent.add(m); return m;
+  };
+  if (def.bean) return makeBean(def, paddle, custom);
+  // ---- chibi build: big separate head, stocky shirt torso, sleeves + mitten hands, trousers and chunky shoes
+  const headC = c.head || c.body, human = !!c.head && /^#(f|e|d|c|a|9|8|7|6)/i.test(headC) && headC !== c.body;
+  const pantsC = c.legs || (human ? '#2f4f7f' : shade(c.body, 0.72));
+  const bareLegs = c.legs && c.legs === c.head;
+  const hipY = 0.5, bottom = 0.44;
+  const legs = [];
+  const shoeCol = c.foot || '#2f3a5c', sole = M('#f4f4f4', { roughness: 0.6, clearcoat: 0 });
+  for (const s of [-1, 1]) {
+    const leg = new THREE.Group(); leg.position.set(s * 0.115, bottom, 0); g.add(leg);
+    const lr = bareLegs ? 0.05 : 0.075;
+    mk(new THREE.CapsuleGeometry(lr, Math.max(0.05, bottom - 0.2), 6, 14), M(bareLegs ? c.legs : pantsC, matOpts), 0, -bottom / 2 + 0.06, 0, leg);
+    if (!bareLegs) { const cuff = mk(cyl(lr + 0.008, lr + 0.008, 0.035, 16), M(shade(pantsC, 0.8), matOpts), 0, 0.13, 0, leg); cuff.position.y = -bottom + 0.15; }
+    const up = mk(new THREE.CapsuleGeometry(0.075, 0.1, 6, 14), M(shoeCol, { roughness: 0.45 }), 0, -bottom + 0.075, -0.035, leg); up.rotation.x = Math.PI / 2; up.scale.set(1.05, 1, 0.85);
+    const so = mk(new THREE.CapsuleGeometry(0.08, 0.11, 4, 14), sole, 0, -bottom + 0.03, -0.04, leg); so.rotation.x = Math.PI / 2; so.scale.set(1.1, 1, 0.42);
+    const lace = mk(box(0.07, 0.012, 0.05), M('#ffffff', { roughness: 0.7, clearcoat: 0 }), 0, -bottom + 0.13, -0.08, leg); lace.rotation.x = -0.5;
+    legs.push(leg);
+  }
+  const upper = new THREE.Group(); g.add(upper);
+  // trousers / hips
+  if (!bareLegs) { const hips = mk(new THREE.CapsuleGeometry(0.27, 0.04, 8, 24), M(pantsC, matOpts), 0, hipY, 0, upper); hips.scale.set(1.02, 0.6, 0.86); }
+  // torso (the shirt): a chunky rounded block
+  const tGeo = def.lowPoly ? new THREE.CapsuleGeometry(0.3, 0.16, 2, 7) : new THREE.CapsuleGeometry(0.3, 0.16, 12, 30);
+  { const pa = tGeo.attributes.position; for (let i = 0; i < pa.count; i++) { const y = pa.getY(i), f = 1.06 - 0.12 * clamp((y + 0.38) / 0.76, 0, 1); pa.setX(i, pa.getX(i) * f); pa.setZ(i, pa.getZ(i) * f); } tGeo.computeVertexNormals(); }
+  const torso = mk(tGeo, def.bodyMat ? def.bodyMat() : M(c.body, matOpts), 0, 0.8, 0, upper);
+  torso.scale.set(1, 1, 0.9);
+  // collar + hem give it a shirt read
+  const trim = M(shade(c.body, 0.78), matOpts);
+  const col = mk(new THREE.TorusGeometry(0.15, 0.03, 8, 28), trim, 0, 1.12, -0.01, upper); col.rotation.x = Math.PI / 2 - 0.15; col.scale.y = 0.85;
+  if (!bareLegs) { const hem = mk(new THREE.TorusGeometry(0.305, 0.022, 8, 36), trim, 0, 0.58, 0, upper); hem.rotation.x = Math.PI / 2; hem.scale.y = 0.9; }
+  // neck
+  mk(cyl(0.1, 0.12, 0.12, 16), M(headC, matOpts), 0, 1.15, 0, upper);
+  // big head
+  const head = new THREE.Group(); head.position.set(0, 1.36, 0); head.scale.setScalar(1.36); upper.add(head);
+  const hGeo = def.lowPoly ? new THREE.IcosahedronGeometry(0.235, 1) : new THREE.SphereGeometry(0.235, 32, 24);
+  const headMesh = mk(hGeo, def.headMat ? def.headMat() : M(headC, matOpts), 0, 0, 0, head); headMesh.scale.set(1.06, 0.98, 1);
+  if (human) {
+    for (const s of [-1, 1]) { const e = mk(sph(0.05, 14, 10), M(headC, matOpts), s * 0.245, -0.01, 0.01, head); e.scale.set(0.6, 1, 0.8); mk(sph(0.025, 10, 8), M(shade(headC, 0.82)), s * 0.262, -0.01, 0.0, head).scale.set(0.5, 1, 0.8); }
+    mk(sph(0.03, 12, 10), M(shade(headC, 0.92)), 0, -0.035, -0.236, head).scale.set(1, 0.8, 0.7);   // little nose
+  }
+  // arms: short sleeve in shirt colour, forearm, mitten hand with a thumb
+  const arms = [];
+  for (const s of [-1, 1]) {
+    const arm = new THREE.Group(); arm.position.set(s * 0.31, 1.0, 0); upper.add(arm);
+    const sl = mk(new THREE.CapsuleGeometry(0.075, 0.08, 6, 14), c.sleeve ? M(c.sleeve, matOpts) : def.bodyMat ? def.bodyMat() : M(c.body, matOpts), 0, -0.07, 0, arm); sl.scale.set(1, 1, 0.95);
+    mk(new THREE.CapsuleGeometry(0.052, 0.2, 6, 12), M(limb, matOpts), 0, -0.24, 0, arm);
+    const hd = mk(sph(0.072, 16, 12), M(hand, matOpts), 0, -0.41, 0, arm); hd.scale.set(1, 1.08, 0.85);
+    mk(sph(0.03, 10, 8), M(hand, matOpts), -s * 0.055, -0.39, -0.03, arm);
     arms.push(arm);
   }
   const pad = makePaddle(paddle, custom); pad.position.y = -0.43; arms[1].add(pad);
@@ -2077,6 +2184,7 @@ function endRally(loser, reason) {
     if (cspr.model) burst(cspr.model.position, '#f9a8d4', 24, 3, 0.2);
     return;
   }
+  pointSnap = { score: { ...score }, server, serverNum };
   phase = 'point'; pointTimer = 1.6; ball.live = false; landMarker = null;
   let pointTo = null, second = false;
   if (arcade) { const w = otherSide(loser); score[w]++; pointTo = w; server = w; }   // arcade uses quick rally scoring
@@ -2164,6 +2272,10 @@ function gameOver() {
     rw += `<div class="fine">Best run: stage ${SAVE.arcadeBest || 0}</div>`;
   }
   if (prize && prize.item) setTimeout(() => showArcadePrize(prize), 1000);
+  if (arcade && win && (arcade.inf ? arcade.lvl : arcadeStage()) >= 25 && !SAVE.owned.includes('c_buff')) {
+    unlockBuff(); rw += `<div class="rw" style="background:rgba(0,255,102,.2)"><span class="ic">🤫</span>SECRET UNLOCKED: Buff + Matrix<b style="color:#7dffb4;font-size:14px">NEW</b></div>`;
+    setTimeout(showBuffUnlock, prize && prize.item ? 2600 : 1000);
+  }
   if (tour) {
     overNext = win && tour.round < 2 ? 'next' : 'newtour';
     $('again').textContent = overNext === 'next' ? `NEXT: ${ROUND_NAMES[tour.round + 1].toUpperCase()}` : 'NEW TOURNAMENT';
@@ -2554,7 +2666,7 @@ function charThumb(def) {
       thumbScene = new THREE.Scene();
       thumbScene.add(new THREE.HemisphereLight('#ffffff', '#556070', 2.2));
       const d = new THREE.DirectionalLight('#ffffff', 2.2); d.position.set(-2, 3, -4); thumbScene.add(d);
-      thumbCam = new THREE.PerspectiveCamera(23, 1, 0.1, 50); thumbCam.position.set(-1.1, 1.45, -4.6); thumbCam.lookAt(0, 1.05, 0);
+      thumbCam = new THREE.PerspectiveCamera(23, 1, 0.1, 50); thumbCam.position.set(-1.15, 1.6, -5.1); thumbCam.lookAt(0, 1.13, 0);
     }
     const m = makeCharacter(def, SHOP.paddle[0]);
     animateChar(m, { spd: 0, swing: 0 }, 0, 0);
@@ -2582,6 +2694,7 @@ function renderShop() {
     let act;
     if (eq) act = `<button class="act eq">Equipped</button>`;
     else if (owned) act = `<button class="act">Equip</button>`;
+    else if (it.exclusive === 'secret') act = `<button class="act no">🤫 Secret</button>`;
     else if (it.exclusive) act = `<button class="act no">🕹️ Arcade</button>`;
     else act = `<button class="act ${SAVE.dinks >= it.price ? 'buy' : 'no'}"><span class="coin"></span> ${it.price}</button>`;
     const rr = itemRarity(shopTab, it);
@@ -2595,7 +2708,8 @@ function renderShop() {
         <div class="stats">${[['PWR', it.pw, '#ff6b4a'], ['CTL', it.ct, '#4ab3ff'], ['SPN', it.sp, '#c27bff']].map(([l, v, c]) =>
           `<div><span>${l}</span><i style="--v:${v * 10}%;--c:${c}"></i><b>${v}</b></div>`).join('')}</div>`;
     }
-    d.innerHTML = `<img src="${thumb(shopTab, it)}" alt="">${rar}${shopTab === 'paddle' ? extra.split('<div class="stats">')[0] : ''}<div class="nm">${it.name}</div>${shopTab === 'paddle' ? '<div class="stats">' + extra.split('<div class="stats">')[1] : ''}${act}`;
+    const hide = it.exclusive === 'secret' && !owned;
+    d.innerHTML = `<img src="${thumb(shopTab, it)}" alt=""${hide ? ' style="filter:brightness(0) drop-shadow(0 0 6px #00ff66)"' : ''}>${rar}${shopTab === 'paddle' ? extra.split('<div class="stats">')[0] : ''}<div class="nm">${hide ? '???' : it.name}</div>${shopTab === 'paddle' ? '<div class="stats">' + extra.split('<div class="stats">')[1] : ''}${act}`;
     d.addEventListener('click', ev => {
       initAudio();
       const isBtn = ev.target.closest('.act');
@@ -2603,6 +2717,7 @@ function renderShop() {
       if (isBtn) {
         if (eq) {}
         else if (owned) { SAVE.equip[shopTab] = it.id; persist(); toast(`Equipped ${it.brand ? it.brand + ' ' : ''}${it.name}`); }
+        else if (it.exclusive === 'secret') toast('🤫 A secret unlock. Go deep in Arcade…');
         else if (it.exclusive) toast('Beat an Arcade boss to unlock this');
         else if (SAVE.dinks >= it.price) {
           SAVE.dinks -= it.price; SAVE.owned.push(it.id); SAVE.equip[shopTab] = it.id; persist(); refreshBalance();
@@ -2797,7 +2912,8 @@ $('rvEquip').addEventListener('click', () => {
 });
 $('rvMore').addEventListener('click', () => { if (!rv.egg) openBox(rv.tier); });
 $('rvDone').addEventListener('click', () => {
-  const wasEgg = rv && (rv.egg || rv.arcade); $('reveal').classList.add('hidden'); rv = null; refreshBalance();
+  const wasEgg = rv && (rv.egg || rv.arcade), then_ = rv && rv.then; $('reveal').classList.add('hidden'); rv = null; refreshBalance();
+  if (then_) { setTimeout(then_, 300); return; }
   if (wasEgg) return;   // sprite drops come from the results screen, which is still open underneath
   renderBoxes(); $('boxesM').classList.remove('hidden');
 });
@@ -3097,6 +3213,9 @@ const SPECIES = [
     passive: m => `+${(3.5 * m).toFixed(0)}% move speed, +${Math.round(4 * m)}% reach`, power:'Lag Spike', pdesc: m => `CPU freezes for ${(0.7 + 0.25 * m).toFixed(1)}s, then gets slowed` },
   { k:'nova', el:'Cosmic', excl:'inf', names:['Stardust','Comet','Nebula','Supernova'], cols:[['#a78bfa','#fef9c3'],['#60a5fa','#ffffff'],['#c026d3','#67e8f9'],['#1e1b4b','#ffd23f']],
     passive: m => `+${Math.round(0.6 * m)} dinks per rally, +${Math.round(8 * m)}% win dinks`, power:'Supernova', pdesc: m => `Next shot is a blazing corner snipe. CPU errors +${Math.round((0.45 + 0.07 * m) * 100)}%` },
+  // ---- secret: comes with Buff; only levels up when you extract in Infinite Arcade
+  { k:'matrix', el:'Secret', excl:'secret', names:['Matrix','Matrix','Matrix','Matrix'], cols:[['#e8f542','#00ff66'],['#e8f542','#00ff66'],['#e8f542','#00ff66'],['#e8f542','#00ff66']],
+    passive: m => `+${Math.round(3 * m)}% move speed`, power:'Rewind', pdesc: () => `Once per match: erase the last point and replay it` },
 ];
 const INF_SPECIES = () => SPECIES.filter(s => s.excl === 'inf');
 const STARTERS = ['ember_0', 'tide_0', 'zephyr_0'];
@@ -3120,6 +3239,21 @@ function makeSprite(spc, t) {
     mk(new THREE.SphereGeometry(0.034, 10, 8), new THREE.MeshStandardMaterial({ color: '#111', roughness: 0.2 }), s * 0.062, 0.03, R * 0.88);
     mk(new THREE.SphereGeometry(0.011, 6, 5), new THREE.MeshBasicMaterial({ color: '#fff' }), s * 0.062 + 0.01, 0.045, R * 0.88 + 0.03);
     const ch = mk(new THREE.SphereGeometry(0.022, 8, 6), new THREE.MeshBasicMaterial({ color: '#ff8fb1', transparent: true, opacity: 0.6 }), s * 0.1, -0.025, R * 0.82); ch.scale.z = 0.4;
+  }
+  // little creature body under the head: round tummy with a belly patch, stubby waving arms, feet, and a smile
+  const lim = [];
+  if (!spc.noBody) {
+    const tum = mk(new THREE.SphereGeometry(R * 0.74, 20, 14), glow(c1, 0.22 + 0.08 * t, { flatShading: flat, transparent: spc.k === 'tide', opacity: spc.k === 'tide' ? 0.88 : 1 }), 0, -R * 1.08, 0); tum.scale.set(1, 0.92, 0.9); tum.castShadow = true;
+    const bel = mk(new THREE.SphereGeometry(R * 0.5, 16, 12), glow(c2, 0.35), 0, -R * 1.1, R * 0.42); bel.scale.set(1, 1, 0.32);
+    for (const s of [-1, 1]) {
+      const a = new THREE.Group(); a.position.set(s * R * 0.62, -R * 0.82, 0.02); body.add(a);
+      const am = mk(new THREE.CapsuleGeometry(R * 0.15, R * 0.34, 4, 8), glow(c1, 0.28, { flatShading: flat }), 0, -R * 0.22, 0, a); am.castShadow = true;
+      mk(new THREE.SphereGeometry(R * 0.19, 10, 8), glow(c2, 0.4), 0, -R * 0.44, 0, a);
+      a.rotation.z = s * 0.75; a.userData.s = s; lim.push(a);
+      const f = mk(new THREE.SphereGeometry(R * 0.25, 12, 8), glow(c2, 0.3), s * R * 0.34, -R * 1.72, R * 0.12); f.scale.set(1, 0.55, 1.35);
+    }
+    const mo = mk(new THREE.TorusGeometry(R * 0.17, R * 0.04, 6, 16, Math.PI), new THREE.MeshBasicMaterial({ color: '#3a1020' }), 0, -0.035, R * 0.93); mo.rotation.z = Math.PI;
+    anim.push(tm => lim.forEach((a, i) => { a.rotation.z = a.userData.s * (0.75 + Math.sin(tm * 5 + i * 1.3) * 0.35); }));
   }
   const K = spc.k;
   if (K === 'ember') {
@@ -3161,6 +3295,20 @@ function makeSprite(spc, t) {
     for (let i = 0; i < 5; i++) { const a = i / 5 * Math.PI * 2; const c = mk(new THREE.ConeGeometry(0.045, 0.13, 6), glow(c2, 1.2), Math.cos(a) * (R + 0.04), Math.sin(a) * (R + 0.04), -0.02, ring); c.rotation.z = a - Math.PI / 2; }
     anim.push(tm => { ring.rotation.z = tm * 0.8; });
   }
+  if (K === 'matrix') {   // a pickleball with shades, wrapped in falling green code
+    for (const [th, ph] of [[0.5, 0.4], [0.5, 2.0], [0.5, 3.6], [0.5, 5.0], [1.2, 1.2], [1.2, 2.8], [1.2, 4.4], [1.9, 1.0], [1.9, 2.6], [1.9, 4.2], [2.5, 0.2], [2.5, 3.0]]) {
+      const x = Math.sin(th) * Math.sin(ph), y = Math.cos(th), z = Math.sin(th) * Math.cos(ph);
+      if (z > 0.35 && y < 0.6 && y > -0.6) continue;   // keep the face clear
+      mk(new THREE.SphereGeometry(0.019, 8, 6), new THREE.MeshStandardMaterial({ color: '#7a8a00', roughness: 0.6 }), x * R * 0.97, y * R * 0.97, z * R * 0.97);
+    }
+    const shade_ = new THREE.MeshStandardMaterial({ color: '#050505', roughness: 0.05, metalness: 0.6 });
+    for (const s of [-1, 1]) { const l = mk(new THREE.SphereGeometry(0.045, 14, 10), shade_, s * 0.062, 0.035, R * 0.96); l.scale.set(1.2, 0.75, 0.35); }
+    mk(new THREE.BoxGeometry(0.05, 0.012, 0.012), shade_, 0, 0.045, R * 0.99);
+    for (const s of [-1, 1]) { const arm_ = mk(new THREE.BoxGeometry(0.012, 0.012, 0.13), shade_, s * 0.125, 0.04, R * 0.5); arm_.rotation.y = s * 0.35; }
+    const code = new THREE.Group(); g.add(code); const bits = [];
+    for (let i = 0; i < 14; i++) { const b = mk(new THREE.BoxGeometry(0.016, 0.03, 0.006), new THREE.MeshBasicMaterial({ color: '#00ff66', transparent: true, opacity: 0.9 }), 0, 0, 0, code); b.userData = { a: i / 14 * Math.PI * 2, o: Math.random() * 3 }; bits.push(b); }
+    anim.push(tm => bits.forEach(b => { const a = b.userData.a + tm * 0.6, yy = ((tm * 0.35 + b.userData.o) % 1); b.position.set(Math.cos(a) * 0.27, 0.25 - yy * 0.55, Math.sin(a) * 0.27); b.material.opacity = 0.9 * (1 - yy); }));
+  }
   if (K === 'pixel') {
     const cubes = [];
     for (const [x, y, z, sz] of [[0, R + 0.05, 0, 0.07], [-0.1, R - 0.01, -0.02, 0.05], [0.1, R, -0.02, 0.05], [0, -0.02, -R - 0.03, 0.06]]) { const c = mk(new THREE.BoxGeometry(sz, sz, sz), glow(c2, 1), x, y, z); cubes.push(c); }
@@ -3175,11 +3323,11 @@ function makeSprite(spc, t) {
     anim.push(tm => { ring.rotation.z = tm * 1.6; stars.forEach((o, i) => { const a = -tm * 1.6 + i * 1.57; o.position.set(Math.cos(a) * 0.25, Math.sin(a) * 0.25 * Math.cos(Math.PI / 2.4), Math.sin(a) * 0.25 * 0.4); o.rotation.y = tm * 4; }); });
   }
   // rarer variants get flashier
-  if (t >= 2) {
+  if (t >= 2 && K !== 'matrix') {
     const halo = mk(new THREE.TorusGeometry(0.15, 0.014, 8, 36), glow(t === 3 ? '#ffd23f' : c2, 1.3), 0, R + 0.16, 0, g); halo.rotation.x = Math.PI / 2;
     anim.push(tm => { halo.rotation.z = tm * 2; halo.position.y = R + 0.16 + Math.sin(tm * 3) * 0.015; });
   }
-  if (t === 3) {
+  if (t === 3 && K !== 'matrix') {
     const crown = new THREE.Group(); crown.position.set(0, R + 0.02, 0); body.add(crown);
     for (let i = 0; i < 5; i++) { const a = i / 5 * Math.PI * 2; mk(new THREE.ConeGeometry(0.022, 0.07, 5), glow('#ffd23f', 0.8, { metalness: 0.8 }), Math.cos(a) * 0.07, 0.03, Math.sin(a) * 0.07, crown); }
     const orbs = [];
@@ -3198,7 +3346,7 @@ function spriteThumb(id) {
   if (sprThumbCache[id]) return sprThumbCache[id];
   try {
     if (!thumbR) charThumb(CHARS[0]);
-    if (!sprCam) { sprCam = new THREE.PerspectiveCamera(30, 1, 0.1, 20); sprCam.position.set(0.35, 0.2, 1.75); sprCam.lookAt(0, 0.04, 0); }
+    if (!sprCam) { sprCam = new THREE.PerspectiveCamera(30, 1, 0.1, 20); sprCam.position.set(0.38, 0.1, 2.05); sprCam.lookAt(0, -0.07, 0); }
     const { spc, t } = sprParse(id);
     const m = makeSprite(spc, t); m.userData.anim.forEach(f => f(0.6));
     thumbScene.add(m); thumbR.render(thumbScene, sprCam);
@@ -3209,7 +3357,8 @@ function spriteThumb(id) {
 }
 
 // ---- equipped sprite: gameplay state
-const spr = { spc: null, t: 0, lvl: 1, m: 1, need: 8, charge: 0, next: null, slowT: 0, stunT: 0, freezeT: 0, reachT: 0, shield: false, model: null, emitT: 0 };
+let pointSnap = null;   // score state before the last point, for Matrix's Rewind
+const spr = { spc: null, t: 0, lvl: 1, m: 1, need: 8, charge: 0, used: false, next: null, slowT: 0, stunT: 0, freezeT: 0, reachT: 0, shield: false, model: null, emitT: 0 };
 const sprOn = () => mode === 'cpu' && !!spr.spc;
 const sprIs = k => sprOn() && spr.spc.k === k;
 function loadSprite() {
@@ -3223,9 +3372,9 @@ function loadSprite() {
   spr.model.position.copy(T3(player.x, player.y, 1.6));
   updateSprBtn();
 }
-function resetSpriteMatch() { Object.assign(spr, { charge: 0, next: null, slowT: 0, stunT: 0, freezeT: 0, reachT: 0, shield: false }); updateSprBtn(); }
+function resetSpriteMatch() { Object.assign(spr, { charge: 0, used: false, next: null, slowT: 0, stunT: 0, freezeT: 0, reachT: 0, shield: false }); pointSnap = null; if (spr.spc && spr.spc.k === 'matrix') spr.charge = spr.need; updateSprBtn(); }
 function sprCharge() {
-  if (!sprOn()) return;
+  if (!sprOn() || spr.spc.k === 'matrix') return;
   spr.charge = Math.min(spr.need, spr.charge + (spr.spc.k === 'volt' ? 1 + 0.2 * spr.m : 1));
   updateSprBtn();
 }
@@ -3240,10 +3389,20 @@ function updateSprBtn() {
   sprBtn.style.setProperty('--sc', spr.spc.cols[spr.t][0]);
   const ready = spr.charge >= spr.need;
   sprBtn.classList.toggle('ready', ready);
-  sprBtn.querySelector('.lbl').textContent = ready ? spr.spc.power.toUpperCase() : `${Math.floor(spr.charge)}/${spr.need}`;
+  sprBtn.querySelector('.lbl').textContent = spr.spc.k === 'matrix' ? (ready ? 'REWIND' : 'USED') : ready ? spr.spc.power.toUpperCase() : `${Math.floor(spr.charge)}/${spr.need}`;
 }
 function activateSprite() {
   if (!sprOn() || spr.charge < spr.need || !['serve', 'rally', 'point'].includes(phase) || paused) return;
+  if (spr.spc.k === 'matrix') {
+    if (!pointSnap) { toast('Nothing to rewind yet'); return; }
+    spr.charge = 0; spr.used = true;
+    score = { ...pointSnap.score }; server = pointSnap.server; serverNum = pointSnap.serverNum; pointSnap = null;
+    gameOverPending = false; phase = 'point'; pointTimer = 1.3; ball.live = false; landMarker = null;
+    flash('⏪ REWIND! Last point erased', '#00ff66', 1.6); screenFlash(0.4); buzz([20, 40, 20, 40]);
+    [1175, 880, 660, 440].forEach((n, i) => setTimeout(() => beep(n, 0.1, 0.12, 'square'), i * 70));
+    if (spr.model) burst(spr.model.position, '#00ff66', 30, 3, 0.2);
+    updateHud(); updateSprBtn(); return;
+  }
   spr.charge = 0;
   const k = spr.spc.k, m = spr.m, col = spr.spc.cols[spr.t][0];
   flash(`${sprName(spr.spc, spr.t)}: ${spr.spc.power}!`, col === '#ffffff' || col === '#fef9c3' ? '#ffe45c' : col, 1.3);
@@ -3315,7 +3474,7 @@ function setupCpuSprite() {
   Object.assign(cspr, { charge: 0, next: null, shield: false, slowT: 0, stunT: 0, shrinkT: 0, wait: 0 });
   const plan = csprPlan(); if (!plan) return;
   const [t, lvl, extra] = plan;
-  const pool = SPECIES.filter(s => !s.excl || (arcade && arcade.inf && arcade.lvl + 1 >= 25));
+  const pool = SPECIES.filter(s => !s.excl || (s.excl === 'inf' && arcade && arcade.inf && arcade.lvl + 1 >= 25));
   const spc = pool[Math.floor(Math.random() * pool.length)];
   Object.assign(cspr, { spc, t, m: sprMult(t, lvl), need: TIER_NEED[t] + extra });
   cspr.model = makeSprite(spc, t); scene.add(cspr.model);
@@ -3439,7 +3598,8 @@ function renderDen() {
   const stars = Array.from({ length: 5 }, (_, i) => i < lvl ? '★' : '<i>★</i>').join('');
   let act = '';
   if (lvl) {
-    if (lvl < 5) { const cost = Math.round(LVL_COST[lvl - 1] * TIER_COST[t]); act += `<button class="bigbtn sm" id="lvlBtn" ${SAVE.dinks >= cost ? '' : 'disabled'}>LEVEL UP · <span class="coin"></span> ${cost}</button>`; }
+    if (spc.excl === 'secret') act += `<div class="sprTxt" style="text-align:center;opacity:.85">${lvl < 5 ? '🚁 Levels up each time you extract in Infinite Arcade' : 'Max level'}</div>`;
+    else if (lvl < 5) { const cost = Math.round(LVL_COST[lvl - 1] * TIER_COST[t]); act += `<button class="bigbtn sm" id="lvlBtn" ${SAVE.dinks >= cost ? '' : 'disabled'}>LEVEL UP · <span class="coin"></span> ${cost}</button>`; }
     else act += `<div class="sprTxt" style="text-align:center;opacity:.8">Max level</div>`;
     if (S.equip !== sel) act = `<button class="bigbtn green sm" id="sprEq">EQUIP</button><div style="height:10px"></div>` + act;
   } else act = `<div class="sprTxt" style="text-align:center;opacity:.85">${spc.excl ? '🔒 ♾️ Infinite Arcade exclusive: extract at level 25+' : '🔒 Win matches to find this sprite'}</div>`;
@@ -3452,8 +3612,9 @@ function renderDen() {
     <span style="opacity:.7">Harder modes drop rarer sprites. Duplicates level your sprite up.</span><br>
     <span style="color:#ff9cf0">♾️ Glitch & Cosmic sprites only come from extracting in Infinite Arcade.</span></div>`;
   for (const sp of SPECIES) {
-    html += `<div class="spRow"><div class="lab">${sp.excl ? '♾️ ' : ''}${sp.el}</div><div class="spTiles">`;
-    for (let tt = 0; tt < 4; tt++) {
+    if (sp.excl === 'secret' && !S.owned[`${sp.k}_3`]) { html += `<div class="spRow"><div class="lab">🤫 ???</div><div class="spTiles"><button class="spTile locked" style="--tc:#00ff66;pointer-events:none"><img src="${spriteThumb(sp.k + '_3')}" alt="" style="filter:brightness(0)"><span>???</span><span class="lv">🔒</span></button></div></div>`; continue; }
+    html += `<div class="spRow"><div class="lab">${sp.excl === 'secret' ? '🤫 ' : sp.excl ? '♾️ ' : ''}${sp.el}</div><div class="spTiles">`;
+    for (let tt = sp.excl === 'secret' ? 3 : 0; tt < 4; tt++) {
       const id = `${sp.k}_${tt}`, L = S.owned[id] || 0;
       html += `<button class="spTile${L ? '' : ' locked'}${id === sel ? ' sel' : ''}${S.equip === id ? ' eq' : ''}" data-id="${id}" style="--tc:${RARITY[TIER_KEYS[tt]][1]}">
         <img src="${spriteThumb(id)}" alt=""><span>${sp.names[tt]}</span><span class="lv">${L ? 'Lv ' + L : '🔒'}</span></button>`;
@@ -3598,7 +3759,7 @@ function showInfLadder() {
   const next = nextCheckpoint(arcade.canExt ? n + 1 : n);
   $('arcSub').innerHTML = arcade.canExt
     ? `<b style="color:#7dffb4">Extraction point! Level ${n} cleared.</b><br>Extract now for a guaranteed Infinite sprite, or push on for better odds. Next chance: level ${next}.`
-    : `Set ${Math.floor(n / 5) + 1} · Level ${n + 1}<br>No bosses. Endless games to 5. Lose once and the run ends.${n + 1 >= 10 ? ' <b style="color:#ff8f8f">CPUs bring sprites now.</b>' : ''}<br>${n < INF_FIRST ? `Reach <b style="color:#7dffb4">level ${INF_FIRST}</b> to unlock extraction.` : `Next extraction: <b style="color:#7dffb4">level ${next}</b>.`}`;
+    : `Set ${Math.floor(n / 5) + 1} · Level ${n + 1}<br>No bosses. Endless games to 5. Lose once and the run ends.${n + 1 >= 10 ? ' <b style="color:#ff8f8f">CPUs bring sprites now.</b>' : ''}<br>${n < INF_FIRST ? `Reach <b style="color:#7dffb4">level ${INF_FIRST}</b> to unlock extraction.${SAVE.owned.includes('c_buff') ? '' : ' 🤫 Something secret waits there too…'}` : `Next extraction: <b style="color:#7dffb4">level ${next}</b>.`}`;
   const L_ = $('ladder'); L_.innerHTML = ''; L_.classList.add('five');
   arcade.opps.forEach((o, i) => {
     const lv = start + i + 1, ext = infCheckpoint(lv);
@@ -3617,6 +3778,17 @@ function showInfLadder() {
   $('arcGo').textContent = arcade.canExt ? `PUSH ON TO LEVEL ${n + 1}` : `PLAY LEVEL ${n + 1}`;
   $('arcM').classList.remove('hidden');
 }
+function unlockBuff() {
+  if (!SAVE.owned.includes('c_buff')) SAVE.owned.push('c_buff');
+  const S = ensureSprites(); if (!S.owned.matrix_3) S.owned.matrix_3 = 1;
+  persist();
+}
+function showBuffUnlock() {
+  const item = findItem('char', 'c_buff');
+  showArcadePrize({ cat: 'char', item });
+  rv.res.rar = 'secret'; $('reveal').style.setProperty('--rc', RARITY.secret[1]); $('rvTap').textContent = '🤫 SECRET UNLOCK! TAP TO OPEN';
+  rv.then = () => showDropReveal('matrix_3', { isNew: true, lvl: sprLevel('matrix_3') }, 'infinite');
+}
 function infExtract() {
   if (!arcade || !arcade.inf || !arcade.canExt) return;
   const n = arcade.lvl, od = infOdds(n);
@@ -3626,7 +3798,9 @@ function infExtract() {
   const g = grantSprite(id);
   SAVE.infBest = Math.max(SAVE.infBest || 0, n);
   SAVE.infExtracts = (SAVE.infExtracts || 0) + 1;
+  const mx = ensureSprites().owned.matrix_3 ? grantSprite('matrix_3') : null;
   persist();
+  if (mx) setTimeout(() => toast(mx.dupe ? `Matrix is maxed: +${mx.dupe} dinks` : `⏪ Matrix levelled up to Lv ${mx.lvl}!`), 2200);
   $('arcM').classList.add('hidden'); toMenu();
   toast(`Extracted at level ${n}!`);
   setTimeout(() => showDropReveal(id, g, 'infinite'), 350);
@@ -3762,7 +3936,7 @@ function moveHuman(o, side, [jx, jy], dt) {
   if (mag > 0.12) { o.tx = o.x + jx / mag * 2; o.ty = o.y + jy / mag * 2; } else { o.tx = o.x; o.ty = o.y; }
   o.tx = clamp(o.tx, -1.3, W + 1.3);
   o.ty = side === 'p' ? clamp(o.ty, NET + 0.35, L + 1.8) : clamp(o.ty, -1.8, NET - 0.35);
-  const boost = side === 'p' && sprIs('zephyr') ? 1 + 0.05 * spr.m : side === 'p' && sprIs('pixel') ? 1 + 0.035 * spr.m : 1;
+  const boost = side === 'p' && sprIs('zephyr') ? 1 + 0.05 * spr.m : side === 'p' && sprIs('pixel') ? 1 + 0.035 * spr.m : side === 'p' && sprIs('matrix') ? 1 + 0.03 * spr.m : 1;
   moveToward(o, o.tx, o.ty, player.speed * boost * (side === 'p' ? csprSpeed() : 1) * (mag > 0.12 ? Math.min(1, 0.35 + mag * 0.8) : 0), dt);
 }
 
