@@ -435,7 +435,7 @@
       <p class="sub">Take a breather.</p>
       <button class="bigbtn" id="resume">RESUME</button>
       <div style="height:10px"></div>
-      <button class="bigbtn ghost sm" id="aimTog">📡 Aim: RADAR</button>
+      <button class="bigbtn ghost sm" id="aimTog">🎲 Aim: AUTO</button>
       <div style="height:14px"></div>
       <button class="bigbtn ghost sm" id="quit">Quit to home</button>
     </div>
@@ -449,7 +449,7 @@
       <div class="help">
         <div><i>🕹️</i><span><b>Move</b> with the joystick. Touch anywhere on the left half and it appears under your thumb.</span></div>
         <div><i>🏓</i><span><b>Hitting</b> is automatic. Catch the ball on the edge of your paddle to angle it. Near the net you dink, from the back you drive.</span></div>
-        <div><i>📡</i><span><b>Radar:</b> as the ball comes to you, a pink target shows where your shot will land. Move left or right of the ball to change the angle: ball on your right side goes right, ball on your left goes left, ball in the middle goes straight. Near the net it shows a dink, from the back a drive; LOB, POWER and SPIN move it too. The faint pink circle is how far it can wobble (better CTL = smaller). It goes dim if you can't reach the ball yet. Switch to random aim in the pause menu.</span></div>
+        <div><i>📡</i><span><b>Aim:</b> AUTO by default (your shot angle comes from where you catch the ball, with some randomness). Switch to <b>MANUAL</b> in the pause menu for the radar: as the ball comes to you, a pink target shows where your shot will land. Move left or right of the ball to change the angle: ball on your right side goes right, ball on your left goes left, ball in the middle goes straight. Near the net it shows a dink, from the back a drive; LOB, POWER and SPIN move it too. The faint pink circle is how far it can wobble (better CTL = smaller). It goes dim if you can't reach the ball yet.</span></div>
         <div><i>⚡</i><span><b>LOB</b> lofts your next shot. <b>POWER</b> rips a hard drive (riskier). <b>SPIN</b> curves and dips it, and kicks off the bounce. Paddles with a high SPN stat make it nastier; low-spin paddles make it weak and wild.</span></div>
         <div><i>📏</i><span><b>Rules:</b> serve and return must bounce. No volleys from the kitchen, and if your follow-through after a volley carries you into the kitchen, that's a fault too. Only the server scores. Win by 2. Every game goes to 11. Easy is chill, Medium is faster, Hard is blazing fast.</span></div>
         <div><i>✨</i><span><b>Sprites</b> float beside you in CPU matches. Each gives a passive boost and has a power that charges as you hit. Tap the sprite button when its ring is full. Level them up to 5. New sprites only drop when you win: harder modes and tournaments drop rarer ones.</span></div>
@@ -2866,7 +2866,7 @@ function moveJoy(J, e) {
   J.kn.style.transform = J.flip ? `translate(${-dx}px,${-dy}px)` : `translate(${dx}px,${dy}px)`;
 }
 // ---- radar aim: where the ball meets your paddle (left/right of your body) sets the angle; the radar shows the landing spot
-const radarOn = () => SAVE.aimMode !== false && mode !== 'local' && mode !== 'online';
+const radarOn = () => SAVE.aim === 'manual' && mode !== 'local' && mode !== 'online';
 function radarPlan(me, b, q) {
   const { p: pd, pf, cf } = paddleFactors('p');
   const reach = playerReach('p'), nearNet = me.y < NET + K + 1.3;
@@ -3020,9 +3020,9 @@ pauseBtn.addEventListener('click', () => {
   $('quit').textContent = mode === 'online' ? 'Leave match' : 'Quit to home';
   $('paused').classList.remove('hidden');
 });
-function aimTogLabel() { $('aimTog').textContent = SAVE.aimMode === false ? '🎲 Aim: RANDOM' : '📡 Aim: RADAR'; }
+function aimTogLabel() { $('aimTog').textContent = SAVE.aim === 'manual' ? '📡 Aim: MANUAL' : '🎲 Aim: AUTO'; }
 aimTogLabel();
-$('aimTog').addEventListener('click', () => { SAVE.aimMode = SAVE.aimMode === false; aimTogLabel(); persist(); });
+$('aimTog').addEventListener('click', () => { SAVE.aim = SAVE.aim === 'manual' ? 'auto' : 'manual'; aimTogLabel(); persist(); });
 $('resume').addEventListener('click', () => { paused = false; $('paused').classList.add('hidden'); });
 document.addEventListener('visibilitychange', () => {
   if (document.hidden && mode !== 'online' && (phase === 'rally' || phase === 'serve')) { paused = true; $('paused').classList.remove('hidden'); }
