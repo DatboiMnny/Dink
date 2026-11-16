@@ -1138,6 +1138,35 @@ const CHARS = [
       jerseyNum(k, '8', 0.86, -0.285, Math.PI); jerseyNum(k, '8', 0.86, 0.285, 0, 0.22);
       for (const a of k.arms) k.mk(new THREE.TorusGeometry(0.075, 0.012, 6, 20), '#ffffff', 0, -0.12, 0, a).rotation.x = Math.PI / 2;
     } },
+  { id:'c_orlando', name:'Orlando', price:500, group:'squad', rarity:'epic',
+    c:{ body:'#7a4a2a', limb:'#7a4a2a', hand:'#e3b98a', legs:'#6b4026', foot:'#3b2414' },
+    deco: k => {
+      const fur = k.M('#7a4a2a', { roughness: 0.8, clearcoat: 0.1 }), skin = k.M('#e3b98a', { roughness: 0.7, clearcoat: 0.1 }), dark = '#2a160c';
+      // heart-shaped light face + big muzzle
+      for (const sx of [-1, 1]) k.mk(sph(0.105, 20, 14), skin, sx * 0.068, 0.035, -0.17, k.head).scale.set(1, 1.1, 0.42);
+      const mz = k.mk(sph(0.12, 22, 16), skin, 0, -0.075, -0.18, k.head); mz.scale.set(1.25, 0.85, 0.62);
+      for (const sx of [-1, 1]) k.mk(sph(0.013, 8, 6), dark, sx * 0.024, -0.045, -0.255, k.head);
+      const sm = k.mk(new THREE.TorusGeometry(0.055, 0.012, 8, 22, Math.PI), dark, 0, -0.095, -0.252, k.head); sm.rotation.z = Math.PI; sm.rotation.x = -0.35;
+      // big round ears
+      for (const sx of [-1, 1]) {
+        const e = k.mk(sph(0.095, 18, 12), fur, sx * 0.265, 0.02, 0.0, k.head); e.scale.set(0.45, 1, 1);
+        const ei = k.mk(sph(0.065, 16, 10), skin, sx * 0.29, 0.02, -0.005, k.head); ei.scale.set(0.3, 1, 1);
+      }
+      // little tuft on top
+      for (const [x, rz] of [[-0.03, 0.35], [0, 0], [0.03, -0.35]]) { const t = k.mk(cone(0.03, 0.09, 8), fur, x, 0.25, 0.01, k.head); t.rotation.z = rz; }
+      belly(k, '#e3b98a');
+      // curly tail
+      tail(k, g => {
+        const pts = [[0, 0, 0], [0, -0.03, 0.16], [0, 0.06, 0.34], [0, 0.24, 0.46], [0, 0.42, 0.42], [0, 0.46, 0.3], [0, 0.38, 0.25], [0, 0.34, 0.33]].map(p_ => new THREE.Vector3(...p_));
+        const m = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 48, 0.03, 10), fur); m.castShadow = true; g.add(m);
+      }, 0, 0.55);
+      // banana in the free hand
+      const ban = new THREE.Group(); ban.position.set(0.0, -0.44, -0.05); ban.rotation.set(0.4, 0, 0.3); k.arms[0].add(ban);
+      const bc = new THREE.CatmullRomCurve3([[-0.1, 0.06, 0], [-0.05, 0.0, 0], [0.03, -0.01, 0], [0.1, 0.04, 0]].map(p_ => new THREE.Vector3(...p_)));
+      const bm = new THREE.Mesh(new THREE.TubeGeometry(bc, 24, 0.028, 10), k.M('#ffd84a', { roughness: 0.5 })); bm.castShadow = true; ban.add(bm);
+      k.mk(cyl(0.008, 0.012, 0.04, 8), '#5a3a10', -0.115, 0.08, 0, ban).rotation.z = 0.7;
+      k.mk(sph(0.012, 8, 6), '#3a2410', 0.112, 0.05, 0, ban);
+    } },
   { id:'c_halor', name:'Halor', price:850, group:'squad', rarity:'legendary', c:{ body:'#1e6bff', limb:'#1d1d24', hand:'#1d1d24', foot:'#1d1d24' },
     bodyMat: () => carPaint(),
     deco: k => {
