@@ -527,6 +527,7 @@
       <button class="x" id="tourX">✕</button>
       <h2>Tournament</h2>
       <p class="sub">Three knockout rounds. Lose once and you're out.<br>Every round won has a <b style="color:#ffe45c">50% sprite drop</b>. Champions get a guaranteed rare sprite.</p>
+      <div class="fine" id="kingProg" style="margin:-4px 0 8px"></div>
       <div id="bracket"></div>
       <button class="bigbtn" id="tourGo">PLAY</button>
     </div>
@@ -1166,6 +1167,8 @@ const SHOP = {
     { id:'p_hyper',   brand:'Hyperion',  name:'Thermo Hybrid',   price:550, type:'hybrid',   shape:'hybrid',  style:'thermo',  a:'#202026', b:'#3ddc84', mark:'HYPERION', pw:8, ct:7, sp:8 },
     { id:'p_pixel',   brand:'Arcade',    name:'Pixel Pro',       price:0, exclusive:'arcade', type:'hybrid', shape:'square', style:'pixel', a:'#120a2a', b:'#ff4fd8', pw:8, ct:8, sp:9 },
     { id:'p_cabinet', brand:'Arcade',    name:'Cabinet Classic', price:0, exclusive:'arcade', type:'control', shape:'wide', style:'thermo', a:'#1a0b3a', b:'#00f0ff', mark:'ARCADE', pw:7, ct:10, sp:7 },
+    { id:'p_shag',    brand:'Furball',   name:'Shag Spinner',    price:0, exclusive:'boss2', type:'spin', shape:'round', style:'fur', hairy:true, a:'#7a4a24', b:'#c98a4b', pw:2, ct:6, sp:10 },
+    { id:'p_king',    brand:'Champion',  name:'Tournament King', price:0, exclusive:'tour3', rarity:'legendary', type:'hybrid', shape:'crown', style:'royal', a:'#ffd34d', b:'#6b1d8f', mark:'KING', ink:'#5a3d00', metal:true, pw:9, ct:9, sp:8 },
     { id:'p_gold',    brand:'Midas',     name:'24K Signature',   price:750, type:'hybrid',   shape:'tear',  style:'gold',    a:'#ffd34d', b:'#b8860b', mark:'MIDAS', ink:'#5a3d00', metal:true, pw:8, ct:9, sp:8 },
   ],
   ball: [
@@ -1213,6 +1216,7 @@ const PSHAPE = {
   tear:   { name:'Teardrop',  w:0.218, h:0.262, rt:0.1,   rb:0.022, taper:0.34, hl:0.13, reach:0.02 },
   round:  { name:'Oval',      w:0.21,  h:0.255, rt:0.105, rb:0.07,  taper:0.1,  hl:0.13, reach:0.03 },
   square: { name:'Square',    w:0.2,   h:0.25,  rt:0.012, rb:0.012, taper:0,    hl:0.12, reach:0 },
+  crown:  { name:'Crown',     w:0.215, h:0.27,  rt:0.02,  rb:0.035, taper:0.12, hl:0.13, reach:0.03, crown:5 },
   blade:  { name:'Blade',     w:0.162, h:0.31,  rt:0.08,  rb:0.02,  taper:0.08, hl:0.18, reach:0.04 },
 };
 const SHAPES = Object.fromEntries(Object.entries(PSHAPE).map(([k, v]) => [k, [v.w, v.h]]));
@@ -1223,10 +1227,16 @@ function padPath(P, path, grow = 0) {
   path.moveTo(-bw / 2 + rb, y0);
   path.lineTo(bw / 2 - rb, y0);
   path.quadraticCurveTo(bw / 2, y0, bw / 2, y0 + rb);
+  if (P.crown) {   // crown points along the tip
+    const sp = h * 0.24, yb = y0 + h - sp, n = P.crown;
+    path.quadraticCurveTo(w / 2, sideMid - sp / 2, w / 2, y0 + h - grow * 0.5);
+    for (let i = n - 1; i > 0; i--) { const xv = -w / 2 + (i - 0.5) * w / (n - 1), xt = -w / 2 + (i - 1) * w / (n - 1); path.lineTo(xv, yb + grow * 0.6); path.lineTo(xt, y0 + h - grow * 0.5 - (i - 1 === 0 ? 0 : (i - 1 === (n - 1) / 2 ? -sp * 0.15 : 0))); }
+  } else {
   path.quadraticCurveTo(w / 2, sideMid, w / 2, y0 + h - rt);
   path.quadraticCurveTo(w / 2, y0 + h, w / 2 - rt, y0 + h);
   path.lineTo(-w / 2 + rt, y0 + h);
   path.quadraticCurveTo(-w / 2, y0 + h, -w / 2, y0 + h - rt);
+  }
   path.quadraticCurveTo(-w / 2, sideMid, -bw / 2, y0 + rb);
   path.quadraticCurveTo(-bw / 2, y0, -bw / 2 + rb, y0);
 }
@@ -1283,6 +1293,7 @@ function mergeSaves(a, b) {
   if (!out.sprites.equip && !Object.keys(out.sprites.owned).length) out.sprites = null;
   out.arcadeBest = Math.max(n.arcadeBest || 0, o.arcadeBest || 0);
   out.infBest = Math.max(n.infBest || 0, o.infBest || 0);
+  out.tourWins = Math.max(n.tourWins || 0, o.tourWins || 0);
   out.rec = { w: Math.max(n.rec?.w || 0, o.rec?.w || 0), l: Math.max(n.rec?.l || 0, o.rec?.l || 0) };
   delete out._fresh;
   return out;
@@ -1690,6 +1701,21 @@ const padTexCache = {};
 function paddleCanvas(p) {
   const c = document.createElement('canvas'); c.width = 128; c.height = 160;
   const x = c.getContext('2d');
+  if (p.style === 'royal') {
+    const g = x.createLinearGradient(0, 0, 128, 160); g.addColorStop(0, '#fff3a0'); g.addColorStop(0.35, '#ffd34d'); g.addColorStop(0.7, '#d99a1a'); g.addColorStop(1, '#ffe27a');
+    x.fillStyle = g; x.fillRect(0, 0, 128, 160);
+    x.fillStyle = '#6b1d8f'; x.fillRect(0, 96, 128, 30); x.fillStyle = '#ffd34d'; x.fillRect(0, 94, 128, 3); x.fillRect(0, 125, 128, 3);
+    x.fillStyle = 'rgba(255,255,255,.35)'; for (let i = 0; i < 18; i++) { x.beginPath(); x.arc(Math.random() * 128, Math.random() * 90, 1 + Math.random() * 1.5, 0, 7); x.fill(); }
+  }
+  if (p.style === 'fur') {
+    x.fillStyle = p.a; x.fillRect(0, 0, 128, 160);
+    for (let i = 0; i < 900; i++) {
+      const fx = Math.random() * 128, fy = Math.random() * 160, a = Math.PI / 2 + (Math.random() - 0.5) * 1.1, l = 6 + Math.random() * 9;
+      x.strokeStyle = ['#5a3418', '#8a5a2e', p.b, '#a8703a', '#3f230f'][i % 5]; x.lineWidth = 1 + Math.random() * 1.2; x.globalAlpha = 0.75;
+      x.beginPath(); x.moveTo(fx, fy); x.quadraticCurveTo(fx + Math.cos(a) * l * 0.5 + 2, fy + Math.sin(a) * l * 0.5, fx + Math.cos(a) * l, fy + Math.sin(a) * l); x.stroke();
+    }
+    x.globalAlpha = 1;
+  }
   if (p.style === 'wood') {
     const g = x.createLinearGradient(0, 0, 128, 0); g.addColorStop(0, p.a); g.addColorStop(0.5, '#e2b77e'); g.addColorStop(1, p.a);
     x.fillStyle = g; x.fillRect(0, 0, 128, 160);
@@ -1759,6 +1785,28 @@ function makePaddle(p, custom) {
   const head = new THREE.Mesh(geo, [face, edge]);
   const top = 0.017, faceY = top - P.hl + 0.005;
   head.rotation.z = Math.PI; head.position.y = faceY; head.castShadow = true; g.add(head);
+  if (P.crown) {   // gold balls on each point, a gem band across the face
+    const gold = new THREE.MeshStandardMaterial({ color: '#ffd34d', metalness: 0.9, roughness: 0.2 });
+    for (let i = 0; i < P.crown; i++) { const tx = -w / 2 + i * w / (P.crown - 1), mid = i === (P.crown - 1) / 2; const b = new THREE.Mesh(new THREE.SphereGeometry(mid ? 0.013 : 0.01, 12, 8), gold); b.position.set(tx, h + (mid ? 0.04 * h : 0) + 0.004, 0); head.add(b); }
+    [['#e11d48', -0.06], ['#2563eb', 0], ['#16a34a', 0.06]].forEach(([c, gx]) => { for (const z of [-0.013, 0.013]) { const gm = new THREE.Mesh(new THREE.OctahedronGeometry(0.012), new THREE.MeshStandardMaterial({ color: c, roughness: 0.1, metalness: 0.3, emissive: c, emissiveIntensity: 0.25 })); gm.scale.z = 0.5; gm.position.set(gx * w / 0.215, h * 0.62, z); head.add(gm); } });
+  }
+  if (p.hairy) {   // shaggy fur sticking out of both faces and round the rim
+    const N = 560, strand = new THREE.ConeGeometry(0.0028, 0.03, 3); strand.translate(0, 0.015, 0);
+    const fur = new THREE.InstancedMesh(strand, new THREE.MeshStandardMaterial({ roughness: 0.95 }), N);
+    const m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), e = new THREE.Euler(), cols = ['#5a3418', '#8a5a2e', '#c98a4b', '#a8703a', '#3f230f'].map(c => new THREE.Color(c));
+    const inside = (px, py) => { const cx = Math.max(0, Math.abs(px) - (w / 2 - P.rt)), cy = Math.max(0, py - (h - P.rt)); if (cy > 0) return Math.hypot(cx, cy) < P.rt * 0.92; return Math.abs(px) < w / 2 * (1 - P.taper * (1 - py / h)) - 0.006; };
+    let n = 0;
+    while (n < N) {
+      const px = (Math.random() - 0.5) * w, py = 0.01 + Math.random() * (h - 0.012);
+      if (!inside(px, py)) continue;
+      const side = n % 2 ? 1 : -1, rim = n % 7 === 0;
+      e.set(side * (Math.PI / 2 - 0.35 + Math.random() * 0.7) * (rim ? 0.4 : 1), 0, (Math.random() - 0.5) * 1.2 + (rim ? Math.sign(px) * -1.2 : 0));
+      q.setFromEuler(e); const sc = 0.7 + Math.random() * 0.7;
+      m4.compose(new THREE.Vector3(px, py, side * 0.011), q, new THREE.Vector3(sc, sc * (0.8 + Math.random() * 0.6), sc));
+      fur.setMatrixAt(n, m4); fur.setColorAt(n, cols[n % cols.length]); n++;
+    }
+    fur.castShadow = true; head.add(fur);
+  }
   // throat: a short wedge joining handle and face
   const th = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.034, 0.03, 10), edge); th.scale.z = 0.55; th.position.y = faceY + 0.005; g.add(th);
   const handle = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.02, P.hl, 10), std(custom.grip, { roughness: 0.9 }));
@@ -2282,7 +2330,8 @@ function gameOver() {
   } else if (arcade) {
     if (!win) { SAVE.arcadeBest = Math.max(SAVE.arcadeBest || 0, arcadeStage() - 1); }
     else SAVE.arcadeBest = Math.max(SAVE.arcadeBest || 0, arcadeStage());
-    if (bossWin) prize = arcadePrize();
+    if (bossWin && arcade.cycle === 1 && !SAVE.owned.includes('p_shag')) { SAVE.owned.push('p_shag'); prize = { cat: 'paddle', item: findItem('paddle', 'p_shag') }; }
+    else if (bossWin) prize = arcadePrize();
     persist();
   }
   $('overTitle').textContent = arcade ? (arcade.inf ? (win ? (arcade.canExt ? 'EXTRACTION POINT!' : 'LEVEL CLEAR!') : 'RUN OVER') : bossWin ? 'BOSS DEFEATED!' : win ? 'STAGE CLEAR!' : 'GAME OVER') : tour ? (champ ? 'CHAMPION!' : win ? `${ROUND_NAMES[tour.round].toUpperCase()} WON!` : 'KNOCKED OUT') : win ? 'VICTORY!' : 'DEFEAT';
@@ -2315,7 +2364,15 @@ function gameOver() {
     overNext = win && tour.round < 2 ? 'next' : 'newtour';
     $('again').textContent = overNext === 'next' ? `NEXT: ${ROUND_NAMES[tour.round + 1].toUpperCase()}` : 'NEW TOURNAMENT';
   }
-  if (drop) setTimeout(() => showDropReveal(drop, dropRes, champ ? 'golden' : 'egg'), 1000);
+  let kingNew = false;
+  if (champ) {
+    SAVE.tourWins = (SAVE.tourWins || 0) + 1;
+    if (SAVE.tourWins >= 3 && !SAVE.owned.includes('p_king')) { SAVE.owned.push('p_king'); kingNew = true; rw += `<div class="rw" style="background:rgba(255,211,77,.28)"><span class="ic">👑</span>3 tournaments won: Tournament King<b style="color:#ffe45c;font-size:14px">NEW</b></div>`; }
+    else if (!SAVE.owned.includes('p_king')) rw += `<div class="fine">👑 Tournament King paddle: ${SAVE.tourWins}/3 tournaments won</div>`;
+    persist();
+  }
+  if (drop) setTimeout(() => { showDropReveal(drop, dropRes, champ ? 'golden' : 'egg'); if (kingNew) rv.then = showKingUnlock; }, 1000);
+  else if (kingNew) setTimeout(showKingUnlock, 1000);
   if (boxWon) rw += `<div class="rw" style="background:rgba(124,58,237,.35)"><span class="ic">${boxSVG(boxWon)}</span>${BOXES[boxWon].name}<b style="color:#fff">+1</b></div>`;
   if (mode === 'online') rw += `<div class="fine">Online match vs a friend</div>`;
   $('earned').innerHTML = rw;
@@ -2731,6 +2788,8 @@ function renderShop() {
     let act;
     if (eq) act = `<button class="act eq">Equipped</button>`;
     else if (owned) act = `<button class="act">Equip</button>`;
+    else if (it.exclusive === 'tour3') act = `<button class="act no">🏆 ${Math.min(3, SAVE.tourWins || 0)}/3 Tours</button>`;
+    else if (it.exclusive === 'boss2') act = `<button class="act no">👑 Boss 2</button>`;
     else if (it.exclusive === 'secret') act = `<button class="act no">🤫 Secret</button>`;
     else if (it.exclusive) act = `<button class="act no">🕹️ Arcade</button>`;
     else act = `<button class="act ${SAVE.dinks >= it.price ? 'buy' : 'no'}"><span class="coin"></span> ${it.price}</button>`;
@@ -2754,6 +2813,8 @@ function renderShop() {
       if (isBtn) {
         if (eq) {}
         else if (owned) { SAVE.equip[shopTab] = it.id; persist(); toast(`Equipped ${it.brand ? it.brand + ' ' : ''}${it.name}`); }
+        else if (it.exclusive === 'tour3') toast(`Win 3 tournaments to unlock this (${Math.min(3, SAVE.tourWins || 0)}/3)`);
+        else if (it.exclusive === 'boss2') toast('Beat the 2nd Arcade boss to win this');
         else if (it.exclusive === 'secret') toast('🤫 A secret unlock. Go deep in Arcade…');
         else if (it.exclusive) toast('Beat an Arcade boss to unlock this');
         else if (SAVE.dinks >= it.price) {
@@ -2854,7 +2915,7 @@ function boxSVG(tier) {
 }
 function poolOf(r) {
   const out = [];
-  for (const cat of ['char', 'paddle', 'ball', 'arena']) for (const it of SHOP[cat]) if (itemRarity(cat, it) === r) out.push({ cat, it });
+  for (const cat of ['char', 'paddle', 'ball', 'arena']) for (const it of SHOP[cat]) if (!it.exclusive && itemRarity(cat, it) === r) out.push({ cat, it });
   return out;
 }
 function rollBox(tier) {
@@ -3741,7 +3802,7 @@ function showLadder() {
   $('menu').classList.add('hidden');
   if (arcade.inf) return showInfLadder();
   $('arcM').querySelector('h2').textContent = '🕹️ Arcade'; $('ladder').classList.remove('five'); $('infBox').innerHTML = ''; $('arcExt').classList.add('hidden');
-  $('arcSub').innerHTML = `Loop ${arcade.cycle + 1} · Stage ${arcadeStage()}<br>Beat 3 players to 3 points, then the boss to 5.<br>Lose once and the run ends. Bosses drop <b style="color:#ff9cf0">Arcade-exclusive</b> gear.`;
+  $('arcSub').innerHTML = `Loop ${arcade.cycle + 1} · Stage ${arcadeStage()}<br>Beat 3 players to 3 points, then the boss to 5.<br>Lose once and the run ends. Bosses drop <b style="color:#ff9cf0">Arcade-exclusive</b> gear.${arcade.cycle === 1 && !SAVE.owned.includes('p_shag') ? '<br>🦱 This boss drops the hairy <b style="color:#ffd9a8">Shag Spinner</b> paddle!' : ''}`;
   const L_ = $('ladder'); L_.innerHTML = '';
   arcade.opps.forEach((o, i) => {
     const d = document.createElement('div'); d.className = 'rung' + (i === 3 ? ' boss' : '') + (i === arcade.step ? ' now' : i < arcade.step ? ' done' : '');
@@ -3815,6 +3876,10 @@ function showInfLadder() {
   $('arcGo').textContent = arcade.canExt ? `PUSH ON TO LEVEL ${n + 1}` : `PLAY LEVEL ${n + 1}`;
   $('arcM').classList.remove('hidden');
 }
+function showKingUnlock() {
+  showArcadePrize({ cat: 'paddle', item: findItem('paddle', 'p_king') });
+  rv.res.rar = 'legendary'; $('reveal').style.setProperty('--rc', RARITY.legendary[1]); $('rvTap').textContent = '👑 TOURNAMENT KING! TAP TO OPEN';
+}
 function unlockBuff() {
   if (!SAVE.owned.includes('c_buff')) SAVE.owned.push('c_buff');
   const S = ensureSprites(); if (!S.owned.matrix_3) S.owned.matrix_3 = 1;
@@ -3869,6 +3934,7 @@ function showBracket() {
     b.appendChild(d);
   });
   $('tourGo').textContent = `PLAY ${ROUND_NAMES[tour.round].toUpperCase()}`;
+  $('kingProg').innerHTML = SAVE.owned.includes('p_king') ? '👑 Tournament King unlocked' : `👑 Win 3 tournaments for the <b style="color:#ffe45c">Tournament King</b> paddle: ${SAVE.tourWins || 0}/3`;
   $('tourM').classList.remove('hidden');
 }
 $('tourGo').addEventListener('click', () => { initAudio(); $('tourM').classList.add('hidden'); newGame('cpu', { tour: true }); });
