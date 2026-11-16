@@ -1152,21 +1152,21 @@ const SHOP = {
   char: CHARS,
   paddle: [
     // stats are 1–10: pw = power, ct = control, sp = spin. Brands are fictional.
-    { id:'p_classic', brand:'Backyard',  name:'Woodie',          price:0,   type:'allround', shape:'std',  style:'wood',    a:'#d3a36a', b:'#8a5a2b', pw:4, ct:5, sp:2 },
-    { id:'p_ocean',   brand:'Tidal',     name:'Soft Touch',      price:40,  type:'control',  shape:'std',  style:'solid',   a:'#2a9df4', b:'#ffffff', mark:'TIDAL', pw:3, ct:8, sp:4 },
-    { id:'p_stripes', brand:'Vortex',    name:'Hybrid 2',        price:90,  type:'hybrid',   shape:'std',  style:'stripes', a:'#ffffff', b:'#e63946', mark:'VORTEX', ink:'#111', pw:6, ct:6, sp:6 },
+    { id:'p_classic', brand:'Backyard',  name:'Woodie',          price:0,   type:'allround', shape:'square',  style:'wood',    a:'#d3a36a', b:'#8a5a2b', pw:4, ct:5, sp:2 },
+    { id:'p_ocean',   brand:'Tidal',     name:'Soft Touch',      price:40,  type:'control',  shape:'round',  style:'solid',   a:'#2a9df4', b:'#ffffff', mark:'TIDAL', pw:3, ct:8, sp:4 },
+    { id:'p_stripes', brand:'Vortex',    name:'Hybrid 2',        price:90,  type:'hybrid',   shape:'hybrid',  style:'stripes', a:'#ffffff', b:'#e63946', mark:'VORTEX', ink:'#111', pw:6, ct:6, sp:6 },
     { id:'p_pulse',   brand:'Pulse',     name:'Widebody',        price:150, type:'control',  shape:'wide', style:'brand',   a:'#3ddc84', b:'#0b3d24', mark:'PULSE', pw:5, ct:8, sp:5 },
     { id:'p_flames',  brand:'Inferno',   name:'Power Elongated', price:180, type:'power',    shape:'long', style:'flames',  a:'#1a1a1a', b:'#ff5a00', mark:'INFERNO', pw:8, ct:4, sp:5 },
-    { id:'p_sakura',  brand:'Sakura',    name:'Touch 13mm',      price:220, type:'control',  shape:'std',  style:'brand',   a:'#ffc2d9', b:'#d6336c', mark:'SAKURA', pw:4, ct:9, sp:6 },
-    { id:'p_galaxy',  brand:'Nebula',    name:'Spin Pro',        price:260, type:'spin',     shape:'std',  style:'galaxy',  a:'#1b0b3a', b:'#b18cff', mark:'NEBULA', pw:5, ct:6, sp:8 },
+    { id:'p_sakura',  brand:'Sakura',    name:'Touch 13mm',      price:220, type:'control',  shape:'tear',  style:'brand',   a:'#ffc2d9', b:'#d6336c', mark:'SAKURA', pw:4, ct:9, sp:6 },
+    { id:'p_galaxy',  brand:'Nebula',    name:'Spin Pro',        price:260, type:'spin',     shape:'blade',  style:'galaxy',  a:'#1b0b3a', b:'#b18cff', mark:'NEBULA', pw:5, ct:6, sp:8 },
     { id:'p_cobalt',  brand:'Cobalt',    name:'Power 14mm',      price:300, type:'power',    shape:'std',  style:'brand',   a:'#1f4fd8', b:'#0a1a4a', mark:'COBALT', pw:8, ct:6, sp:6 },
-    { id:'p_toxic',   brand:'Toxic',     name:'Grit Carbon',     price:340, type:'spin',     shape:'std',  style:'carbon',  a:'#18181c', b:'#b6ff1a', mark:'TOXIC', pw:6, ct:5, sp:9 },
+    { id:'p_toxic',   brand:'Toxic',     name:'Grit Carbon',     price:340, type:'spin',     shape:'hybrid',  style:'carbon',  a:'#18181c', b:'#b6ff1a', mark:'TOXIC', pw:6, ct:5, sp:9 },
     { id:'p_kinetic', brand:'Kinetic',   name:'Raw Carbon 16',   price:400, type:'control',  shape:'std',  style:'carbon',  a:'#18181c', b:'#e63946', mark:'KINETIC', pw:5, ct:9, sp:8 },
     { id:'p_apex',    brand:'Apex',      name:'Elongated Gen 3', price:450, type:'power',    shape:'long', style:'brand',   a:'#f4f4f4', b:'#2a9df4', mark:'APEX', ink:'#0a1a4a', pw:9, ct:5, sp:7 },
-    { id:'p_hyper',   brand:'Hyperion',  name:'Thermo Hybrid',   price:550, type:'hybrid',   shape:'std',  style:'thermo',  a:'#202026', b:'#3ddc84', mark:'HYPERION', pw:8, ct:7, sp:8 },
-    { id:'p_pixel',   brand:'Arcade',    name:'Pixel Pro',       price:0, exclusive:'arcade', type:'hybrid', shape:'std', style:'pixel', a:'#120a2a', b:'#ff4fd8', pw:8, ct:8, sp:9 },
+    { id:'p_hyper',   brand:'Hyperion',  name:'Thermo Hybrid',   price:550, type:'hybrid',   shape:'hybrid',  style:'thermo',  a:'#202026', b:'#3ddc84', mark:'HYPERION', pw:8, ct:7, sp:8 },
+    { id:'p_pixel',   brand:'Arcade',    name:'Pixel Pro',       price:0, exclusive:'arcade', type:'hybrid', shape:'square', style:'pixel', a:'#120a2a', b:'#ff4fd8', pw:8, ct:8, sp:9 },
     { id:'p_cabinet', brand:'Arcade',    name:'Cabinet Classic', price:0, exclusive:'arcade', type:'control', shape:'wide', style:'thermo', a:'#1a0b3a', b:'#00f0ff', mark:'ARCADE', pw:7, ct:10, sp:7 },
-    { id:'p_gold',    brand:'Midas',     name:'24K Signature',   price:750, type:'hybrid',   shape:'std',  style:'gold',    a:'#ffd34d', b:'#b8860b', mark:'MIDAS', ink:'#5a3d00', metal:true, pw:8, ct:9, sp:8 },
+    { id:'p_gold',    brand:'Midas',     name:'24K Signature',   price:750, type:'hybrid',   shape:'tear',  style:'gold',    a:'#ffd34d', b:'#b8860b', mark:'MIDAS', ink:'#5a3d00', metal:true, pw:8, ct:9, sp:8 },
   ],
   ball: [
     { id:'b_classic', name:'Classic',   price:0,   color:'#e8f542', trail:'#e8f542' },
@@ -1203,7 +1203,33 @@ const CPU_PADDLE = { id:'p_cpu', style:'brand', shape:'std', a:'#c9a7ff', b:'#3a
 const PTYPES = { control:['Control','#4ab3ff'], power:['Power','#ff6b4a'], hybrid:['Hybrid','#3ddc84'], spin:['Spin','#c27bff'], allround:['All-round','#b9c2cc'] };
 const EDGE_COLORS = ['#1d1d24','#f4f4f4','#e63946','#2a9df4','#3ddc84','#ffd34d','#ff6ec7','#8a3ffc'];
 const GRIP_COLORS = ['#222228','#f4f4f4','#e63946','#2a9df4','#3ddc84','#ffd34d','#ff6ec7','#ff9a1f'];
-const SHAPES = { std:[0.2, 0.26], long:[0.168, 0.3], wide:[0.232, 0.245] };
+// paddle outlines, modelled on real shapes: w/h = face size, rt/rb = top/bottom corner radius, taper = how much narrower the throat end is,
+// hl = handle length, reach = small gameplay bonus from the extra face
+const PSHAPE = {
+  std:    { name:'Standard',  w:0.2,   h:0.26,  rt:0.045, rb:0.03,  taper:0,    hl:0.13, reach:0 },
+  hybrid: { name:'Hybrid',    w:0.194, h:0.272, rt:0.055, rb:0.03,  taper:0.02, hl:0.14, reach:0.015 },
+  long:   { name:'Elongated', w:0.168, h:0.3,   rt:0.03,  rb:0.025, taper:0,    hl:0.16, reach:0.03 },
+  wide:   { name:'Widebody',  w:0.235, h:0.24,  rt:0.075, rb:0.045, taper:0,    hl:0.12, reach:0.07 },
+  tear:   { name:'Teardrop',  w:0.218, h:0.262, rt:0.1,   rb:0.022, taper:0.34, hl:0.13, reach:0.02 },
+  round:  { name:'Oval',      w:0.21,  h:0.255, rt:0.105, rb:0.07,  taper:0.1,  hl:0.13, reach:0.03 },
+  square: { name:'Square',    w:0.2,   h:0.25,  rt:0.012, rb:0.012, taper:0,    hl:0.12, reach:0 },
+  blade:  { name:'Blade',     w:0.162, h:0.31,  rt:0.08,  rb:0.02,  taper:0.08, hl:0.18, reach:0.04 },
+};
+const SHAPES = Object.fromEntries(Object.entries(PSHAPE).map(([k, v]) => [k, [v.w, v.h]]));
+// traces the outline (throat at y = 0, tip at y = h) on a THREE.Shape or a canvas 2D context
+function padPath(P, path, grow = 0) {
+  const w = P.w + grow * 2, h = P.h + grow * 2, bw = w * (1 - P.taper), rt = Math.min(P.rt + grow, w / 2), rb = Math.min(P.rb + grow, bw / 2), y0 = -grow;
+  const sideMid = (y0 + rb + y0 + h - rt) / 2 + h * 0.08;
+  path.moveTo(-bw / 2 + rb, y0);
+  path.lineTo(bw / 2 - rb, y0);
+  path.quadraticCurveTo(bw / 2, y0, bw / 2, y0 + rb);
+  path.quadraticCurveTo(w / 2, sideMid, w / 2, y0 + h - rt);
+  path.quadraticCurveTo(w / 2, y0 + h, w / 2 - rt, y0 + h);
+  path.lineTo(-w / 2 + rt, y0 + h);
+  path.quadraticCurveTo(-w / 2, y0 + h, -w / 2, y0 + h - rt);
+  path.quadraticCurveTo(-w / 2, sideMid, -bw / 2, y0 + rb);
+  path.quadraticCurveTo(-bw / 2, y0, -bw / 2 + rb, y0);
+}
 
 // ================= save =================
 const DEFAULT_SAVE = { dinks:50, boxes:{ basic:1, premium:0, mythic:0 }, lastSpin:'', owned:['c_blanko','p_classic','b_classic','a_park'],
@@ -1721,15 +1747,24 @@ function paddleTex(p) {
 function padCustom() { return SAVE.padCustom || { edge: EDGE_COLORS[0], grip: GRIP_COLORS[0] }; }
 function makePaddle(p, custom) {
   custom = custom || { edge: '#1d1d24', grip: '#222228' };
-  const [w, h] = SHAPES[p.shape || 'std'];
+  const P = PSHAPE[p.shape] || PSHAPE.std, { w, h } = P;
   const g = new THREE.Group();
   const face = new THREE.MeshStandardMaterial({ map: paddleTex(p), roughness: p.metal ? 0.25 : (p.style === 'carbon' || p.style === 'thermo') ? 0.35 : 0.55, metalness: p.metal ? 0.85 : 0.05 });
   const edge = std(custom.edge, { roughness: 0.4 });
-  const head = new THREE.Mesh(new THREE.BoxGeometry(w, h, 0.022), [edge, edge, edge, edge, face, face]);
-  head.position.y = -0.11 - h / 2; head.castShadow = true; g.add(head);
-  const handle = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.02, 0.13, 8), std(custom.grip, { roughness: 0.9 }));
-  handle.position.y = -0.05; g.add(handle);
-  const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.022, 0.022, 0.012, 10), edge); cap.position.y = 0.017; g.add(cap);
+  const sh = new THREE.Shape(); padPath(P, sh);
+  const geo = new THREE.ExtrudeGeometry(sh, { depth: 0.014, bevelEnabled: true, bevelThickness: 0.004, bevelSize: 0.005, bevelSegments: 2, curveSegments: 14 });
+  geo.translate(0, 0, -0.007);
+  const uv = geo.attributes.uv, pos = geo.attributes.position;
+  for (let i = 0; i < uv.count; i++) uv.setXY(i, 1 - (pos.getX(i) + w / 2) / w, 1 - pos.getY(i) / h);
+  const head = new THREE.Mesh(geo, [face, edge]);
+  const top = 0.017, faceY = top - P.hl + 0.005;
+  head.rotation.z = Math.PI; head.position.y = faceY; head.castShadow = true; g.add(head);
+  // throat: a short wedge joining handle and face
+  const th = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.034, 0.03, 10), edge); th.scale.z = 0.55; th.position.y = faceY + 0.005; g.add(th);
+  const handle = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.02, P.hl, 10), std(custom.grip, { roughness: 0.9 }));
+  handle.position.y = top - P.hl / 2; g.add(handle);
+  for (let i = 1; i < P.hl / 0.03; i++) { const r = new THREE.Mesh(new THREE.TorusGeometry(0.0195, 0.0025, 4, 12), std(shade(custom.grip, 0.7), { roughness: 0.9 })); r.rotation.x = Math.PI / 2; r.position.y = top - i * 0.03; g.add(r); }
+  const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.025, 0.022, 0.014, 12), edge); cap.position.y = top; g.add(cap);
   return g;
 }
 
@@ -2084,7 +2119,7 @@ function paddleFactors(side = 'p') {
 }
 function playerReach(side = 'p') {
   const { p, cf } = paddleFactors(side);
-  let r = REACH * (1 + 0.05 * cf + (p.shape === 'wide' ? 0.07 : 0) + (p.shape === 'long' ? 0.03 : 0));
+  let r = REACH * (1 + 0.05 * cf + (PSHAPE[p.shape] || PSHAPE.std).reach);
   if (side === 'p' && sprOn()) { if (spr.spc.k === 'tide') r *= 1 + 0.06 * spr.m; if (spr.spc.k === 'pixel') r *= 1 + 0.04 * spr.m; if (spr.reachT > 0) r *= 1.5 + 0.1 * spr.m; }
   if (side === 'p' && csprOn() && cspr.shrinkT > 0) r *= 0.72;
   return r;
@@ -2632,11 +2667,13 @@ function thumb(cat, it) {
   const key = cat + it.id + (cat === 'paddle' ? JSON.stringify(padCustom()) : '') + (it.look ? JSON.stringify(look()) : ''); if (thumbCache[key]) return thumbCache[key];
   const c = document.createElement('canvas'); c.width = c.height = 128; const x = c.getContext('2d');
   if (cat === 'paddle') {
-    const cu = padCustom(), [sw, sh] = SHAPES[it.shape || 'std'], pw = sw * 330, ph = sh * 330;
-    x.save(); x.translate(64, 58); x.rotate(-0.35);
-    x.fillStyle = cu.grip; x.beginPath(); x.roundRect(-7, ph / 2 - 6, 14, 34, 5); x.fill();
-    x.beginPath(); x.roundRect(-pw / 2 - 4, -ph / 2 - 4, pw + 8, ph + 8, 16); x.fillStyle = cu.edge; x.fill();
-    x.beginPath(); x.roundRect(-pw / 2, -ph / 2, pw, ph, 13); x.clip(); x.drawImage(paddleCanvas(it), -pw / 2, -ph / 2, pw, ph); x.restore();
+    const cu = padCustom(), P = PSHAPE[it.shape] || PSHAPE.std, S = 300 * Math.min(1, 0.3 / (P.h + P.hl * 0.55)), pw = P.w * S, ph = P.h * S, hl = P.hl * S;
+    x.save(); x.translate(64, 60 - hl * 0.25); x.rotate(-0.35);
+    x.fillStyle = cu.grip; x.beginPath(); x.roundRect(-6.5, ph / 2 - 4, 13, hl + 4, 5); x.fill();
+    x.fillStyle = cu.edge; x.beginPath(); x.roundRect(-8, ph / 2 + hl - 4, 16, 6, 3); x.fill();
+    const outline = grow => { x.beginPath(); x.save(); x.translate(0, ph / 2); x.scale(S, -S); padPath(P, x, grow); x.restore(); };
+    outline(0.012); x.fillStyle = cu.edge; x.fill();
+    outline(0); x.save(); x.clip(); x.drawImage(paddleCanvas(it), -pw / 2, -ph / 2, pw, ph); x.restore(); x.restore();
   } else if (cat === 'ball') {
     if (it.glow) { const g = x.createRadialGradient(64, 64, 10, 64, 64, 62); g.addColorStop(0, it.trail === 'rainbow' ? '#fff' : it.emissive); g.addColorStop(1, 'rgba(0,0,0,0)'); x.fillStyle = g; x.globalAlpha = .6; x.fillRect(0, 0, 128, 128); x.globalAlpha = 1; }
     if (it.trail === 'rainbow') { for (let i = 0; i < 6; i++) { x.fillStyle = `hsl(${i * 60},100%,60%)`; x.beginPath(); x.arc(64, 64, 34, i * Math.PI / 3, (i + 1) * Math.PI / 3); x.lineTo(64, 64); x.fill(); } }
@@ -2703,7 +2740,7 @@ function renderShop() {
     let extra = '';
     if (shopTab === 'paddle') {
       const t = PTYPES[it.type];
-      extra = `<div class="ptype" style="color:${t[1]}">${t[0]}${it.shape !== 'std' ? ' · ' + (it.shape === 'long' ? 'Elongated' : 'Widebody') : ''}</div>
+      extra = `<div class="ptype" style="color:${t[1]}">${t[0]} · ${(PSHAPE[it.shape] || PSHAPE.std).name}</div>
         <div class="brand">${it.brand}</div>
         <div class="stats">${[['PWR', it.pw, '#ff6b4a'], ['CTL', it.ct, '#4ab3ff'], ['SPN', it.sp, '#c27bff']].map(([l, v, c]) =>
           `<div><span>${l}</span><i style="--v:${v * 10}%;--c:${c}"></i><b>${v}</b></div>`).join('')}</div>`;
