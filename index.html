@@ -450,7 +450,8 @@
         <div><i>⚡</i><span><b>LOB</b> lofts your next shot. <b>POWER</b> rips a hard drive (riskier). <b>SPIN</b> curves and dips it, and kicks off the bounce. Paddles with a high SPN stat make it nastier; low-spin paddles make it weak and wild.</span></div>
         <div><i>📏</i><span><b>Rules:</b> serve and return must bounce. No volleys from the kitchen. Only the server scores. Win by 2. Easy games go to 11, Medium to 15, Hard to 21. Same-phone games go to 11.</span></div>
         <div><i>✨</i><span><b>Sprites</b> float beside you in CPU matches. Each gives a passive boost and has a power that charges as you hit. Tap the sprite button when its ring is full. Level them up to 5. New sprites only drop when you win: harder modes and tournaments drop rarer ones.</span></div>
-        <div><i>🕹️</i><span><b>Arcade</b> is an endless ladder: beat 3 players to 3 points, then a boss to 5, and keep going as it gets harder. Bosses drop Arcade-exclusive characters, paddles, a ball and an arena that you can't get anywhere else.</span></div>
+        <div><i>🕹️</i><span><b>Arcade</b> is an endless ladder: beat 3 players to 3 points, then a boss to 5 (rally scoring, win by 2), and keep going as it gets harder. Bosses drop Arcade-exclusive characters, paddles, a ball and an arena that you can't get anywhere else.</span></div>
+        <div><i>♿</i><span><b>Juan</b> plays by real wheelchair pickleball rules: he may let the ball bounce <b>twice</b> on his side (the second bounce can land anywhere).</span></div>
         <div><i>🎾</i><span><b>Serving:</b> tap the court for a normal serve, or pick <b>SHORT</b> (floats just past the kitchen, pulls them forward) or <b>DEEP</b> (fast to the baseline, harder to return). Both carry a little risk of a fault.</span></div>
         <div><i>😈</i><span><b>CPU sprites:</b> on Medium and Hard, Arcade bosses, and Infinite from level 10, your opponent brings a sprite too. Watch its red ring top-right: when it fills, they fire a power at you (slow you down, freeze you, shrink your reach, or hit a power shot).</span></div>
         <div><i>♾️</i><span><b>Infinite Arcade</b> has no bosses: just endless games to 5 (each game is one level). Every 15 levels (15, 30, 45…) you can <b>extract</b> and pick an Infinite-only sprite <i>or</i> paddle. The deeper you go, the better your legendary odds, but lose before you extract and you get nothing.</span></div>
@@ -668,8 +669,14 @@ function belly(k, color, y = 0.82, sx = 1, sy = 1.35) { const m = k.mk(sph(0.2),
 function belt(k, color, y = 0.62, r = 0.3, t = 0.03) { const m = k.mk(new THREE.TorusGeometry(r, t, 8, 32), color, 0, y, 0, k.upper); m.rotation.x = Math.PI / 2; m.scale.y = 0.92; return m; }
 function smile(k, color = '#3a1414') { const m = k.mk(new THREE.TorusGeometry(0.058, 0.014, 8, 24, Math.PI), color, 0, -0.075, -0.222, k.head); m.rotation.z = Math.PI; m.rotation.x = -0.25; }
 function cape(k, color) {
-  const m = k.mk(new THREE.PlaneGeometry(0.5, 0.7, 1, 4), k.M(color, { side: DS }), 0, 0.8, 0.31, k.upper);
-  m.rotation.x = 0.14; k.cape = m;
+  // hangs from the shoulders and wraps round the back of the torso; the pivot at the collar lets it flare out when running
+  const pivot = new THREE.Group(); pivot.position.set(0, 1.13, 0.02); k.upper.add(pivot);
+  const geo = new THREE.CylinderGeometry(0.29, 0.4, 0.78, 24, 6, true, -1.25, 2.5); geo.translate(0, -0.39, 0);
+  const m = k.mk(geo, k.M(color, { side: DS, roughness: 0.55 }), 0, 0, 0, pivot); m.scale.z = 0.98;
+  const clasp = k.M('#ffd23f', { metalness: 0.9, roughness: 0.25 });
+  for (const sx of [-1, 1]) k.mk(sph(0.035, 12, 10), clasp, sx * 0.17, 0.0, -0.17, pivot);   // clasps on the collarbones
+  const tie = k.mk(new THREE.TorusGeometry(0.17, 0.014, 6, 20, Math.PI), clasp, 0, 0.005, -0.1, pivot); tie.rotation.x = Math.PI / 2; tie.rotation.z = Math.PI;
+  k.cape = pivot;
 }
 function frontHalf(r, t0, tl) { return new THREE.SphereGeometry(r, 20, 12, Math.PI, Math.PI, t0, tl); }
 function beard(k, color, big = 1) { const m = k.mk(frontHalf(0.265 * big, Math.PI * 0.52, Math.PI * 0.4), k.M(color, { side: DS, roughness: 1 }), 0, -0.01, 0, k.head); return m; }
@@ -1139,7 +1146,7 @@ CHARS.push({ id:'c_hiker', name:'Hairy Hiker', price:0, exclusive:'spin', group:
     k.mk(sph(0.03), k.M('#222'), 0, 0.26, -0.09, pole);
   } });
 // ---- secret: Juan, who plays from a sports wheelchair. Unlocked by tapping the DINK! logo 5 times on the home screen.
-CHARS.push({ id:'c_juan', name:'Juan', price:0, exclusive:'logo', group:'secret', rarity:'secret',
+CHARS.push({ id:'c_juan', name:'Juan', price:0, wheelchair:true, exclusive:'logo', group:'secret', rarity:'secret',
   c:{ body:'#0ea5e9', head:'#c68a5a', limb:'#c68a5a', hand:'#1d1d24', legs:'#1f2937', foot:'#ef4444' },
   deco: k => {
     // hair, backwards cap, jersey number
@@ -2102,7 +2109,7 @@ function animateChar(m, o, dt, t) {
   if (u.tail) u.tail.rotation.y = Math.sin(t * (4 + sp * 6)) * 0.35;
   if (u.wings) u.wings.forEach(w => { const s = w.userData.s; w.rotation.y = -s * (0.65 + Math.sin(t * (sp > 0.1 ? 12 : 4)) * 0.35); });
   if (u.snakes) u.snakes.forEach((s, i) => { s.children.forEach(c => c.rotation.z = Math.sin(t * 5 + i) * 0.25); });
-  if (u.cape) u.cape.rotation.x = 0.14 + sp * 0.5 + Math.sin(t * 6) * 0.04 * (0.3 + sp);
+  if (u.cape) u.cape.rotation.x = -(0.04 + sp * 0.45 + Math.sin(t * 6) * 0.04 * (0.3 + sp));
   if (u.def.fx && Math.random() < (u.def.fx === 'embers' ? 0.35 : 0.15)) {
     const p = new THREE.Vector3(); u.upper.getWorldPosition(p); p.y += rnd(0.6, 1.5); p.x += rnd(-0.25, 0.25);
     burst(p, u.def.fx === 'embers' ? 'fire' : u.def.fx === 'ash' ? (Math.random() < 0.3 ? '#ff7a2a' : '#7a7a82') : '#bffcff', 1, 0.8, 0.12);
@@ -2191,10 +2198,16 @@ let arcade = null;
 let doubles = false, serverNum = 1, tour = null, gameTo = 11, selMode = 'single', overNext = null;
 function team(sd) { return sd === 'p' ? (doubles ? [player, partner] : [player]) : (doubles ? [ai, ai2] : [ai]); }
 function isBot(o) { return o === partner || o === ai2 || (o === ai && ctrl.a === 'ai'); }
-function currentServer() { const t = team(server); return doubles ? t[serverNum - 1] : t[0]; }
+// doubles follows real rotation: rightOf[team] = who stands in that team's right court. Partners swap sides only when their team
+// scores on its serve; after a side-out the player on the right serves first; server 2 serves from wherever they stand.
+let srvObj = null, rightOf = { p: null, a: null };
+const teamOf = o => (o === player || o === partner) ? 'p' : 'a';
+const mate = o => { const t = team(teamOf(o)); return t[0] === o ? t[1] : t[0]; };
+function currentServer() { return doubles ? srvObj : team(server)[0]; }
 const PARTNER_D = { ...DIFFS[1], ue: 0.06 };
 const botD = o => o === partner ? PARTNER_D : D;
 const ROUND_NAMES = ['Quarterfinal', 'Semifinal', 'Final'];
+const TOUR_TO = [11, 11, 15];   // tournament games to 11, final to 15, win by 2
 const TOUR_D = [{ ...DIFFS[1] }, { ...DIFFS[2] }, { ...DIFFS[2], ue: 0.03, speed: 5.8, react: 0.08, err: 0.2, pace: 0.86, judge: 0.95 }];
 const TOUR_PRIZE = [40, 70, 120], TOUR_CHAMP = 250;
 const ball = { x: W / 2, y: L, z: 1, vx: 0, vy: 0, vz: 0, bounces: 0, live: false, held: true };
@@ -2283,6 +2296,8 @@ const rand = rnd;
 const gauss = () => (Math.random() + Math.random() + Math.random() - 1.5) / 1.5;
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const side = y => (y > NET ? 'p' : 'a');
+const isWheelchair = o => { const m = o === player ? playerModel : o === ai ? aiModel : o === partner ? partnerModel : o === ai2 ? ai2Model : null; return !!(m && m.userData.def && m.userData.def.wheelchair); };
+const wheelchairOn = sd => team(sd).some(isWheelchair);
 const inKitchen = (o, sd) => sd === 'p' ? o.y < NET + K : o.y > NET - K;
 
 // ================= flow =================
@@ -2294,7 +2309,7 @@ function newGame(m = 'cpu', opts = {}) {
   if (!opts.arcade) arcade = null;
   doubles = m === 'cpu' && !!opts.doubles && !tour;
   D = arcade ? arcadeD() : tour ? TOUR_D[tour.round] : m === 'cpu' ? selD : DIFFS[1];
-  gameTo = arcade ? (arcade.inf || arcade.step === 3 ? 5 : 3) : tour ? [7, 9, 11][tour.round] : m === 'cpu' ? [11, 15, 21][Math.max(0, DIFFS.indexOf(selD))] : 11;
+  gameTo = arcade ? (arcade.inf || arcade.step === 3 ? 5 : 3) : tour ? TOUR_TO[tour.round] : m === 'cpu' ? [11, 15, 21][Math.max(0, DIFFS.indexOf(selD))] : 11;
   document.body.classList.toggle('local', m === 'local');
   score = { p: 0, a: 0 }; earnedThisGame = 0; gameOverPending = false; paused = false;
   server = Math.random() < 0.5 ? 'p' : 'a';
@@ -2306,6 +2321,7 @@ function newGame(m = 'cpu', opts = {}) {
   setupCpuSprite();
   if (doubles) setupDoublesModels();
   serverNum = doubles ? 2 : 1;   // doubles starts "0-0-2": only one server before the first side out
+  if (doubles) { rightOf = { p: player, a: ai }; srvObj = rightOf[server]; }   // first server starts in the right court
   aiModel.visible = true;
   resetSpriteMatch(); showControls(true); resetJoy(); clearQueued();
   $('again').textContent = m === 'online' ? (role === 'host' ? 'REMATCH' : 'WAITING FOR HOST…') : 'PLAY AGAIN'; overNext = null;
@@ -2322,15 +2338,16 @@ function setupServe() {
   phase = 'serve'; clearQueued(); resetJoy();
   Object.assign(ball, { live: false, held: true, bounces: 0 }); trailPts.length = 0; landMarker = null;
   for (const o of [ai, ai2, partner]) { o.leave = false; o.plan = null; o.react = 0; }
-  const sx = serveSide(server), rx = W - sx;
+  const RX = sd => sd === 'p' ? W * 0.75 : W * 0.25;   // each team's right court, as the players face the net
+  const sx = doubles ? (currentServer() === rightOf[server] ? RX(server) : W - RX(server)) : serveSide(server), rx = W - sx;
   const base = sd => sd === 'p' ? L + 0.35 : -0.35, kline = sd => sd === 'p' ? NET + K + 0.45 : NET - K - 0.45;
   const place = (o, x, y) => { o.x = o.tx = x; o.y = o.ty = y; };
   const rs = otherSide(server), srv = currentServer();
   place(srv, sx, base(server));
   if (!doubles) place(team(rs)[0], rx, base(rs) + (rs === 'p' ? -0.05 : 0.05));
   else {
-    place(team(server).find(o => o !== srv), W - sx, base(server) + (server === 'p' ? -0.25 : 0.25));
-    const [rcv, rp] = team(rs);
+    place(mate(srv), W - sx, base(server) + (server === 'p' ? -0.25 : 0.25));
+    const rcv = srv === rightOf[server] ? rightOf[rs] : mate(rightOf[rs]), rp = mate(rcv);   // receiver is diagonal to the server
     place(rcv, rx, base(rs) + (rs === 'p' ? -0.05 : 0.05)); place(rp, sx, kline(rs));
     ai.laneSign = Math.sign(ai.x - W / 2) || 1; ai2.laneSign = -ai.laneSign;
   }
@@ -2382,17 +2399,17 @@ function endRally(loser, reason) {
     if (cspr.model) burst(cspr.model.position, '#f9a8d4', 24, 3, 0.2);
     return;
   }
-  pointSnap = { score: { ...score }, server, serverNum };
+  pointSnap = { score: { ...score }, server, serverNum, srvObj, rightOf: { ...rightOf } };
   phase = 'point'; pointTimer = 1.6; ball.live = false; landMarker = null;
   let pointTo = null, second = false;
   if (arcade) { const w = otherSide(loser); score[w]++; pointTo = w; server = w; }   // arcade uses quick rally scoring
-  else if (loser !== server) { score[server]++; pointTo = server; }
-  else if (doubles && serverNum === 1) { serverNum = 2; second = true; }
-  else { server = otherSide(server); serverNum = 1; }
+  else if (loser !== server) { score[server]++; pointTo = server; if (doubles) rightOf[server] = mate(rightOf[server]); }   // serving team swaps sides
+  else if (doubles && serverNum === 1) { serverNum = 2; second = true; srvObj = mate(srvObj); }
+  else { server = otherSide(server); serverNum = 1; if (doubles) srvObj = rightOf[server]; }   // side out: right-court player serves first
   net.rc++; net.rl = { l: loser, r: reason, pt: pointTo };
   rallyFeedback(loser, reason, pointTo, second);
   const s = score.p, o = score.a;
-  if ((s >= gameTo || o >= gameTo) && (arcade || Math.abs(s - o) >= 2)) { pointTimer = 1.8; gameOverPending = true; }
+  if ((s >= gameTo || o >= gameTo) && Math.abs(s - o) >= 2) { pointTimer = 1.8; gameOverPending = true; }   // win by 2, in side-out and rally scoring
 }
 function rallyFeedback(loser, reason, pointTo, second) {
   const me = mySide();
@@ -2498,7 +2515,7 @@ function updateHud() {
   $('numP').textContent = score[me]; $('numA').textContent = score[op];
   $('scP').classList.toggle('serving', server === me); $('scA').classList.toggle('serving', server === op);
   $('cpuName').textContent = arcade && arcade.step === 3 && cpuDef ? (cpuDef.boss ? 'COACH' : `MEGA ${cpuDef.name.toUpperCase()}`) : mode === 'local' ? 'P2' : mode === 'online' ? 'FRIEND' : doubles ? 'THEM' : (cpuDef ? cpuDef.name.toUpperCase() : 'CPU');
-  $('midTxt').textContent = arcade ? `FIRST TO ${gameTo}` : doubles ? `${score[server]}-${score[otherSide(server)]}-${serverNum}` : `TO ${gameTo}`;
+  $('midTxt').textContent = arcade ? `TO ${gameTo} · WIN BY 2` : doubles ? `${score[server]}-${score[otherSide(server)]}-${serverNum}` : `TO ${gameTo}`;
   $('meName').textContent = mode === 'local' ? 'P1' : 'YOU';
 }
 
@@ -2557,7 +2574,7 @@ function humanShot(side, me = side === 'p' ? player : ai) {
     spr.next = null;
   }
   ty = mir(ty);
-  if (ball.bounces === 1) mustBounce[side] = false;
+  if (ball.bounces >= 1) mustBounce[side] = false;
   const big = ['SMASH!', 'POWER!', 'WICKED SPIN!', 'FIREBALL!', 'GUST!', 'GLEAM!'].includes(label);
   hitFx(big); noteHit(side, big, label);
   makeShot(tx, ty, T, spin, curve);
@@ -2600,7 +2617,7 @@ function botShot(bot) {
   const vsYou = sd === 'a';
   const spinIn = vsYou ? ball.spinIn || 0 : 0, curveIn = vsYou ? Math.abs(ball.curveIn || 0) : 0;
   tx += gauss() * Db.err * (1 + spinIn * 1.6); ty += gauss() * Db.err * 0.7 * (1 + spinIn * 1.6);
-  if (ball.bounces === 1) mustBounce[sd] = false;
+  if (ball.bounces >= 1) mustBounce[sd] = false;
   if (!smash) T *= Db.pace;
   // pressure: fast balls, spin, being stretched, low volleys and long rallies all cause mistakes
   const inSpeed = Math.hypot(ball.vx, ball.vy), stretch = clamp(Math.hypot(ball.x - bot.x, ball.y - bot.y) / REACH, 0, 1);
@@ -3634,7 +3651,7 @@ function activateSprite() {
   if (spr.spc.k === 'matrix') {
     if (!pointSnap) { toast('Nothing to rewind yet'); return; }
     spr.charge = 0; spr.used = true;
-    score = { ...pointSnap.score }; server = pointSnap.server; serverNum = pointSnap.serverNum; pointSnap = null;
+    score = { ...pointSnap.score }; server = pointSnap.server; serverNum = pointSnap.serverNum; srvObj = pointSnap.srvObj; rightOf = { ...pointSnap.rightOf }; pointSnap = null;
     gameOverPending = false; phase = 'point'; pointTimer = 1.3; ball.live = false; landMarker = null;
     flash('⏪ REWIND! Last point erased', '#00ff66', 1.6); screenFlash(0.4); buzz([20, 40, 20, 40]);
     [1175, 880, 660, 440].forEach((n, i) => setTimeout(() => beep(n, 0.1, 0.12, 'square'), i * 70));
@@ -3942,7 +3959,7 @@ function showLadder() {
   $('menu').classList.add('hidden');
   if (arcade.inf) return showInfLadder();
   $('arcM').querySelector('h2').textContent = '🕹️ Arcade'; $('ladder').classList.remove('five'); $('infBox').innerHTML = ''; $('arcExtRow').classList.add('hidden');
-  $('arcSub').innerHTML = `Loop ${arcade.cycle + 1} · Stage ${arcadeStage()}<br>Beat 3 players to 3 points, then the boss to 5.<br>Lose once and the run ends. Bosses drop <b style="color:#ff9cf0">Arcade-exclusive</b> gear.${arcade.cycle === 1 && !SAVE.owned.includes('p_shag') ? '<br>🦱 This boss drops the hairy <b style="color:#ffd9a8">Shag Spinner</b> paddle!' : ''}`;
+  $('arcSub').innerHTML = `Loop ${arcade.cycle + 1} · Stage ${arcadeStage()}<br>Beat 3 players to 3 points, then the boss to 5. Rally scoring, win by 2.<br>Lose once and the run ends. Bosses drop <b style="color:#ff9cf0">Arcade-exclusive</b> gear.${arcade.cycle === 1 && !SAVE.owned.includes('p_shag') ? '<br>🦱 This boss drops the hairy <b style="color:#ffd9a8">Shag Spinner</b> paddle!' : ''}`;
   const L_ = $('ladder'); L_.innerHTML = '';
   arcade.opps.forEach((o, i) => {
     const d = document.createElement('div'); d.className = 'rung' + (i === 3 ? ' boss' : '') + (i === arcade.step ? ' now' : i < arcade.step ? ' done' : '');
@@ -3997,7 +4014,7 @@ function showInfLadder() {
   const next = nextCheckpoint(arcade.canExt ? n + 1 : n);
   $('arcSub').innerHTML = arcade.canExt
     ? `<b style="color:#7dffb4">Extraction point! Level ${n} cleared.</b><br>Extract now and pick an Infinite <b>sprite</b> or <b>paddle</b>, or push on for better odds. Next chance: level ${next}.`
-    : `Set ${Math.floor(n / 5) + 1} · Level ${n + 1}<br>No bosses. Endless games to 5. Lose once and the run ends.${n + 1 >= 10 ? ' <b style="color:#ff8f8f">CPUs bring sprites now.</b>' : ''}<br>${n < INF_FIRST ? `Reach <b style="color:#7dffb4">level ${INF_FIRST}</b> to unlock extraction.` : `Next extraction: <b style="color:#7dffb4">level ${next}</b>.`}${n < 25 && !SAVE.owned.includes('c_buff') ? '<br>🤫 Something secret waits at level 25…' : ''}`;
+    : `Set ${Math.floor(n / 5) + 1} · Level ${n + 1}<br>No bosses. Endless games to 5 (rally scoring, win by 2). Lose once and the run ends.${n + 1 >= 10 ? ' <b style="color:#ff8f8f">CPUs bring sprites now.</b>' : ''}<br>${n < INF_FIRST ? `Reach <b style="color:#7dffb4">level ${INF_FIRST}</b> to unlock extraction.` : `Next extraction: <b style="color:#7dffb4">level ${next}</b>.`}${n < 25 && !SAVE.owned.includes('c_buff') ? '<br>🤫 Something secret waits at level 25…' : ''}`;
   const L_ = $('ladder'); L_.innerHTML = ''; L_.classList.add('five');
   arcade.opps.forEach((o, i) => {
     const lv = start + i + 1, ext = infCheckpoint(lv);
@@ -4096,7 +4113,7 @@ function showBracket() {
   tour.opps.forEach((o, i) => {
     const st = i < tour.round ? '✅' : i === tour.round ? '▶️' : '🔒';
     const d = document.createElement('div'); d.className = 'bk' + (i === tour.round ? ' now' : i < tour.round ? ' done' : '');
-    d.innerHTML = `<img src="${thumb('char', o)}" alt=""><div><div class="rn">${ROUND_NAMES[i]} · to ${[7, 9, 11][i]}</div><div class="on">${o.name}</div></div>
+    d.innerHTML = `<img src="${thumb('char', o)}" alt=""><div><div class="rn">${ROUND_NAMES[i]} · to ${TOUR_TO[i]}</div><div class="on">${o.name}</div></div>
       <div class="pz"><span class="coin"></span> +${TOUR_PRIZE[i]}${i === 2 ? `<br><span style="color:#ffe45c">+${TOUR_CHAMP} & 🏆</span>` : ''}</div><div class="st">${st}</div>`;
     b.appendChild(d);
   });
@@ -4167,15 +4184,17 @@ function update(dtReal) {
       const s = side(ball.y);
       if (ball.bounces === 0) {
         const hs = lastHitter;
-        const out = ball.x < -0.02 || ball.x > W + 0.02 || ball.y < -0.02 || ball.y > L + 0.02 || s === hs;
+        // a ball touching any line is in (LT = half line width + contact), except the kitchen line on a serve, which is short
+        const LT = 0.035, out = ball.x < -LT || ball.x > W + LT || ball.y < -LT || ball.y > L + LT || s === hs;
         if (!out && isServe) {
-          const inDepth = hs === 'p' ? ball.y <= NET - K : ball.y >= NET + K;
-          const diag = (ball.x < W / 2) === (serveFromX > W / 2);
+          const inDepth = hs === 'p' ? ball.y < NET - K - LT : ball.y > NET + K + LT;
+          const diag = Math.abs(ball.x - W / 2) <= LT || (ball.x < W / 2) === (serveFromX > W / 2);
           if (!inDepth || !diag) { endRally(hs, inDepth ? 'Wrong box' : 'Short serve'); break; }
         }
         if (out) { endRally(hs, 'Out'); break; }
         ball.bounces = 1;
-      } else { endRally(s, '2b'); break; }
+      } else if (ball.bounces === 1 && wheelchairOn(s)) { ball.bounces = 2; showHint('2nd bounce', 0.5, s); }   // wheelchair players may take two bounces; the 2nd can land anywhere
+      else { endRally(s, '2b'); break; }
     }
     if (phase !== 'rally') break;
     const bs = side(ball.y);
@@ -4183,6 +4202,7 @@ function update(dtReal) {
   }
 }
 function tryHitObj(o, sd) {
+  if (ball.bounces >= 2 && !isWheelchair(o)) return false;   // only the wheelchair player gets the second bounce
   const bot = isBot(o), human = !bot;
   const reach = human ? playerReach(o === player ? 'p' : 'a') : REACH;
   if (Math.hypot(ball.x - o.x, ball.y - o.y) > reach || ball.z > MAX_HIT_Z) return false;
