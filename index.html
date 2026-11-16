@@ -448,7 +448,7 @@
         <div><i>🕹️</i><span><b>Move</b> with the joystick. Touch anywhere on the left half and it appears under your thumb.</span></div>
         <div><i>🏓</i><span><b>Hitting</b> is automatic. Catch the ball on the edge of your paddle to angle it. Near the net you dink, from the back you drive.</span></div>
         <div><i>⚡</i><span><b>LOB</b> lofts your next shot. <b>POWER</b> rips a hard drive (riskier). <b>SPIN</b> curves and dips it, and kicks off the bounce. Paddles with a high SPN stat make it nastier; low-spin paddles make it weak and wild.</span></div>
-        <div><i>📏</i><span><b>Rules:</b> serve and return must bounce. No volleys from the kitchen. Only the server scores. Win by 2. Every game goes to 11. Easy is chill, Medium is faster, Hard is blazing fast.</span></div>
+        <div><i>📏</i><span><b>Rules:</b> serve and return must bounce. No volleys from the kitchen, and if your follow-through after a volley carries you into the kitchen, that's a fault too. Only the server scores. Win by 2. Every game goes to 11. Easy is chill, Medium is faster, Hard is blazing fast.</span></div>
         <div><i>✨</i><span><b>Sprites</b> float beside you in CPU matches. Each gives a passive boost and has a power that charges as you hit. Tap the sprite button when its ring is full. Level them up to 5. New sprites only drop when you win: harder modes and tournaments drop rarer ones.</span></div>
         <div><i>🕹️</i><span><b>Arcade</b> is an endless ladder: beat 3 players to 3 points, then a boss to 5 (rally scoring, win by 2), and keep going as it gets harder. Bosses drop Arcade-exclusive characters, paddles, a ball and an arena that you can't get anywhere else.</span></div>
         <div><i>🐒</i><span><b>Orlando</b> has a special <b>SPIN</b> serve: heavy sidespin that bends and kicks off the bounce, so it's much harder to return (small risk of curling wide).</span></div>
@@ -3734,7 +3734,7 @@ function spriteThumb(id) {
 }
 
 // ---- equipped sprite: gameplay state
-let pointSnap = null;   // score state before the last point, for Matrix's Rewind
+let pointSnap = null, volleyMom = null;   // volleyMom: who just volleyed, for the kitchen momentum rule   // score state before the last point, for Matrix's Rewind
 const spr = { spc: null, t: 0, lvl: 1, m: 1, need: 8, charge: 0, used: false, next: null, slowT: 0, stunT: 0, freezeT: 0, reachT: 0, shield: false, model: null, emitT: 0 };
 const sprOn = () => mode === 'cpu' && !!spr.spc;
 const sprIs = k => sprOn() && spr.spc.k === k;
@@ -4261,6 +4261,7 @@ function update(dtReal) {
   for (const o of [player, ai, partner, ai2]) o.swing = Math.max(0, o.swing - dtReal);
   if (phase === 'menu' || phase === 'over' || phase === 'shop' || paused) { player.spd = ai.spd = 0; return; }
   sprTick(dtReal); csprTick(dtReal);
+  if (volleyMom) { volleyMom.t -= dtReal; if (volleyMom.t <= 0 || phase !== 'rally') volleyMom = null; }
   const dt = dtReal * D.timeScale * (sprOn() && spr.slowT > 0 ? 0.5 : 1);
   if (mode === 'online' && role === 'guest') { guestUpdate(dtReal, dt); return; }
 
@@ -4290,10 +4291,13 @@ function update(dtReal) {
       }
     } else { const [hx, hy] = botHome(bot); bot.tx = hx; bot.ty = hy; }
     bot.ty = sd === 'a' ? clamp(bot.ty, -1.8, NET - 0.35) : clamp(bot.ty, NET + 0.35, L + 1.8); bot.tx = clamp(bot.tx, -1.3, W + 1.3);
+    if (volleyMom && volleyMom.o === bot) bot.ty = sd === 'a' ? Math.min(bot.ty, NET - K - 0.12) : Math.max(bot.ty, NET + K + 0.12);
     const slow = sd === 'a' && sprOn() ? (sprIs('frost') ? 1 - 0.04 * spr.m : 1) * (spr.freezeT > 0 ? 0.3 : 1) * (spr.stunT > 0 ? 0 : 1) : 1;
     moveToward(bot, bot.tx, bot.ty, botD(bot).speed * slow, dt);
   }
 
+  // kitchen momentum rule, checked after everyone has moved this frame
+  if (volleyMom && phase === 'rally' && inKitchen(volleyMom.o, volleyMom.sd)) { const m = volleyMom; volleyMom = null; flashKitchen(m.sd); endRally(m.sd, 'Kitchen fault'); return; }
   const N = 4, sdt = dt / N;
   for (let i = 0; i < N && phase === 'rally'; i++) {
     const py = ball.y, bounced = stepBall(ball, sdt);
@@ -4335,6 +4339,8 @@ function tryHitObj(o, sd) {
   if (bot && o.leave && ball.bounces === 0) return false;
   // your partner leaves balls in your lane to you
   if (o === partner && Math.abs(ball.x - W / 2) > 0.35 && Math.sign(ball.x - W / 2) !== partner.laneSign && Math.hypot(ball.x - player.x, ball.y - player.y) < playerReach('p') * 1.6) return false;
+  if (ball.bounces === 0) volleyMom = { o, sd, t: 0.6 };   // follow-through: stepping into the kitchen now is a fault
+  else volleyMom = null;
   if (human) humanShot(sd, o); else botShot(o);
   return true;
 }
