@@ -9,8 +9,8 @@
 <meta name="application-name" content="Dink!">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
-<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=2">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png?v=2">
 <link rel="manifest" href="manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -267,6 +267,12 @@
   #sprBtn .lbl{position:absolute;bottom:-15px;left:50%;transform:translateX(-50%);font-size:9.5px;font-weight:900;letter-spacing:.08em;white-space:nowrap;text-shadow:0 1px 3px #000,0 0 6px #000}
   #sprBtn.ready{animation:pulse 0.9s ease-in-out infinite;box-shadow:0 0 0 4px rgba(255,255,255,.35),0 0 28px var(--sc)}
   #sprBtn.ready .lbl{color:var(--y)}
+  #csprB{position:absolute;right:16px;top:calc(env(safe-area-inset-top) + 92px);width:52px;height:52px;border-radius:50%;display:none;align-items:center;justify-content:center;padding:3px;pointer-events:none;z-index:5;
+    background:conic-gradient(#ff5a5a calc(var(--p,0)*1%),rgba(255,255,255,.14) 0)}
+  #csprB .in{width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 50% 35%,rgba(255,120,120,.3),rgba(40,8,20,.9) 72%);display:flex;align-items:center;justify-content:center;overflow:hidden}
+  #csprB img{width:125%;height:125%;object-fit:contain}
+  #csprB .lbl{position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);font-size:8.5px;font-weight:900;letter-spacing:.08em;white-space:nowrap;color:#ffb3b3;text-shadow:0 1px 3px #000,0 0 6px #000}
+  #csprB.ready{animation:pulse 0.9s ease-in-out infinite;box-shadow:0 0 0 3px rgba(255,90,90,.45),0 0 22px #ff5a5a}
   #fxTint{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s;background:radial-gradient(circle,rgba(0,0,0,0) 45%,rgba(40,140,255,.45) 100%)}
   .sprHero{display:flex;gap:12px;align-items:center;background:rgba(0,0,0,.22);border-radius:20px;padding:10px 12px;text-align:left;margin:8px 0 12px}
   .sprHero img{width:100px;height:100px;flex:none;object-fit:contain;filter:drop-shadow(0 6px 10px rgba(0,0,0,.45))}
@@ -364,6 +370,7 @@
   <div id="joy"><div class="ring"><svg viewBox="0 0 136 136" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
     <path d="M60 18l8-7 8 7"/><path d="M60 118l8 7 8-7"/><path d="M18 60l-7 8 7 8"/><path d="M118 60l7 8-7 8"/></svg></div><div id="knob"></div></div>
   <div id="sprBtn"><div class="in"><img alt=""></div><div class="lbl"></div></div>
+  <div id="csprB"><div class="in"><img alt=""></div><div class="lbl"></div></div>
   <div id="spinB" class="sbtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M18.2 2.6l-.7 3.6 3.6.6"/><path d="M15.2 12a3.2 3.2 0 1 1-3.2-3.2"/></svg><span>SPIN</span></div>
   <div id="pow" class="sbtn"><svg viewBox="0 0 24 24"><path d="M13.5 2L5 13.5h6L9.5 22 19 9.5h-6.2L13.5 2z" fill="currentColor"/></svg><span>POWER</span></div>
   <div id="lob" class="sbtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M3 19C6 5 16 3 21 15"/><path d="M17.5 14.2L21 15l.6-3.6"/><circle cx="3.5" cy="19.5" r="1.6" fill="currentColor" stroke="none"/></svg><span>LOB</span></div>
@@ -438,6 +445,7 @@
         <div><i>📏</i><span><b>Rules:</b> serve and return must bounce. No volleys from the kitchen. Only the server scores. Win by 2. Easy games go to 11, Medium to 15, Hard to 21. Same-phone games go to 11.</span></div>
         <div><i>✨</i><span><b>Sprites</b> float beside you in CPU matches. Each gives a passive boost and has a power that charges as you hit. Tap the sprite button when its ring is full. Level them up to 5. New sprites only drop when you win: harder modes and tournaments drop rarer ones.</span></div>
         <div><i>🕹️</i><span><b>Arcade</b> is an endless ladder: beat 3 players to 3 points, then a boss to 5, and keep going as it gets harder. Bosses drop Arcade-exclusive characters, paddles, a ball and an arena that you can't get anywhere else.</span></div>
+        <div><i>😈</i><span><b>CPU sprites:</b> on Medium and Hard, Arcade bosses, and Infinite from level 10, your opponent brings a sprite too. Watch its red ring top-right: when it fills, they fire a power at you (slow you down, freeze you, shrink your reach, or hit a power shot).</span></div>
         <div><i>♾️</i><span><b>Infinite Arcade</b> has no bosses: just endless games to 5 (each game is one level). Every 25 levels (25, 50, 75…) you can <b>extract</b> for an Infinite-only sprite. The deeper you go, the better your legendary odds, but lose before you extract and you get nothing.</span></div>
         <div><i>🎁</i><span><b>Dinks</b> come from rallies and games. Spend them in the Locker, open Boxes, and claim your free daily Spin.</span></div>
       </div>
@@ -1971,6 +1979,7 @@ function playerReach(side = 'p') {
   const { p, cf } = paddleFactors(side);
   let r = REACH * (1 + 0.05 * cf + (p.shape === 'wide' ? 0.07 : 0) + (p.shape === 'long' ? 0.03 : 0));
   if (side === 'p' && sprOn()) { if (spr.spc.k === 'tide') r *= 1 + 0.06 * spr.m; if (spr.spc.k === 'pixel') r *= 1 + 0.04 * spr.m; if (spr.reachT > 0) r *= 1.5 + 0.1 * spr.m; }
+  if (side === 'p' && csprOn() && cspr.shrinkT > 0) r *= 0.72;
   return r;
 }
 const rand = rnd;
@@ -1997,6 +2006,7 @@ function newGame(m = 'cpu', opts = {}) {
   closeShop(true);
   if (m !== 'online') { pickCpu(arcade ? arcade.opps[arcade.inf ? arcade.lvl % 5 : arcade.step] : tour ? tour.opps[tour.round] : null); padA = CPU_PADDLE; }
   if (arcade && arcade.step === 3) { aiModel.scale.setScalar(1.55); padA = findItem('paddle', 'p_hyper'); }
+  setupCpuSprite();
   if (doubles) setupDoublesModels();
   serverNum = doubles ? 2 : 1;   // doubles starts "0-0-2": only one server before the first side out
   aiModel.visible = true;
@@ -2007,7 +2017,7 @@ function newGame(m = 'cpu', opts = {}) {
   setupServe();
   const who = s => m === 'local' ? (s === 'p' ? 'P1' : 'P2') : s === 'p' ? 'you' : 'they';
   const vs = arcade ? (arcade.inf ? `♾️ Level ${arcadeStage()} · vs ${cpuDef.name}` : arcade.step === 3 ? `👑 BOSS: ${cpuDef.boss ? '' : 'MEGA '}${cpuDef.name.toUpperCase()}` : `Stage ${arcadeStage()} · vs ${cpuDef.name}`) : tour ? `${ROUND_NAMES[tour.round]} · vs ${cpuDef.name}` : doubles ? `Doubles · ${partnerDef.name} & you` : m === 'cpu' ? `vs ${cpuDef.name}` : m === 'local' ? 'P1 vs P2' : 'vs Friend';
-  flash(`${vs} · ${who(server)} serve${m === 'local' ? 's' : ''}`, '#e8f542', 1.8);
+  flash(`${vs}${csprOn() ? ` + ${sprName(cspr.spc, cspr.t)}` : ''} · ${who(server)} serve${m === 'local' ? 's' : ''}`, '#e8f542', 1.8);
 }
 function serveSide(who) { const even = score[who] % 2 === 0; return who === 'p' ? (even ? W * 0.75 : W * 0.25) : (even ? W * 0.25 : W * 0.75); }
 function setupServe() {
@@ -2059,6 +2069,12 @@ function endRally(loser, reason) {
     spr.shield = false; phase = 'point'; pointTimer = 1.5; ball.live = false; landMarker = null;
     flash('Second Chance! Replay the point', '#f9a8d4', 1.5); beep(880, 0.15, 0.12, 'triangle');
     if (spr.model) burst(spr.model.position, '#f9a8d4', 24, 3, 0.2);
+    return;
+  }
+  if (csprOn() && cspr.shield && loser === 'a') {
+    cspr.shield = false; phase = 'point'; pointTimer = 1.5; ball.live = false; landMarker = null;
+    flash(`${cpuDef ? cpuDef.name : 'CPU'}'s Second Chance! Replay`, '#ff8f8f', 1.5); beep(330, 0.18, 0.12, 'triangle');
+    if (cspr.model) burst(cspr.model.position, '#f9a8d4', 24, 3, 0.2);
     return;
   }
   phase = 'point'; pointTimer = 1.6; ball.live = false; landMarker = null;
@@ -2280,10 +2296,20 @@ function botShot(bot) {
     else if (k < 0.82) { tx = Math.random() < 0.5 ? rand(-1.2, -0.25) : W + rand(0.25, 1.2); }    // sprays wide
     else { tx = rand(1.2, W - 1.2); ty = NET + K + rand(0.1, 1.2); T = 1.55; smash = false; }    // pops it up
   }
+  let cSpin = 0, cCurve = 0, cFire = false;
+  if (sd === 'a' && csprOn() && cspr.next) {   // CPU sprite power shot: clean, aimed away from you
+    const pm = cspr.m, away = player.x < W / 2 ? 1 : 0, lbl = { fire: 'FIREBALL!', gust: 'GUST!', gleam: 'GLEAM!', nova: 'SUPERNOVA!' }[cspr.next];
+    raw = false; smash = true;
+    if (cspr.next === 'fire') { tx = away ? rand(W * 0.6, W - 0.45) : rand(0.45, W * 0.4); ty = rand(L - 3, L - 0.7); T = 0.64 * (1 - 0.025 * pm); cSpin = 0.25; cFire = true; }
+    if (cspr.next === 'gust') { tx = away ? rand(W * 0.55, W - 0.5) : rand(0.5, W * 0.45); ty = rand(NET + 2, L - 1); T = 0.9; cCurve = (Math.random() < 0.5 ? -1 : 1) * (4 + pm); }
+    if (cspr.next === 'gleam' || cspr.next === 'nova') { tx = away ? W - 0.35 : 0.35; ty = L - rand(0.5, 1.2); T = cspr.next === 'nova' ? 0.66 : 0.8; if (cspr.next === 'nova') { cSpin = 0.25; cFire = true; } }
+    cspr.next = null; showHint(lbl, 0.9, 'a');
+  }
   ty = mir(ty);
   hitFx(smash);
-  makeShot(tx, ty, T, 0, 0, raw);
-  ball.errBoost = 0; ball.fxFire = false;
+  makeShot(tx, ty, T, cSpin, cCurve, raw);
+  ball.errBoost = 0; ball.fxFire = cFire;
+  if (sd === 'a') csprCharge();
   rallyHits++;
   lastHitter = sd; isServe = false; bot.swing = 0.25; beep(560, 0.08, 0.2); bot.plan = null;
   noteHit(sd, smash, '');
@@ -2456,7 +2482,7 @@ document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click
 function toMenu() {
   if (mode === 'online') leaveOnline();
   if (mode !== 'cpu') { curLook.char = null; mode = 'cpu'; role = null; ctrl.a = 'ai'; document.body.classList.remove('local'); applyLook(); pickCpu(); }
-  doubles = false; tour = null; arcade = null; overNext = null; $('arcM').classList.add('hidden'); $('tourM').classList.add('hidden');
+  clearCpuSprite(); doubles = false; tour = null; arcade = null; overNext = null; $('arcM').classList.add('hidden'); $('tourM').classList.add('hidden');
   if (partnerModel) partnerModel.visible = false; if (ai2Model) ai2Model.visible = false;
   if (selD) D = selD;
   phase = 'menu'; paused = false; msgT = 0;
@@ -3267,6 +3293,98 @@ function sprVisuals(dt, t) {
   }
 }
 
+// ================= CPU sprites: Medium/Hard, Arcade bosses and deep Infinite runs =================
+const cspr = { spc: null, t: 0, m: 1, need: 10, charge: 0, next: null, shield: false, slowT: 0, stunT: 0, shrinkT: 0, wait: 0, model: null, emitT: 0 };
+const csprOn = () => mode === 'cpu' && !!cspr.spc;
+function csprPlan() {   // [tier, level, extra hits to charge] or null
+  if (mode !== 'cpu') return null;
+  if (arcade && arcade.inf) {
+    const n = arcade.lvl + 1; if (n < 10) return null;
+    return [n >= 75 ? 3 : n >= 50 ? 2 : n >= 25 ? 1 : 0, Math.min(5, 1 + Math.floor((n - 10) / 10)), n >= 25 ? 2 : 4];
+  }
+  if (arcade) return arcade.step === 3 ? [Math.min(3, 1 + arcade.cycle), Math.min(5, 2 + arcade.cycle), 2] : null;
+  if (tour) return null;
+  const di = DIFFS.indexOf(selD);
+  if (di === 1) return [0, 2, 4];
+  if (di === 2) return [Math.random() < 0.6 ? 1 : 2, 3, 2];
+  return null;
+}
+function clearCpuSprite() { if (cspr.model) { scene.remove(cspr.model); cspr.model = null; } cspr.spc = null; updateCsprB(); }
+function setupCpuSprite() {
+  clearCpuSprite();
+  Object.assign(cspr, { charge: 0, next: null, shield: false, slowT: 0, stunT: 0, shrinkT: 0, wait: 0 });
+  const plan = csprPlan(); if (!plan) return;
+  const [t, lvl, extra] = plan;
+  const pool = SPECIES.filter(s => !s.excl || (arcade && arcade.inf && arcade.lvl + 1 >= 25));
+  const spc = pool[Math.floor(Math.random() * pool.length)];
+  Object.assign(cspr, { spc, t, m: sprMult(t, lvl), need: TIER_NEED[t] + extra });
+  cspr.model = makeSprite(spc, t); scene.add(cspr.model);
+  cspr.model.position.copy(T3(ai.x, ai.y, 1.8));
+  updateCsprB();
+}
+function csprCharge() {
+  if (!csprOn() || cspr.charge >= cspr.need) return;
+  cspr.charge = Math.min(cspr.need, cspr.charge + (cspr.spc.k === 'volt' ? 1 + 0.15 * cspr.m : 1));
+  if (cspr.charge >= cspr.need) cspr.wait = rand(0.4, 1.6);
+  updateCsprB();
+}
+const csprSpeed = () => csprOn() ? (cspr.stunT > 0 ? 0.12 : 1) * (cspr.slowT > 0 ? 0.55 : 1) : 1;
+function csprTick(dt) {
+  for (const k of ['slowT', 'stunT', 'shrinkT']) if (cspr[k] > 0) cspr[k] = Math.max(0, cspr[k] - dt);
+  if (csprOn() && phase === 'rally' && cspr.charge >= cspr.need) { cspr.wait -= dt; if (cspr.wait <= 0) csprActivate(); }
+  updateCsprB();
+}
+function csprActivate() {
+  const k = cspr.spc.k, m = cspr.m, col = cspr.spc.cols[cspr.t][0];
+  cspr.charge = 0;
+  const who = cpuDef ? cpuDef.name : 'CPU';
+  flash(`${who}'s ${sprName(cspr.spc, cspr.t)}: ${cspr.spc.power}!`, '#ff8f8f', 1.4);
+  const atYou = c => burst(T3(player.x, player.y, 1.1), c, 26, 3.5, 0.22);
+  if (k === 'ember') cspr.next = 'fire';
+  if (k === 'zephyr') cspr.next = 'gust';
+  if (k === 'lumen') cspr.next = 'gleam';
+  if (k === 'nova') cspr.next = 'nova';
+  if (k === 'bloom') cspr.shield = true;
+  if (k === 'tide') { cspr.slowT = 1.4 + 0.3 * m; atYou('#3ba4ff'); }
+  if (k === 'frost') { cspr.slowT = 1.6 + 0.4 * m; atYou('#bae6fd'); }
+  if (k === 'volt') { cspr.stunT = 0.45 + 0.15 * m; atYou('#fde047'); shake = 0.2; }
+  if (k === 'pixel') { cspr.stunT = 0.5 + 0.15 * m; cspr.slowT = 1 + 0.3 * m; atYou('#00f0ff'); shake = 0.2; }
+  if (k === 'stone') { cspr.shrinkT = 3 + m; atYou('#a8a29e'); }
+  if (cspr.model) burst(cspr.model.position, cspr.spc.cols[cspr.t][1], 22, 3, 0.2);
+  buzz([40, 30, 40]); [520, 390, 260].forEach((n, i) => setTimeout(() => beep(n, 0.12, 0.12, 'sawtooth'), i * 70));
+  void col; updateCsprB();
+}
+const csprB = $('csprB');
+function updateCsprB() {
+  const show = csprOn() && ['serve', 'rally', 'point'].includes(phase);
+  csprB.style.display = show ? 'flex' : 'none';
+  if (!show) return;
+  const id = `${cspr.spc.k}_${cspr.t}`, img = csprB.querySelector('img');
+  if (img.dataset.id !== id) { img.src = spriteThumb(id); img.dataset.id = id; }
+  csprB.style.setProperty('--p', Math.round(cspr.charge / cspr.need * 100));
+  const ready = cspr.charge >= cspr.need, busy = cspr.slowT > 0 || cspr.stunT > 0 || cspr.shrinkT > 0;
+  csprB.classList.toggle('ready', ready);
+  const lbl = ready ? 'CHARGED!' : busy ? (cspr.stunT > 0 ? 'STUNNED' : cspr.shrinkT > 0 ? 'SHRUNK' : 'SLOWED') : cspr.shield ? 'SHIELD' : 'CPU SPRITE';
+  const el = csprB.querySelector('.lbl'); if (el.textContent !== lbl) el.textContent = lbl;
+}
+function csprVisuals(dt, t) {
+  const m = cspr.model; if (!m) return;
+  const inGame = ['serve', 'rally', 'point', 'over'].includes(phase);
+  m.visible = csprOn() && inGame; if (!m.visible) return;
+  const target = T3(ai.x, ai.y, 0).add(new THREE.Vector3(0.62, 1.95 + Math.sin(t * 2.4 + 1) * 0.08, -0.3));
+  m.position.lerp(target, 1 - Math.exp(-dt * 7));
+  m.rotation.y = Math.sin(t * 0.9 + 2) * 0.35;
+  m.userData.body.rotation.z = Math.sin(t * 1.7 + 1) * 0.12;
+  m.userData.anim.forEach(f => f(t));
+  cspr.emitT -= dt;
+  if (cspr.emitT <= 0) { cspr.emitT = 0.16 + Math.random() * 0.12; burst(m.position.clone().add(new THREE.Vector3(rnd(-0.1, 0.1), -0.1, rnd(-0.1, 0.1))), m.userData.c2, 1, 0.5, 0.08); }
+  if (cspr.slowT > 0 && Math.random() < 0.45) burst(T3(player.x + rnd(-0.3, 0.3), player.y, rnd(0.2, 1.6)), '#bae6fd', 1, 0.6, 0.12);
+  if (cspr.stunT > 0 && Math.random() < 0.6) burst(T3(player.x + rnd(-0.3, 0.3), player.y, rnd(1.3, 1.9)), '#fde047', 1, 1.5, 0.1);
+  if (cspr.shrinkT > 0 && Math.random() < 0.3) burst(T3(player.x + rnd(-0.4, 0.4), player.y + rnd(-0.4, 0.4), 0.9), '#a8a29e', 1, 0.6, 0.1);
+  if (cspr.shield && Math.random() < 0.15) burst(T3(ai.x, ai.y, 2.1), '#f9a8d4', 1, 0.6, 0.12);
+  if (!sprOn() && ball.fxFire && ball.live) burst(ballMesh.position, 'fire', 2, 0.8, 0.2);
+}
+
 // ---- save + collection
 function ensureSprites() { if (!SAVE.sprites) SAVE.sprites = { owned: {}, equip: null }; return SAVE.sprites; }
 function grantSprite(id) {
@@ -3480,7 +3598,7 @@ function showInfLadder() {
   const next = nextCheckpoint(arcade.canExt ? n + 1 : n);
   $('arcSub').innerHTML = arcade.canExt
     ? `<b style="color:#7dffb4">Extraction point! Level ${n} cleared.</b><br>Extract now for a guaranteed Infinite sprite, or push on for better odds. Next chance: level ${next}.`
-    : `Set ${Math.floor(n / 5) + 1} · Level ${n + 1}<br>No bosses. Endless games to 5. Lose once and the run ends.<br>${n < INF_FIRST ? `Reach <b style="color:#7dffb4">level ${INF_FIRST}</b> to unlock extraction.` : `Next extraction: <b style="color:#7dffb4">level ${next}</b>.`}`;
+    : `Set ${Math.floor(n / 5) + 1} · Level ${n + 1}<br>No bosses. Endless games to 5. Lose once and the run ends.${n + 1 >= 10 ? ' <b style="color:#ff8f8f">CPUs bring sprites now.</b>' : ''}<br>${n < INF_FIRST ? `Reach <b style="color:#7dffb4">level ${INF_FIRST}</b> to unlock extraction.` : `Next extraction: <b style="color:#7dffb4">level ${next}</b>.`}`;
   const L_ = $('ladder'); L_.innerHTML = ''; L_.classList.add('five');
   arcade.opps.forEach((o, i) => {
     const lv = start + i + 1, ext = infCheckpoint(lv);
@@ -3558,7 +3676,7 @@ function update(dtReal) {
   if (kitchenFlash > 0) kitchenFlash -= dtReal;
   for (const o of [player, ai, partner, ai2]) o.swing = Math.max(0, o.swing - dtReal);
   if (phase === 'menu' || phase === 'over' || phase === 'shop' || paused) { player.spd = ai.spd = 0; return; }
-  sprTick(dtReal);
+  sprTick(dtReal); csprTick(dtReal);
   const dt = dtReal * D.timeScale * (sprOn() && spr.slowT > 0 ? 0.5 : 1);
   if (mode === 'online' && role === 'guest') { guestUpdate(dtReal, dt); return; }
 
@@ -3645,7 +3763,7 @@ function moveHuman(o, side, [jx, jy], dt) {
   o.tx = clamp(o.tx, -1.3, W + 1.3);
   o.ty = side === 'p' ? clamp(o.ty, NET + 0.35, L + 1.8) : clamp(o.ty, -1.8, NET - 0.35);
   const boost = side === 'p' && sprIs('zephyr') ? 1 + 0.05 * spr.m : side === 'p' && sprIs('pixel') ? 1 + 0.035 * spr.m : 1;
-  moveToward(o, o.tx, o.ty, player.speed * boost * (mag > 0.12 ? Math.min(1, 0.35 + mag * 0.8) : 0), dt);
+  moveToward(o, o.tx, o.ty, player.speed * boost * (side === 'p' ? csprSpeed() : 1) * (mag > 0.12 ? Math.min(1, 0.35 + mag * 0.8) : 0), dt);
 }
 
 // ================= visuals =================
@@ -3698,7 +3816,7 @@ function visuals(dt) {
     if (!mdl) continue; mdl.visible = showD; if (!showD) continue;
     mdl.position.copy(T3(o.x, o.y)); animateChar(mdl, o, dt, t);
   }
-  sprVisuals(dt, t);
+  sprVisuals(dt, t); csprVisuals(dt, t);
 
   // ball
   if (phase === 'shop') {
