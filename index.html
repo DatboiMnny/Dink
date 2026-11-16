@@ -682,6 +682,12 @@ function hawaiiMat() {
   const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(2, 1.4);
   return new THREE.MeshPhysicalMaterial({ map: t, roughness: 0.6, clearcoat: 0.15 });
 }
+function jerseyNum(k, n, y, z, ry, size = 0.17, color = '#ffffff') {   // a printed shirt number on the torso
+  const c = document.createElement('canvas'); c.width = c.height = 64; const x = c.getContext('2d');
+  x.font = '900 54px system-ui'; x.textAlign = 'center'; x.textBaseline = 'middle'; x.lineWidth = 5; x.strokeStyle = 'rgba(0,0,0,.25)'; x.strokeText(n, 32, 36); x.fillStyle = color; x.fillText(n, 32, 36);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace;
+  const m = k.mk(new THREE.PlaneGeometry(size, size), new THREE.MeshBasicMaterial({ map: t, transparent: true }), 0, y, z, k.upper); m.rotation.y = ry; m.castShadow = false; return m;
+}
 function strum() {   // quick ukulele strum: G C E A
   [392, 262, 330, 440].forEach((n, i) => setTimeout(() => beep(n, 0.22, 0.09, 'triangle'), i * 28));
 }
@@ -1113,6 +1119,24 @@ const CHARS = [
       k.mk(box(0.035, 0.24, 0.02), dark, 0, 0.17, 0, uke);
       k.mk(box(0.05, 0.06, 0.02), dark, 0, 0.31, 0, uke);
       for (const sx of [-0.009, -0.003, 0.003, 0.009]) k.mk(box(0.0018, 0.4, 0.0018), '#f4f1ea', sx, 0.1, -0.022, uke);
+    } },
+  { id:'c_hamza', name:'Hamza', price:550, group:'squad', rarity:'epic',
+    c:{ body:'#16a34a', head:'#c68a5a', limb:'#c68a5a', hand:'#c68a5a', legs:'#6b4423', foot:'#1f2937' },
+    deco: k => {
+      smile(k, '#4a1a10');
+      // short dark hair
+      k.mk(new THREE.SphereGeometry(0.245, 28, 16, 0, Math.PI * 2, 0, Math.PI * 0.4), k.M('#16110d', { roughness: 0.9, clearcoat: 0 }), 0, 0.015, 0.01, k.head);
+      // glasses: rounded frames, bridge, arms back to the ears, a hint of lens
+      const frame = k.M('#111318', { roughness: 0.3, metalness: 0.2 });
+      for (const sx of [-1, 1]) {
+        const f = k.mk(new THREE.TorusGeometry(0.056, 0.0085, 8, 28), frame, sx * 0.085, 0.032, -0.245, k.head); f.scale.set(1.05, 0.85, 1);
+        const lens = k.mk(new THREE.CircleGeometry(0.054, 24), new THREE.MeshPhysicalMaterial({ color: '#cfe8ff', transparent: true, opacity: 0.18, roughness: 0.05 }), sx * 0.085, 0.032, -0.247, k.head); lens.scale.set(1.05, 0.85, 1); lens.rotation.y = Math.PI;
+        const arm = k.mk(box(0.008, 0.008, 0.2), frame, sx * 0.192, 0.04, -0.14, k.head); arm.rotation.y = sx * 0.28;
+      }
+      k.mk(box(0.05, 0.008, 0.008), frame, 0, 0.045, -0.25, k.head);
+      // jersey: number 8 front and back, white trim on the sleeves
+      jerseyNum(k, '8', 0.86, -0.285, Math.PI); jerseyNum(k, '8', 0.86, 0.285, 0, 0.22);
+      for (const a of k.arms) k.mk(new THREE.TorusGeometry(0.075, 0.012, 6, 20), '#ffffff', 0, -0.12, 0, a).rotation.x = Math.PI / 2;
     } },
   { id:'c_halor', name:'Halor', price:850, group:'squad', rarity:'legendary', c:{ body:'#1e6bff', limb:'#1d1d24', hand:'#1d1d24', foot:'#1d1d24' },
     bodyMat: () => carPaint(),
