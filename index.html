@@ -446,7 +446,7 @@
         <div><i>✨</i><span><b>Sprites</b> float beside you in CPU matches. Each gives a passive boost and has a power that charges as you hit. Tap the sprite button when its ring is full. Level them up to 5. New sprites only drop when you win: harder modes and tournaments drop rarer ones.</span></div>
         <div><i>🕹️</i><span><b>Arcade</b> is an endless ladder: beat 3 players to 3 points, then a boss to 5, and keep going as it gets harder. Bosses drop Arcade-exclusive characters, paddles, a ball and an arena that you can't get anywhere else.</span></div>
         <div><i>😈</i><span><b>CPU sprites:</b> on Medium and Hard, Arcade bosses, and Infinite from level 10, your opponent brings a sprite too. Watch its red ring top-right: when it fills, they fire a power at you (slow you down, freeze you, shrink your reach, or hit a power shot).</span></div>
-        <div><i>♾️</i><span><b>Infinite Arcade</b> has no bosses: just endless games to 5 (each game is one level). Every 25 levels (25, 50, 75…) you can <b>extract</b> for an Infinite-only sprite. The deeper you go, the better your legendary odds, but lose before you extract and you get nothing.</span></div>
+        <div><i>♾️</i><span><b>Infinite Arcade</b> has no bosses: just endless games to 5 (each game is one level). Every 15 levels (15, 30, 45…) you can <b>extract</b> and pick an Infinite-only sprite <i>or</i> paddle. The deeper you go, the better your legendary odds, but lose before you extract and you get nothing.</span></div>
         <div><i>🎁</i><span><b>Dinks</b> come from rallies and games. Spend them in the Locker, open Boxes, and claim your free daily Spin.</span></div>
       </div>
       <div class="backup">
@@ -516,7 +516,7 @@
       <div id="ladder"></div>
       <div id="infBox"></div>
       <div class="fine" id="arcBest" style="margin:4px 0 12px"></div>
-      <button class="bigbtn green hidden" id="arcExt" style="margin-bottom:10px">EXTRACT</button>
+      <div class="row hidden" id="arcExtRow" style="margin-bottom:10px;gap:8px"><button class="bigbtn green sm" id="arcExt">🚁 TAKE A SPRITE</button><button class="bigbtn green sm" id="arcExtP">🚁 TAKE A PADDLE</button></div>
       <button class="bigbtn purple" id="arcGo">FIGHT!</button>
     </div>
   </div>
@@ -586,7 +586,7 @@ const DIFFS = [
 
 // ================= character roster =================
 const RARITY = { starter:['Starter','#b9c2cc'], common:['Common','#3ddc84'], rare:['Rare','#3fa9ff'], epic:['Epic','#c27bff'], legendary:['Legendary','#ffc93c'], arcade:['Arcade','#ff4fd8'], secret:['Secret','#00ff66'] };
-const GROUPS = [['starter','Starter'], ['animals','Animals'], ['legends','Legends'], ['aliens','Aliens'], ['myth','Mythology'], ['squad','👑 The Squad'], ['arcade','🕹️ Arcade exclusives'], ['secret','🤫 Secret']];
+const GROUPS = [['starter','Starter'], ['animals','Animals'], ['legends','Legends'], ['aliens','Aliens'], ['myth','Mythology'], ['squad','👑 The Squad'], ['arcade','🕹️ Arcade exclusives'], ['secret','🤫 Secret & special']];
 const SKIN = '#f0c9a0';
 const sph = (r, w = 18, h = 14) => new THREE.SphereGeometry(r, w, h);
 const cyl = (rt, rb, h, s = 12) => new THREE.CylinderGeometry(rt, rb, h, s);
@@ -1095,6 +1095,42 @@ const CHARS = [
 const OLD_OUTFITS = { c_classic:0, c_royal:60, c_lime:90, c_pink:120, c_ninja:250, c_king:450 };
 
 // ================= shop catalogue =================
+// ---- Daily Spin exclusive: Hairy Hiker (it's Bigfoot)
+CHARS.push({ id:'c_hiker', name:'Hairy Hiker', price:0, exclusive:'spin', group:'secret', rarity:'legendary', scale:1.12,
+  c:{ body:'#6b4a32', head:'#6b4a32', limb:'#6b4a32', hand:'#4a3020', legs:'#6b4a32', foot:'#4a3020' },
+  deco: k => {
+    const fur = k.M('#6b4a32', { roughness: 0.95, clearcoat: 0 }), dark = k.M('#3d2716', { roughness: 0.9, clearcoat: 0 }), face = k.M('#b88a62', { roughness: 0.8, clearcoat: 0 });
+    // shaggy fur tufts all over
+    const tuft = (parent, x, y, z, r = 0.05, rx = 0, rz = 0) => { const t = k.mk(cone(r, r * 2.2, 6), fur, x, y, z, parent); t.rotation.set(rx, 0, rz); return t; };
+    for (let i = 0; i < 14; i++) { const a = i / 14 * Math.PI * 2; tuft(k.head, Math.cos(a) * 0.17, 0.17 + Math.sin(i) * 0.02, Math.sin(a) * 0.17, 0.045, Math.sin(a) * 0.6, -Math.cos(a) * 0.6); }
+    const up = new THREE.Vector3(0, 1, 0);
+    const hang = (parent, x, y, z, dx, dz, r) => { const t = k.mk(cone(r, r * 2.6, 6), fur, x, y, z, parent); t.quaternion.setFromUnitVectors(up, new THREE.Vector3(dx * 0.55, -0.85, dz * 0.55).normalize()); };
+    for (let i = 0; i < 30; i++) { const a = i / 30 * Math.PI * 2 + (i % 2) * 0.1; hang(k.upper, Math.cos(a) * 0.29, 0.58 + (i % 3) * 0.16, Math.sin(a) * 0.26, Math.cos(a), Math.sin(a), 0.038); }
+    for (const a of k.arms) for (const y of [-0.08, -0.17, -0.26]) for (const sx of [-1, 1]) hang(a, sx * 0.05, y, 0, sx, 0, 0.026);
+    // hide the trouser trims so he's all fur
+    k.upper.children.forEach(m => { if (m.geometry && m.geometry.type === 'TorusGeometry') m.visible = false; });
+    // face: lighter muzzle, heavy brow, flat nose, big grin
+    const fp = k.mk(sph(0.17, 22, 16), face, 0, -0.04, -0.15, k.head); fp.scale.set(1.08, 0.95, 0.5); fp.castShadow = false;
+    const brow = k.mk(new THREE.CapsuleGeometry(0.03, 0.2, 4, 10), dark, 0, 0.085, -0.225, k.head); brow.rotation.z = Math.PI / 2;
+    k.mk(sph(0.045, 14, 10), dark, 0, -0.035, -0.245, k.head).scale.set(1.3, 0.75, 0.6);
+    const gr = k.mk(new THREE.TorusGeometry(0.06, 0.013, 8, 20, Math.PI), '#2a1408', 0, -0.1, -0.235, k.head); gr.rotation.z = Math.PI;
+    for (const s of [-1, 1]) k.mk(box(0.022, 0.024, 0.01), '#ffffff', s * 0.02, -0.112, -0.245, k.head);
+    // BIG feet: swap the sneakers for huge hairy feet with toes
+    for (const leg of k.legs) {
+      leg.children.forEach((m, i) => { if (i > 0) m.visible = false; });
+      const f = k.mk(sph(0.11, 18, 12), dark, 0, -0.395, -0.07, leg); f.scale.set(1.05, 0.5, 1.75);
+      for (const tx of [-0.06, -0.025, 0.012, 0.048]) k.mk(sph(0.028, 10, 8), dark, tx, -0.4, -0.25, leg);
+    }
+    // hiker kit: backpack with a bedroll, bandana, trekking pole
+    k.mk(box(0.34, 0.4, 0.17), k.M('#2f6b3a', { roughness: 0.7 }), 0, 0.84, 0.33, k.upper);
+    k.mk(box(0.26, 0.14, 0.04), k.M('#25552e'), 0, 0.74, 0.43, k.upper);
+    const roll = k.mk(cyl(0.07, 0.07, 0.42, 16), k.M('#c0392b', { roughness: 0.8 }), 0, 1.08, 0.33, k.upper); roll.rotation.z = Math.PI / 2;
+    for (const s of [-1, 1]) k.mk(box(0.04, 0.42, 0.03), k.M('#1d3d22'), s * 0.15, 0.88, -0.27, k.upper);
+    const band = k.mk(new THREE.TorusGeometry(0.2, 0.028, 8, 28), '#e8792b', 0, 1.13, -0.03, k.upper); band.rotation.x = Math.PI / 2 - 0.25;
+    const pole = new THREE.Group(); pole.position.set(0, -0.42, 0); k.arms[0].add(pole);
+    k.mk(cyl(0.012, 0.012, 0.95, 8), k.M('#9aa3ad', { metalness: 0.8, roughness: 0.3 }), 0, -0.22, -0.02, pole).rotation.x = 0.15;
+    k.mk(sph(0.03), k.M('#222'), 0, 0.26, -0.09, pole);
+  } });
 // ---- secret: Buff the strongman, unlocked by reaching level 25 in Arcade (comes with the Matrix sprite)
 CHARS.push({ id:'c_buff', name:'Buff', price:0, exclusive:'secret', group:'secret', rarity:'secret', scale:1.07,
   c:{ body:'#e63946', head:SKIN, limb:SKIN, hand:SKIN, sleeve:SKIN, legs:'#1d1d24', foot:'#2b2b2b' },
@@ -1169,6 +1205,11 @@ const SHOP = {
     { id:'p_cabinet', brand:'Arcade',    name:'Cabinet Classic', price:0, exclusive:'arcade', type:'control', shape:'wide', style:'thermo', a:'#1a0b3a', b:'#00f0ff', mark:'ARCADE', pw:7, ct:10, sp:7 },
     { id:'p_shag',    brand:'Furball',   name:'Shag Spinner',    price:0, exclusive:'boss2', type:'spin', shape:'round', style:'fur', hairy:true, a:'#7a4a24', b:'#c98a4b', pw:2, ct:6, sp:10 },
     { id:'p_king',    brand:'Champion',  name:'Tournament King', price:0, exclusive:'tour3', rarity:'legendary', type:'hybrid', shape:'crown', style:'royal', a:'#ffd34d', b:'#6b1d8f', mark:'KING', ink:'#5a3d00', metal:true, pw:9, ct:9, sp:8 },
+    // ---- Infinite Arcade paddles: Hex shape, one per rarity, only from extracting
+    { id:'p_inf0', brand:'Void', name:'Loop Lite',     price:0, exclusive:'inf', rarity:'common',    type:'allround', shape:'hex', style:'void', a:'#08130d', b:'#3ddc84', mark:'VOID', pw:6, ct:6, sp:6 },
+    { id:'p_inf1', brand:'Void', name:'Loop Pro',      price:0, exclusive:'inf', rarity:'rare',      type:'hybrid',   shape:'hex', style:'void', a:'#060d1c', b:'#3fa9ff', mark:'VOID', pw:7, ct:7, sp:8 },
+    { id:'p_inf2', brand:'Void', name:'Event Horizon', price:0, exclusive:'inf', rarity:'epic',      type:'spin',     shape:'hex', style:'void', a:'#0e0618', b:'#c27bff', mark:'VOID', pw:8, ct:8, sp:9 },
+    { id:'p_inf3', brand:'Void', name:'Infinity Edge', price:0, exclusive:'inf', rarity:'legendary', type:'hybrid',   shape:'hex', style:'void', a:'#140d00', b:'#ffc93c', mark:'VOID', metal:true, pw:9, ct:10, sp:9 },
     { id:'p_gold',    brand:'Midas',     name:'24K Signature',   price:750, type:'hybrid',   shape:'tear',  style:'gold',    a:'#ffd34d', b:'#b8860b', mark:'MIDAS', ink:'#5a3d00', metal:true, pw:8, ct:9, sp:8 },
   ],
   ball: [
@@ -1217,6 +1258,7 @@ const PSHAPE = {
   round:  { name:'Oval',      w:0.21,  h:0.255, rt:0.105, rb:0.07,  taper:0.1,  hl:0.13, reach:0.03 },
   square: { name:'Square',    w:0.2,   h:0.25,  rt:0.012, rb:0.012, taper:0,    hl:0.12, reach:0 },
   crown:  { name:'Crown',     w:0.215, h:0.27,  rt:0.02,  rb:0.035, taper:0.12, hl:0.13, reach:0.03, crown:5 },
+  hex:    { name:'Hex',       w:0.205, h:0.27,  rt:0.05,  rb:0.035, taper:0.05, hl:0.135, reach:0.035, hex:true },
   blade:  { name:'Blade',     w:0.162, h:0.31,  rt:0.08,  rb:0.02,  taper:0.08, hl:0.18, reach:0.04 },
 };
 const SHAPES = Object.fromEntries(Object.entries(PSHAPE).map(([k, v]) => [k, [v.w, v.h]]));
@@ -1224,6 +1266,11 @@ const SHAPES = Object.fromEntries(Object.entries(PSHAPE).map(([k, v]) => [k, [v.
 function padPath(P, path, grow = 0) {
   const w = P.w + grow * 2, h = P.h + grow * 2, bw = w * (1 - P.taper), rt = Math.min(P.rt + grow, w / 2), rb = Math.min(P.rb + grow, bw / 2), y0 = -grow;
   const sideMid = (y0 + rb + y0 + h - rt) / 2 + h * 0.08;
+  if (P.hex) {   // angular: straight chamfered corners
+    path.moveTo(-bw / 2 + rb, y0); path.lineTo(bw / 2 - rb, y0); path.lineTo(bw / 2, y0 + rb); path.lineTo(w / 2, y0 + h - rt);
+    path.lineTo(w / 2 - rt, y0 + h); path.lineTo(-w / 2 + rt, y0 + h); path.lineTo(-w / 2, y0 + h - rt); path.lineTo(-bw / 2, y0 + rb); path.lineTo(-bw / 2 + rb, y0);
+    return;
+  }
   path.moveTo(-bw / 2 + rb, y0);
   path.lineTo(bw / 2 - rb, y0);
   path.quadraticCurveTo(bw / 2, y0, bw / 2, y0 + rb);
@@ -1701,6 +1748,14 @@ const padTexCache = {};
 function paddleCanvas(p) {
   const c = document.createElement('canvas'); c.width = 128; c.height = 160;
   const x = c.getContext('2d');
+  if (p.style === 'void') {
+    const g = x.createRadialGradient(64, 70, 6, 64, 80, 110); g.addColorStop(0, '#1d1d2b'); g.addColorStop(1, p.a);
+    x.fillStyle = g; x.fillRect(0, 0, 128, 160);
+    x.fillStyle = 'rgba(255,255,255,.5)'; for (let i = 0; i < 40; i++) { x.beginPath(); x.arc(Math.random() * 128, Math.random() * 160, Math.random() * 1.2, 0, 7); x.fill(); }
+    x.save(); x.translate(64, 108); x.strokeStyle = p.b; x.lineWidth = 7; x.shadowColor = p.b; x.shadowBlur = 14; x.lineCap = 'round';
+    x.beginPath(); for (let t = 0; t <= Math.PI * 2 + 0.05; t += 0.05) { const d = 1 + Math.sin(t) ** 2, px = 38 * Math.cos(t) / d, py = 38 * Math.sin(t) * Math.cos(t) / d; t ? x.lineTo(px, py) : x.moveTo(px, py); } x.stroke();
+    x.restore(); x.strokeStyle = p.b; x.lineWidth = 3; x.globalAlpha = 0.7; x.strokeRect(6, 6, 116, 148); x.globalAlpha = 1;
+  }
   if (p.style === 'royal') {
     const g = x.createLinearGradient(0, 0, 128, 160); g.addColorStop(0, '#fff3a0'); g.addColorStop(0.35, '#ffd34d'); g.addColorStop(0.7, '#d99a1a'); g.addColorStop(1, '#ffe27a');
     x.fillStyle = g; x.fillRect(0, 0, 128, 160);
@@ -2346,7 +2401,7 @@ function gameOver() {
   if (arcade && arcade.inf) {
     overNext = win ? 'infNext' : 'infNew';
     $('again').textContent = win ? (arcade.canExt ? 'EXTRACT OR PUSH ON' : 'NEXT LEVEL') : 'NEW RUN';
-    if (!win && arcade.lvl >= 25) rw += `<div class="rw" style="background:rgba(255,80,80,.22)"><span class="ic">💀</span>Didn't extract. Infinite sprite lost<b style="color:#ffb3b3">0</b></div>`;
+    if (!win && arcade.lvl >= INF_FIRST) rw += `<div class="rw" style="background:rgba(255,80,80,.22)"><span class="ic">💀</span>Didn't extract. Infinite prize lost<b style="color:#ffb3b3">0</b></div>`;
     if (win) rw += `<div class="infHype" style="margin:8px 0 2px">${infHype(arcade.lvl, arcade.canExt)}</div>`;
     else if ((SAVE.infBest || 0) > arcade.lvl) rw += `<div class="fine" style="color:#ffe9a8">So close to your best (level ${SAVE.infBest}). Run it back!</div>`;
     rw += `<div class="fine">Best Infinite run: level ${SAVE.infBest || 0}</div>`;
@@ -2788,6 +2843,8 @@ function renderShop() {
     let act;
     if (eq) act = `<button class="act eq">Equipped</button>`;
     else if (owned) act = `<button class="act">Equip</button>`;
+    else if (it.exclusive === 'spin') act = `<button class="act no">🎡 Daily Spin</button>`;
+    else if (it.exclusive === 'inf') act = `<button class="act no">♾️ Extract</button>`;
     else if (it.exclusive === 'tour3') act = `<button class="act no">🏆 ${Math.min(3, SAVE.tourWins || 0)}/3 Tours</button>`;
     else if (it.exclusive === 'boss2') act = `<button class="act no">👑 Boss 2</button>`;
     else if (it.exclusive === 'secret') act = `<button class="act no">🤫 Secret</button>`;
@@ -2813,6 +2870,8 @@ function renderShop() {
       if (isBtn) {
         if (eq) {}
         else if (owned) { SAVE.equip[shopTab] = it.id; persist(); toast(`Equipped ${it.brand ? it.brand + ' ' : ''}${it.name}`); }
+        else if (it.exclusive === 'spin') toast('Win this on the Daily Spin. Good luck!');
+        else if (it.exclusive === 'inf') toast('Extract in Infinite Arcade and pick a paddle to win this');
         else if (it.exclusive === 'tour3') toast(`Win 3 tournaments to unlock this (${Math.min(3, SAVE.tourWins || 0)}/3)`);
         else if (it.exclusive === 'boss2') toast('Beat the 2nd Arcade boss to win this');
         else if (it.exclusive === 'secret') toast('🤫 A secret unlock. Go deep in Arcade…');
@@ -3026,6 +3085,7 @@ const WHEEL = [
   { label:'100',     v:100,       w:8,  col:'#06b6d4' },
   { label:'30',      v:30,        w:12, col:'#ef4444' },
   { label:'300',     v:300,       w:1,  col:'#111827', jackpot:true },
+  { label:'HIKER',   char:'c_hiker', w:3, col:'#6b4a32' },
 ];
 const SEG = 360 / WHEEL.length;
 let wheelAngle = 0, spinning = false;
@@ -3045,7 +3105,11 @@ function drawWheel() {
     x.strokeStyle = 'rgba(255,255,255,.55)'; x.lineWidth = 4; x.stroke();
     x.save(); x.rotate((i * SEG + SEG / 2 - 90) * Math.PI / 180); x.translate(R * 0.62, 0); x.rotate(Math.PI / 2);
     x.textAlign = 'center'; x.textBaseline = 'middle';
-    if (s.box) {
+    if (s.char) {   // a big hairy footprint
+      x.font = '400 26px "Lilita One", sans-serif'; x.fillStyle = '#fff'; x.fillText(s.label, 0, 40);
+      x.fillStyle = '#e7c9a0'; x.beginPath(); x.ellipse(0, -2, 15, 23, 0, 0, Math.PI * 2); x.fill();
+      [[-13, -30, 6], [-4, -34, 6.5], [6, -33, 6], [14, -27, 5]].forEach(([tx, ty, tr]) => { x.beginPath(); x.arc(tx, ty, tr, 0, Math.PI * 2); x.fill(); });
+    } else if (s.box) {
       x.font = '400 30px "Lilita One", sans-serif'; x.fillStyle = '#fff'; x.fillText(s.label, 0, 34);
       x.fillStyle = s.box === 'premium' ? '#7c3aed' : '#2563eb'; x.strokeStyle = '#fff'; x.lineWidth = 4;
       x.beginPath(); x.roundRect(-26, -30, 52, 40, 7); x.fill(); x.stroke();
@@ -3097,7 +3161,11 @@ $('spinBtn').addEventListener('click', () => {
     else {
       wheelAngle = end; spinning = false; SAVE.lastSpin = todayKey();
       const s = WHEEL[idx];
-      if (s.box) { SAVE.boxes[s.box]++; $('spinResult').innerHTML = `You won a ${BOXES[s.box].name}!`; }
+      if (s.char) {
+        if (SAVE.owned.includes(s.char)) { SAVE.dinks += 150; $('spinResult').innerHTML = `Hairy Hiker again! +150 <span class="coin"></span>`; }
+        else { SAVE.owned.push(s.char); $('spinResult').innerHTML = `🦶 You found the Hairy Hiker!`; setTimeout(() => { showArcadePrize({ cat: 'char', item: findItem('char', s.char) }); rv.res.rar = 'legendary'; $('reveal').style.setProperty('--rc', RARITY.legendary[1]); $('rvTap').textContent = '🦶 SOMETHING HAIRY! TAP TO OPEN'; }, 900); }
+      }
+      else if (s.box) { SAVE.boxes[s.box]++; $('spinResult').innerHTML = `You won a ${BOXES[s.box].name}!`; }
       else { SAVE.dinks += s.v; $('spinResult').innerHTML = `${s.jackpot ? 'JACKPOT! ' : ''}+${s.v} <span class="coin"></span>`; }
       persist(); refreshBalance(); spinCountdown();
       const notes = s.jackpot ? [523, 659, 784, 1047, 1319, 1568] : [659, 784, 1047];
@@ -3306,7 +3374,7 @@ const SPECIES = [
     passive: m => `+${(0.8 * m).toFixed(1)} paddle Control`, power:'Long Arm', pdesc: m => `Reach x${(1.5 + 0.1 * m).toFixed(1)} for ${(3 + m).toFixed(1)}s` },
   { k:'lumen', el:'Light', names:['Glim','Shine','Radiant','Starborn'], cols:[['#fef9c3','#fde047'],['#fde68a','#ffffff'],['#f0abfc','#fef08a'],['#ffffff','#ffd23f']],
     passive: m => `+${Math.round(12 * m)}% win dinks, +${Math.round(5 * m)}% box luck`, power:'Gleam', pdesc: m => `Next shot snipes the far corner. CPU errors +${Math.round((0.35 + 0.06 * m) * 100)}%` },
-  // ---- Infinite Arcade exclusives: only from extracting at level 25+
+  // ---- Infinite Arcade exclusives: only from extracting (every 15 levels)
   { k:'pixel', el:'Glitch', excl:'inf', names:['Bit','Byte','Glitchling','Overclock'], cols:[['#00f0ff','#ff4fd8'],['#3ddc84','#00f0ff'],['#ff4fd8','#ffe45c'],['#ffffff','#ff2bd6']],
     passive: m => `+${(3.5 * m).toFixed(0)}% move speed, +${Math.round(4 * m)}% reach`, power:'Lag Spike', pdesc: m => `CPU freezes for ${(0.7 + 0.25 * m).toFixed(1)}s, then gets slowed` },
   { k:'nova', el:'Cosmic', excl:'inf', names:['Stardust','Comet','Nebula','Supernova'], cols:[['#a78bfa','#fef9c3'],['#60a5fa','#ffffff'],['#c026d3','#67e8f9'],['#1e1b4b','#ffd23f']],
@@ -3700,7 +3768,7 @@ function renderDen() {
     else if (lvl < 5) { const cost = Math.round(LVL_COST[lvl - 1] * TIER_COST[t]); act += `<button class="bigbtn sm" id="lvlBtn" ${SAVE.dinks >= cost ? '' : 'disabled'}>LEVEL UP · <span class="coin"></span> ${cost}</button>`; }
     else act += `<div class="sprTxt" style="text-align:center;opacity:.8">Max level</div>`;
     if (S.equip !== sel) act = `<button class="bigbtn green sm" id="sprEq">EQUIP</button><div style="height:10px"></div>` + act;
-  } else act = `<div class="sprTxt" style="text-align:center;opacity:.85">${spc.excl ? '🔒 ♾️ Infinite Arcade exclusive: extract at level 25+' : '🔒 Win matches to find this sprite'}</div>`;
+  } else act = `<div class="sprTxt" style="text-align:center;opacity:.85">${spc.excl ? '🔒 ♾️ Infinite Arcade exclusive: extract at level 15+' : '🔒 Win matches to find this sprite'}</div>`;
   let html = `<div class="sprHero"><img src="${spriteThumb(sel)}" alt="" class="${lvl ? '' : 'lockedImg'}"><div style="flex:1;min-width:0">
     <div class="rar" style="color:${tc[1]}">${tc[0]} · ${spc.el}</div><h3>${sprName(spc, t)}</h3><div class="stars">${lvl ? stars : ''}${lvl ? ` <span style="font-size:11px;opacity:.7">Lv ${lvl}</span>` : ''}</div>
     <div class="sprTxt">${spc.passive(m)}</div><div class="sprTxt"><b>${spc.power}:</b> ${spc.pdesc(m)}</div>
@@ -3801,7 +3869,7 @@ function arcadeAdvance() {
 function showLadder() {
   $('menu').classList.add('hidden');
   if (arcade.inf) return showInfLadder();
-  $('arcM').querySelector('h2').textContent = '🕹️ Arcade'; $('ladder').classList.remove('five'); $('infBox').innerHTML = ''; $('arcExt').classList.add('hidden');
+  $('arcM').querySelector('h2').textContent = '🕹️ Arcade'; $('ladder').classList.remove('five'); $('infBox').innerHTML = ''; $('arcExtRow').classList.add('hidden');
   $('arcSub').innerHTML = `Loop ${arcade.cycle + 1} · Stage ${arcadeStage()}<br>Beat 3 players to 3 points, then the boss to 5.<br>Lose once and the run ends. Bosses drop <b style="color:#ff9cf0">Arcade-exclusive</b> gear.${arcade.cycle === 1 && !SAVE.owned.includes('p_shag') ? '<br>🦱 This boss drops the hairy <b style="color:#ffd9a8">Shag Spinner</b> paddle!' : ''}`;
   const L_ = $('ladder'); L_.innerHTML = '';
   arcade.opps.forEach((o, i) => {
@@ -3826,10 +3894,10 @@ function showArcadePrize(p) {
   $('rvCard').classList.add('hidden'); $('rvBtns').classList.add('hidden'); $('rays').classList.remove('on');
   $('rvTap').classList.remove('hidden'); $('rvTap').textContent = 'BOSS LOOT! TAP TO OPEN';
 }
-// ================= Infinite Arcade: endless games to 5, extract from level 25 for exclusive sprites =================
-const INF_FIRST = 25, INF_EVERY = 25;
+// ================= Infinite Arcade: endless games to 5, extract every 15 levels for an exclusive sprite or paddle =================
+const INF_FIRST = 15, INF_EVERY = 15;
 const infCheckpoint = n => n >= INF_FIRST && (n - INF_FIRST) % INF_EVERY === 0;
-const INF_ODDS = [   // [common, rare, epic, legendary] per extraction point: 25, 50, 75, 100+
+const INF_ODDS = [   // [common, rare, epic, legendary] per extraction point: 15, 30, 45, 60+
   [55, 30, 12, 3], [30, 35, 23, 12], [12, 28, 32, 28], [0, 15, 35, 50],
 ];
 const infOdds = n => INF_ODDS[Math.min(INF_ODDS.length - 1, Math.max(0, Math.floor((n - INF_FIRST) / INF_EVERY)))];
@@ -3842,7 +3910,7 @@ function infBlock() {
 }
 function startInfinite() { tour = null; arcade = { inf: true, lvl: 0, canExt: false }; arcade.opps = infBlock(); showLadder(); }
 function infAdvance() { if (arcade.lvl % 5 === 0) arcade.opps = infBlock(); showLadder(); }
-const INF_HYPE = ['You\'re on fire. Keep it rolling!', 'One more game. Then one more.', 'The legendaries live deeper.', 'Nobody extracts at the first door. Do they?', 'Your sprite is waiting further down.'];
+const INF_HYPE = ['You\'re on fire. Keep it rolling!', 'One more game. Then one more.', 'The legendaries live deeper.', 'Nobody extracts at the first door. Do they?', 'Your prize is waiting further down.'];
 function infHype(n, atExt) {
   const nx = nextCheckpoint(atExt ? n + 1 : n), now = infOdds(atExt ? n : nx)[3], then = infOdds(atExt ? nx : nx + INF_EVERY)[3];
   if (atExt) return then > now
@@ -3856,8 +3924,8 @@ function showInfLadder() {
   $('arcM').querySelector('h2').textContent = '♾️ Infinite Arcade';
   const next = nextCheckpoint(arcade.canExt ? n + 1 : n);
   $('arcSub').innerHTML = arcade.canExt
-    ? `<b style="color:#7dffb4">Extraction point! Level ${n} cleared.</b><br>Extract now for a guaranteed Infinite sprite, or push on for better odds. Next chance: level ${next}.`
-    : `Set ${Math.floor(n / 5) + 1} · Level ${n + 1}<br>No bosses. Endless games to 5. Lose once and the run ends.${n + 1 >= 10 ? ' <b style="color:#ff8f8f">CPUs bring sprites now.</b>' : ''}<br>${n < INF_FIRST ? `Reach <b style="color:#7dffb4">level ${INF_FIRST}</b> to unlock extraction.${SAVE.owned.includes('c_buff') ? '' : ' 🤫 Something secret waits there too…'}` : `Next extraction: <b style="color:#7dffb4">level ${next}</b>.`}`;
+    ? `<b style="color:#7dffb4">Extraction point! Level ${n} cleared.</b><br>Extract now and pick an Infinite <b>sprite</b> or <b>paddle</b>, or push on for better odds. Next chance: level ${next}.`
+    : `Set ${Math.floor(n / 5) + 1} · Level ${n + 1}<br>No bosses. Endless games to 5. Lose once and the run ends.${n + 1 >= 10 ? ' <b style="color:#ff8f8f">CPUs bring sprites now.</b>' : ''}<br>${n < INF_FIRST ? `Reach <b style="color:#7dffb4">level ${INF_FIRST}</b> to unlock extraction.` : `Next extraction: <b style="color:#7dffb4">level ${next}</b>.`}${n < 25 && !SAVE.owned.includes('c_buff') ? '<br>🤫 Something secret waits at level 25…' : ''}`;
   const L_ = $('ladder'); L_.innerHTML = ''; L_.classList.add('five');
   arcade.opps.forEach((o, i) => {
     const lv = start + i + 1, ext = infCheckpoint(lv);
@@ -3866,13 +3934,12 @@ function showInfLadder() {
     L_.appendChild(d);
   });
   const show = arcade.canExt ? n : next, od = infOdds(show);
-  $('infBox').innerHTML = `<div class="fine" style="margin-bottom:4px">${arcade.canExt ? 'Extract now' : `Odds at level ${show}`}${show >= INF_FIRST + (INF_ODDS.length - 1) * INF_EVERY ? ' (max)' : ''}</div>
+  $('infBox').innerHTML = `<div class="fine" style="margin-bottom:4px">${arcade.canExt ? `🚁 Extract at level ${n}: pick a sprite or a Void paddle` : `Prize odds at level ${show}`}${show >= INF_FIRST + (INF_ODDS.length - 1) * INF_EVERY ? ' (max)' : ''}</div>
     <div class="infOdds">${TIER_KEYS.map((k, i) => `<div style="color:${RARITY[k][1]}"><b>${od[i]}%</b>${RARITY[k][0]}</div>`).join('')}</div>
     <div class="infHype">${infHype(n, arcade.canExt)}</div>
     ${arcade.canExt ? `<div class="infWarn">⚠️ Push on and lose before the next extraction and you get nothing.</div>` : ''}`;
   $('arcBest').textContent = `Best Infinite run: level ${SAVE.infBest || 0}`;
-  $('arcExt').classList.toggle('hidden', !arcade.canExt);
-  $('arcExt').textContent = `🚁 EXTRACT AT LEVEL ${n}`;
+  $('arcExtRow').classList.toggle('hidden', !arcade.canExt);
   $('arcGo').textContent = arcade.canExt ? `PUSH ON TO LEVEL ${n + 1}` : `PLAY LEVEL ${n + 1}`;
   $('arcM').classList.remove('hidden');
 }
@@ -3891,13 +3958,20 @@ function showBuffUnlock() {
   rv.res.rar = 'secret'; $('reveal').style.setProperty('--rc', RARITY.secret[1]); $('rvTap').textContent = '🤫 SECRET UNLOCK! TAP TO OPEN';
   rv.then = () => showDropReveal('matrix_3', { isNew: true, lvl: sprLevel('matrix_3') }, 'infinite');
 }
-function infExtract() {
+const INF_PAD_REFUND = [60, 120, 250, 500];
+function infExtract(kind = 'sprite') {
   if (!arcade || !arcade.inf || !arcade.canExt) return;
   const n = arcade.lvl, od = infOdds(n);
   let r = Math.random() * 100, t = 0;
   for (let i = 0; i < 4; i++) { if ((r -= od[i]) < 0) { t = i; break; } }
-  const sp = INF_SPECIES(), spc = sp[Math.floor(Math.random() * sp.length)], id = `${spc.k}_${t}`;
-  const g = grantSprite(id);
+  let id = null, g = null, pad = null, padDupe = 0;
+  if (kind === 'paddle') {
+    pad = findItem('paddle', `p_inf${t}`);
+    if (SAVE.owned.includes(pad.id)) { padDupe = INF_PAD_REFUND[t]; SAVE.dinks += padDupe; } else SAVE.owned.push(pad.id);
+  } else {
+    const sp = INF_SPECIES(), spc = sp[Math.floor(Math.random() * sp.length)]; id = `${spc.k}_${t}`;
+    g = grantSprite(id);
+  }
   SAVE.infBest = Math.max(SAVE.infBest || 0, n);
   SAVE.infExtracts = (SAVE.infExtracts || 0) + 1;
   const mx = ensureSprites().owned.matrix_3 ? grantSprite('matrix_3') : null;
@@ -3905,13 +3979,19 @@ function infExtract() {
   if (mx) setTimeout(() => toast(mx.dupe ? `Matrix is maxed: +${mx.dupe} dinks` : `⏪ Matrix levelled up to Lv ${mx.lvl}!`), 2200);
   $('arcM').classList.add('hidden'); toMenu();
   toast(`Extracted at level ${n}!`);
-  setTimeout(() => showDropReveal(id, g, 'infinite'), 350);
+  if (pad) setTimeout(() => {
+    showArcadePrize({ cat: 'paddle', item: pad }); rv.res.rar = TIER_KEYS[t]; $('reveal').style.setProperty('--rc', RARITY[TIER_KEYS[t]][1]);
+    $('rvTap').textContent = '🚁 EXTRACTION LOOT! TAP TO OPEN';
+    if (padDupe) { rv.isNew = false; rv.dupe = padDupe; }
+  }, 350);
+  else setTimeout(() => showDropReveal(id, g, 'infinite'), 350);
 }
-$('arcExt').addEventListener('click', () => { initAudio(); infExtract(); });
+$('arcExt').addEventListener('click', () => { initAudio(); infExtract('sprite'); });
+$('arcExtP').addEventListener('click', () => { initAudio(); infExtract('paddle'); });
 
 $('arcGo').addEventListener('click', () => { initAudio(); $('arcM').classList.add('hidden'); newGame('cpu', { arcade: true }); });
 $('arcX').addEventListener('click', () => {
-  if (arcade && arcade.inf && arcade.canExt && !arcade.warned) { arcade.warned = true; toast('Leaving now forfeits your sprite. Tap ✕ again to quit'); return; }
+  if (arcade && arcade.inf && arcade.canExt && !arcade.warned) { arcade.warned = true; toast('Leaving now forfeits your prize. Tap ✕ again to quit'); return; }
   $('arcM').classList.add('hidden'); toMenu();
 });
 
