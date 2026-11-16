@@ -434,6 +434,8 @@
       <h2>Paused</h2>
       <p class="sub">Take a breather.</p>
       <button class="bigbtn" id="resume">RESUME</button>
+      <div style="height:10px"></div>
+      <button class="bigbtn ghost sm" id="aimTog">🎯 Aim: TAP</button>
       <div style="height:14px"></div>
       <button class="bigbtn ghost sm" id="quit">Quit to home</button>
     </div>
@@ -447,6 +449,7 @@
       <div class="help">
         <div><i>🕹️</i><span><b>Move</b> with the joystick. Touch anywhere on the left half and it appears under your thumb.</span></div>
         <div><i>🏓</i><span><b>Hitting</b> is automatic. Catch the ball on the edge of your paddle to angle it. Near the net you dink, from the back you drive.</span></div>
+        <div><i>🎯</i><span><b>Aim:</b> tap (or drag) anywhere on their side of the court to drop a target, and your shots go there. Target the kitchen for a dink or drop, deep for a drive. High CTL paddles land closer to it, and stretching for the ball makes it wilder. The target clears each point. Switch back to random aim in the pause menu.</span></div>
         <div><i>⚡</i><span><b>LOB</b> lofts your next shot. <b>POWER</b> rips a hard drive (riskier). <b>SPIN</b> curves and dips it, and kicks off the bounce. Paddles with a high SPN stat make it nastier; low-spin paddles make it weak and wild.</span></div>
         <div><i>📏</i><span><b>Rules:</b> serve and return must bounce. No volleys from the kitchen, and if your follow-through after a volley carries you into the kitchen, that's a fault too. Only the server scores. Win by 2. Every game goes to 11. Easy is chill, Medium is faster, Hard is blazing fast.</span></div>
         <div><i>✨</i><span><b>Sprites</b> float beside you in CPU matches. Each gives a passive boost and has a power that charges as you hit. Tap the sprite button when its ring is full. Level them up to 5. New sprites only drop when you win: harder modes and tournaments drop rarer ones.</span></div>
@@ -2271,8 +2274,15 @@ function dust(x, y) {
   const d = RINGS.find(r => r.life <= 0); if (!d) return;
   d.life = 0.45; d.r.visible = true; d.r.position.copy(T3(x, y, 0.012));
 }
+const aimMark = new THREE.Group();
+{
+  const m = new THREE.MeshBasicMaterial({ color:'#ff3dd5', transparent: true, opacity: 0.95, depthWrite: false, side: THREE.DoubleSide });
+  aimMark.add(new THREE.Mesh(new THREE.RingGeometry(0.26, 0.33, 40), m), new THREE.Mesh(new THREE.CircleGeometry(0.07, 20), m));
+  for (let i = 0; i < 4; i++) { const b = new THREE.Mesh(new THREE.PlaneGeometry(0.05, 0.16), m); const a = i * Math.PI / 2; b.position.set(Math.sin(a) * 0.43, Math.cos(a) * 0.43, 0); b.rotation.z = -a; aimMark.add(b); }
+  aimMark.rotation.x = -Math.PI / 2; aimMark.visible = false; aimMark.renderOrder = 3;
+}
 const marker = new THREE.Mesh(new THREE.RingGeometry(0.16, 0.24, 32), new THREE.MeshBasicMaterial({ color:'#e8f542', transparent: true, opacity: 0.7, depthWrite: false, side: THREE.DoubleSide }));
-marker.rotation.x = -Math.PI / 2; marker.visible = false; scene.add(marker);
+marker.rotation.x = -Math.PI / 2; marker.visible = false; scene.add(marker); scene.add(aimMark);
 const kitchenFlashMesh = new THREE.Mesh(new THREE.PlaneGeometry(W, K), new THREE.MeshBasicMaterial({ color:'#ff3b3b', transparent: true, opacity: 0, depthWrite: false }));
 kitchenFlashMesh.rotation.x = -Math.PI / 2; kitchenFlashMesh.position.set(0, 0.015, K / 2); scene.add(kitchenFlashMesh);
 
@@ -2445,11 +2455,12 @@ function newGame(m = 'cpu', opts = {}) {
   setupServe();
   const who = s => m === 'local' ? (s === 'p' ? 'P1' : 'P2') : s === 'p' ? 'you' : 'they';
   const vs = arcade ? (arcade.inf ? `♾️ Level ${arcadeStage()} · vs ${cpuDef.name}` : arcade.step === 3 ? `👑 BOSS: ${cpuDef.boss ? '' : 'MEGA '}${cpuDef.name.toUpperCase()}` : `Stage ${arcadeStage()} · vs ${cpuDef.name}`) : tour ? `${ROUND_NAMES[tour.round]} · vs ${cpuDef.name}` : doubles ? `Doubles · ${partnerDef.name} & you` : m === 'cpu' ? `vs ${cpuDef.name}` : m === 'local' ? 'P1 vs P2' : 'vs Friend';
+  if (aimOn() && !SAVE.aimTip) { SAVE.aimTip = 1; persist(); setTimeout(() => flash('🎯 New: tap their side of the court to aim', '#ff9ef0', 2.6), 2000); }
   flash(`${vs}${csprOn() ? ` + ${sprName(cspr.spc, cspr.t)}` : ''} · ${who(server)} serve${m === 'local' ? 's' : ''}`, '#e8f542', 1.8);
 }
 function serveSide(who) { const even = score[who] % 2 === 0; return who === 'p' ? (even ? W * 0.75 : W * 0.25) : (even ? W * 0.25 : W * 0.75); }
 function setupServe() {
-  rallyHits = 0; setTimeout(updateSprBtn, 0);
+  rallyHits = 0; setTimeout(updateSprBtn, 0); aimT = null;
   phase = 'serve'; clearQueued(); resetJoy();
   Object.assign(ball, { live: false, held: true, bounces: 0 }); trailPts.length = 0; landMarker = null;
   for (const o of [ai, ai2, partner]) { o.leave = false; o.plan = null; o.react = 0; }
@@ -2685,6 +2696,20 @@ function humanShot(side, me = side === 'p' ? player : ai) {
     if (spin > 0.4 && Math.random() < 0.35) label = 'Topspin!';
     else if (pd.pw >= 8 && Math.random() < 0.25) label = 'Rip!';
   }
+  // tap-to-aim: the player's target replaces the random placement; CTL and stretching still add error
+  if (side === 'p' && aimOn() && aimT) {
+    const ex = aim * 1.15 + Math.abs(offset) * 0.45, soft = at => at.y > NET - K;
+    tx = aimT.x + rand(-ex, ex) + gauss() * ex * 0.25;
+    if (label === 'Lob') ty = clamp(aimT.y + gauss() * depthErr * 0.5, 0.3, NET - K - 0.6);
+    else if (label === 'SMASH!') ty = clamp(aimT.y + gauss() * 0.4, 0.3, NET - 0.3);
+    else if (soft(aimT) && !['POWER!', 'WICKED SPIN!', 'Spin!', 'Weak spin'].includes(label)) {
+      ty = clamp(aimT.y + gauss() * 0.35 * (1 - 0.4 * cf), NET - K - 0.25, NET - 0.3);
+      T = nearNet ? 1.05 : 1.2; spin = Math.min(spin, 0.08); label = nearNet ? '' : 'Drop';
+    } else {
+      ty = clamp(aimT.y + gauss() * depthErr * 0.6, -0.6, NET - 0.3);
+      if (label === 'Drop' || (nearNet && T >= 1.0 && !q.spin && label !== 'Spin!' && label !== 'WICKED SPIN!' && label !== 'Weak spin')) { T = nearNet ? 0.72 : 0.85; if (nearNet) label = 'Speed-up!'; else label = ''; }
+    }
+  }
   let sprBoost = 0, fire = false;
   if (side === 'p' && sprOn() && spr.next) {
     const m = spr.m;
@@ -2846,6 +2871,17 @@ function moveJoy(J, e) {
   J.x = dx / J.R; J.y = dy / J.R;
   J.kn.style.transform = J.flip ? `translate(${-dx}px,${-dy}px)` : `translate(${dx}px,${dy}px)`;
 }
+// ---- tap-to-aim: touch the other team's side of the court to set where your shots go
+let aimT = null, aimId = null;
+const aimOn = () => SAVE.aimMode !== false && mode !== 'local' && mode !== 'online';
+function setAim(e) {
+  const w = toWorld(e.clientX, e.clientY);
+  if (!w || w[1] > NET + 0.2) return false;   // anything past the net counts (the far court is small on a phone); it snaps onto their court
+  const first = !aimT;
+  aimT = { x: clamp(w[0], 0.1, W - 0.1), y: clamp(w[1], 0.1, NET - 0.3) };
+  if (first) { buzz(6); beep(1100, 0.03, 0.05); }
+  return true;
+}
 cv.addEventListener('pointerdown', e => {
   initAudio();
   if (paused) return;
@@ -2857,11 +2893,12 @@ cv.addEventListener('pointerdown', e => {
     if (J.id === null && (top ? e.clientX > cw * 0.3 : e.clientX < cw * 0.7)) startJoy(J, e);
     return;
   }
+  if (aimOn() && setAim(e)) { aimId = e.pointerId; if (phase === 'serve' && server === mySide()) doServe('p'); return; }
   if (phase === 'serve' && server === mySide()) { if (role === 'guest') net.serveId++; else doServe('p'); }
   if (e.clientX < cw * 0.55 && joy.id === null) startJoy(joy, e);
 });
-cv.addEventListener('pointermove', e => { if (e.pointerId === joy.id) moveJoy(joy, e); else if (e.pointerId === joy2.id) moveJoy(joy2, e); });
-const up = e => { if (e.pointerId === joy.id) resetJoy(joy); if (e.pointerId === joy2.id) resetJoy(joy2); };
+cv.addEventListener('pointermove', e => { if (e.pointerId === aimId && aimOn()) setAim(e); if (e.pointerId === joy.id) moveJoy(joy, e); else if (e.pointerId === joy2.id) moveJoy(joy2, e); });
+const up = e => { if (e.pointerId === aimId) aimId = null; if (e.pointerId === joy.id) resetJoy(joy); if (e.pointerId === joy2.id) resetJoy(joy2); };
 cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up);
 function refreshQueueUI() {
   const me = mySide();
@@ -2971,6 +3008,9 @@ pauseBtn.addEventListener('click', () => {
   $('quit').textContent = mode === 'online' ? 'Leave match' : 'Quit to home';
   $('paused').classList.remove('hidden');
 });
+function aimTogLabel() { $('aimTog').textContent = SAVE.aimMode === false ? '🎲 Aim: AUTO' : '🎯 Aim: TAP'; }
+aimTogLabel();
+$('aimTog').addEventListener('click', () => { SAVE.aimMode = SAVE.aimMode === false; if (!SAVE.aimMode) aimT = null; aimTogLabel(); persist(); });
 $('resume').addEventListener('click', () => { paused = false; $('paused').classList.add('hidden'); });
 document.addEventListener('visibilitychange', () => {
   if (document.hidden && mode !== 'online' && (phase === 'rally' || phase === 'serve')) { paused = true; $('paused').classList.remove('hidden'); }
@@ -4459,6 +4499,8 @@ function visuals(dt) {
     marker.visible = true; marker.position.copy(T3(landMarker.x, landMarker.y, 0.02));
     marker.scale.setScalar(1 + Math.sin(t * 9) * 0.12); marker.material.color.set(ballSkin.trail === 'rainbow' || ballSkin.trail === 'fire' ? '#ffffff' : ballSkin.trail);
   } else marker.visible = false;
+  aimMark.visible = !!(aimT && aimOn() && (phase === 'serve' || phase === 'rally'));
+  if (aimMark.visible) { aimMark.position.copy(T3(aimT.x, aimT.y, 0.025)); aimMark.scale.setScalar(1.5 + Math.sin(t * 6) * 0.1); }
   kitchenFlashMesh.material.opacity = Math.max(0, kitchenFlash) * 1.2;
 
   // arena life
