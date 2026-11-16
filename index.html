@@ -668,6 +668,30 @@ function cheeks(k, color = '#ffadc0') { for (const s of [-1, 1]) k.mk(sph(0.045)
 function belly(k, color, y = 0.82, sx = 1, sy = 1.35) { const m = k.mk(sph(0.2), color, 0, y - 0.03, -0.235, k.upper); m.scale.set(sx, sy * 0.9, 0.5); return m; }
 function belt(k, color, y = 0.62, r = 0.3, t = 0.03) { const m = k.mk(new THREE.TorusGeometry(r, t, 8, 32), color, 0, y, 0, k.upper); m.rotation.x = Math.PI / 2; m.scale.y = 0.92; return m; }
 function smile(k, color = '#3a1414') { const m = k.mk(new THREE.TorusGeometry(0.058, 0.014, 8, 24, Math.PI), color, 0, -0.075, -0.222, k.head); m.rotation.z = Math.PI; m.rotation.x = -0.25; }
+function hawaiiMat() {
+  // red aloha shirt print: white hibiscus with yellow centres and green leaves
+  const c = document.createElement('canvas'); c.width = c.height = 256; const x = c.getContext('2d');
+  x.fillStyle = '#d62828'; x.fillRect(0, 0, 256, 256);
+  const flower = (fx, fy, r, rot) => {
+    x.save(); x.translate(fx, fy); x.rotate(rot);
+    x.fillStyle = '#2f8f46'; for (const a of [0.6, 2.4, 4.3]) { x.save(); x.rotate(a); x.beginPath(); x.ellipse(r * 1.5, 0, r * 0.9, r * 0.35, 0, 0, 7); x.fill(); x.restore(); }
+    x.fillStyle = '#fff4f0'; for (let i = 0; i < 5; i++) { x.save(); x.rotate(i / 5 * Math.PI * 2); x.beginPath(); x.ellipse(r * 0.65, 0, r * 0.62, r * 0.42, 0, 0, 7); x.fill(); x.restore(); }
+    x.fillStyle = '#ffd23f'; x.beginPath(); x.arc(0, 0, r * 0.22, 0, 7); x.fill(); x.restore();
+  };
+  for (const [fx, fy, r] of [[40, 40, 18], [150, 30, 14], [220, 110, 18], [90, 130, 16], [30, 210, 15], [170, 200, 18], [250, 250, 14], [-6, 120, 14], [256 + 40 - 256, 296 - 256, 18]]) flower(fx, fy, r, fx * 0.05);
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(2, 1.4);
+  return new THREE.MeshPhysicalMaterial({ map: t, roughness: 0.6, clearcoat: 0.15 });
+}
+function strum() {   // quick ukulele strum: G C E A
+  [392, 262, 330, 440].forEach((n, i) => setTimeout(() => beep(n, 0.22, 0.09, 'triangle'), i * 28));
+}
+function strawTex() {
+  const c = document.createElement('canvas'); c.width = c.height = 64; const x = c.getContext('2d');
+  x.fillStyle = '#e9c97a'; x.fillRect(0, 0, 64, 64);
+  for (let i = 0; i < 64; i += 4) { x.fillStyle = i % 8 ? '#d9b462' : '#f3d88f'; x.fillRect(0, i, 64, 2); x.fillStyle = 'rgba(120,80,20,.18)'; x.fillRect(i, 0, 1, 64); }
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(4, 2);
+  return t;
+}
 function cape(k, color) {
   // hangs from the shoulders and wraps round the back of the torso; the pivot at the collar lets it flare out when running
   const pivot = new THREE.Group(); pivot.position.set(0, 1.13, 0.02); k.upper.add(pivot);
@@ -1052,6 +1076,43 @@ const CHARS = [
       const ch_ = k.mk(new THREE.TorusGeometry(0.17, 0.013, 8, 30, Math.PI), gold, 0, 0.98, -0.22, k.upper); ch_.rotation.z = Math.PI; ch_.rotation.x = 0.55;
       k.mk(cyl(0.055, 0.055, 0.02, 20), gold, 0, 0.8, -0.315, k.upper).rotation.x = Math.PI / 2;
       k.mk(sph(0.024), k.M('#e11d48', { clearcoat: 1 }), 0, 0.8, -0.33, k.upper);
+    } },
+  { id:'c_sam', name:'Sam', price:700, group:'squad', rarity:'legendary', shout:'Cheeehooo! 🤙',
+    c:{ body:'#d62828', head:'#d9a066', limb:'#d9a066', hand:'#d9a066', legs:'#d9a066', foot:'#8b5a2b' },
+    bodyMat: () => hawaiiMat(),
+    deco: k => {
+      smile(k, '#5a1a10'); cheeks(k, '#ff9e8a');
+      // black hair peeking out under the hat
+      k.mk(new THREE.SphereGeometry(0.243, 28, 16, 0, Math.PI * 2, 0, Math.PI * 0.42), k.M('#14110f', { roughness: 0.9, clearcoat: 0 }), 0, 0.012, 0.01, k.head);
+      // straw hat: woven crown + wide brim, red band, hibiscus tucked in
+      const straw = k.M('#e9c97a', { map: strawTex(), roughness: 0.85, clearcoat: 0 });
+      const brim = k.mk(cyl(0.4, 0.42, 0.025, 36), straw, 0, 0.17, 0, k.head); brim.rotation.x = -0.06;
+      k.mk(cyl(0.2, 0.22, 0.16, 28), straw, 0, 0.26, 0, k.head);
+      k.mk(cyl(0.2, 0.2, 0.012, 28), straw, 0, 0.345, 0, k.head);
+      k.mk(cyl(0.224, 0.224, 0.045, 28), '#c1121f', 0, 0.21, 0, k.head);
+      const fl = new THREE.Group(); fl.position.set(0.19, 0.22, -0.1); k.head.add(fl);
+      for (let i = 0; i < 5; i++) { const a = i / 5 * Math.PI * 2, pt = k.mk(sph(0.032, 10, 8), '#ff5fa2', Math.cos(a) * 0.03, Math.sin(a) * 0.03, 0, fl); pt.scale.z = 0.4; }
+      k.mk(sph(0.014), '#ffd23f', 0, 0, -0.01, fl);
+      // shirt buttons down the front
+      for (let i = 0; i < 4; i++) k.mk(sph(0.014, 8, 6), '#ffffff', 0, 1.02 - i * 0.12, -0.286 + i * 0.004, k.upper);
+      // golden fabric sash with a knot and hanging tails on the side
+      belt(k, '#e8b923', 0.6, 0.312, 0.038);
+      const gold = k.M('#e8b923', { roughness: 0.6, clearcoat: 0.3 });
+      k.mk(sph(0.045, 12, 10), gold, 0.24, 0.6, -0.19, k.upper);
+      for (const [dx, rz] of [[0.0, 0.15], [0.04, -0.1]]) { const t = k.mk(box(0.05, 0.18, 0.015), gold, 0.25 + dx, 0.5, -0.2, k.upper); t.rotation.z = rz; t.rotation.y = -0.6; }
+      // blue board shorts over bare legs
+      const blue = k.M('#2563eb', { roughness: 0.6 });
+      const hips = k.mk(new THREE.CapsuleGeometry(0.27, 0.04, 8, 24), blue, 0, 0.5, 0, k.upper); hips.scale.set(1.02, 0.6, 0.86);
+      for (const l of k.legs) { k.mk(cyl(0.09, 0.095, 0.16, 18), blue, 0, -0.06, 0, l); k.mk(cyl(0.097, 0.097, 0.02, 18), '#ffffff', 0, -0.135, 0, l); }
+      // ukulele in the free hand
+      const uke = new THREE.Group(); uke.position.set(0.02, -0.44, -0.07); uke.rotation.set(0.2, 0.25, 0.55); uke.scale.setScalar(1.55); k.arms[0].add(uke);
+      const wood = k.M('#c68642', { roughness: 0.45, clearcoat: 0.8 }), dark = k.M('#5a3410', { roughness: 0.5 });
+      const lo = k.mk(sph(0.1, 20, 14), wood, 0, -0.1, 0, uke); lo.scale.z = 0.32;
+      const hi = k.mk(sph(0.08, 20, 14), wood, 0, 0.0, 0, uke); hi.scale.z = 0.32;
+      k.mk(cyl(0.028, 0.028, 0.006, 16), '#2a1608', 0, -0.03, -0.028, uke).rotation.x = Math.PI / 2;
+      k.mk(box(0.035, 0.24, 0.02), dark, 0, 0.17, 0, uke);
+      k.mk(box(0.05, 0.06, 0.02), dark, 0, 0.31, 0, uke);
+      for (const sx of [-0.009, -0.003, 0.003, 0.009]) k.mk(box(0.0018, 0.4, 0.0018), '#f4f1ea', sx, 0.1, -0.022, uke);
     } },
   { id:'c_halor', name:'Halor', price:850, group:'squad', rarity:'legendary', c:{ body:'#1e6bff', limb:'#1d1d24', hand:'#1d1d24', foot:'#1d1d24' },
     bodyMat: () => carPaint(),
@@ -2418,6 +2479,8 @@ function rallyFeedback(loser, reason, pointTo, second) {
   const text = pointTo ? `${reason} · Point ${nm(pointTo)}` : second ? `${reason} · Second server` : `${reason} · Side out`;
   flash(text, mode === 'local' ? '#ffe45c' : loser === me ? '#ff8a7a' : '#9dff9a', 1.6);
   beep(mode !== 'local' && loser === me ? 200 : 760, 0.25, 0.15, 'sine');
+  { const d = playerModel && playerModel.userData.def;   // characters with a catchphrase shout it when they win a rally
+    if (mode !== 'local' && loser !== me && d && d.shout && Math.random() < 0.6) { setTimeout(() => showHint(d.shout, 1.3, me), 350); strum(); } }
   if (mode !== 'local' && loser !== me) { award(mode === 'online' ? DIFFS[1].rally : D.rally + (sprIs('bloom') ? Math.round(spr.m) : 0) + (sprIs('nova') ? Math.round(0.6 * spr.m) : 0), T3(me === 'p' ? player.x : ai.x, me === 'p' ? player.y : ai.y, 2.1)); cheerT = 1.4; }
   if (mode === 'local') cheerT = 1.2;
   updateHud();
@@ -2957,7 +3020,7 @@ function renderShop() {
       preview[shopTab] = it.id; applyLook(); beep(700, 0.04, 0.08);
       if (isBtn) {
         if (eq) {}
-        else if (owned) { SAVE.equip[shopTab] = it.id; persist(); toast(`Equipped ${it.brand ? it.brand + ' ' : ''}${it.name}`); }
+        else if (owned) { SAVE.equip[shopTab] = it.id; persist(); toast(it.shout ? `${it.name}: ${it.shout}` : `Equipped ${it.brand ? it.brand + ' ' : ''}${it.name}`); if (it.shout) strum(); }
         else if (it.exclusive === 'logo') toast('🤫 This one is hiding somewhere on the home screen…');
         else if (it.exclusive === 'spin') toast('Win this on the Daily Spin. Good luck!');
         else if (it.exclusive === 'inf') toast('Extract in Infinite Arcade and pick a paddle to win this');
@@ -2967,7 +3030,7 @@ function renderShop() {
         else if (it.exclusive) toast('Beat an Arcade boss to unlock this');
         else if (SAVE.dinks >= it.price) {
           SAVE.dinks -= it.price; SAVE.owned.push(it.id); SAVE.equip[shopTab] = it.id; persist(); refreshBalance();
-          coinSound(); buzz(20); toast(`Unlocked ${it.name}!`);
+          coinSound(); buzz(20); toast(it.shout ? `Unlocked ${it.name}! ${it.shout}` : `Unlocked ${it.name}!`); if (it.shout) setTimeout(strum, 250);
           burst(T3(player.x, player.y, 1.4), '#e8f542', 24, 3, 0.22);
         } else toast(`Need ${it.price - SAVE.dinks} more dinks`);
       }
