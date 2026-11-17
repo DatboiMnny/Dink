@@ -63,6 +63,11 @@
   /* ===== controls ===== */
   #joy{position:absolute;left:28px;bottom:calc(var(--bot) + 38px);width:136px;height:136px;display:none;pointer-events:none;opacity:.55;transition:opacity .15s}
   #joy.live{opacity:1}
+  #proPad{position:absolute;left:18px;bottom:calc(var(--bot) + 30px);width:150px;height:166px;display:none;pointer-events:none;opacity:.6;transition:opacity .15s}
+  #proPad.live{opacity:1}
+  #proPad svg{position:absolute;inset:0;width:100%;height:100%}
+  #proPad .dot{position:absolute;width:18px;height:18px;margin:-9px 0 0 -9px;border-radius:50%;background:#ff3dd5;border:2px solid #fff;box-shadow:0 0 10px #ff3dd5}
+  #proPad .hint{position:absolute;left:0;right:0;bottom:-16px;text-align:center;font-size:9.5px;font-weight:900;letter-spacing:.08em;color:#fff;text-shadow:0 1px 3px #000}
   #joy .ring,#joy2 .ring{position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.05) 0 44%,rgba(255,255,255,.13) 45% 100%);
     border:2px solid rgba(255,255,255,.38);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);box-shadow:0 6px 20px rgba(0,0,0,.25)}
   #joy .ring svg,#joy2 .ring svg{position:absolute;inset:0;width:100%;height:100%;opacity:.7}
@@ -259,7 +264,7 @@
   .dots::after{content:'';animation:dots 1.2s steps(4) infinite}
   @keyframes dots{0%{content:''}25%{content:'.'}50%{content:'..'}75%{content:'...'}}
   .modeHint{font-size:12.5px;opacity:.7;margin:8px 2px 16px;line-height:1.35}
-  #sprBtn{position:absolute;left:22px;bottom:calc(var(--bot) + 194px);width:66px;height:66px;border-radius:50%;display:none;align-items:center;justify-content:center;touch-action:none;padding:4px;
+  #sprBtn{position:absolute;right:112px;bottom:calc(var(--bot) + 180px);width:66px;height:66px;border-radius:50%;display:none;align-items:center;justify-content:center;touch-action:none;padding:4px;
     background:conic-gradient(var(--sc,#e8f542) calc(var(--p,0) * 1%), rgba(255,255,255,.16) 0);box-shadow:0 6px 16px rgba(0,0,0,.35);transition:transform .08s}
   #sprBtn:active{transform:scale(.92)}
   #sprBtn .in{width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 50% 35%,rgba(255,255,255,.28),rgba(12,20,50,.88) 72%);display:flex;align-items:center;justify-content:center;overflow:hidden}
@@ -374,6 +379,7 @@
 
   <div id="joy"><div class="ring"><svg viewBox="0 0 136 136" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
     <path d="M60 18l8-7 8 7"/><path d="M60 118l8 7 8-7"/><path d="M18 60l-7 8 7 8"/><path d="M118 60l7 8-7 8"/></svg></div><div id="knob"></div></div>
+  <div id="proPad"><svg viewBox="0 0 150 166" fill="none" stroke="#fff" stroke-width="2"><rect x="1" y="1" width="148" height="164" rx="14" fill="rgba(20,40,90,.35)" stroke="rgba(255,255,255,.35)"/><rect x="12" y="7" width="126" height="137" fill="rgba(70,130,220,.35)"/><line x1="6" y1="7" x2="144" y2="7" stroke-width="4" stroke-dasharray="3 3"/><line x1="12" y1="51" x2="138" y2="51"/><line x1="75" y1="51" x2="75" y2="144"/></svg><div class="dot"></div><div class="hint">SLIDE TO MOVE</div></div>
   <div id="sprBtn"><div class="in"><img alt=""></div><div class="lbl"></div></div>
   <div id="serveOpts"><button id="srvShort">SHORT<small>just past the kitchen</small></button><button id="srvDeep">DEEP<small>to the baseline</small></button><button id="srvSpin" style="display:none">SPIN<small>Orlando special</small></button></div>
   <div id="csprB"><div class="in"><img alt=""></div><div class="lbl"></div></div>
@@ -449,7 +455,7 @@
       <div class="help">
         <div><i>🕹️</i><span><b>Move</b> with the joystick. Touch anywhere on the left half and it appears under your thumb.</span></div>
         <div><i>🏓</i><span><b>Hitting</b> is automatic. Catch the ball on the edge of your paddle to angle it. Near the net you dink, from the back you drive.</span></div>
-        <div><i>🎮</i><span><b>Controls</b> (pause menu, tap to switch): <b>AUTO</b> is the default: you move with the joystick and your shot angle comes from where you catch the ball, with some randomness. <b>MANUAL</b> adds a pink radar that shows where your shot will land as the ball comes to you: move left or right of the ball to change it, and the faint circle is how far it can wobble. <b>PRO</b> has no joystick: put your thumb on your side of the court and slide it, and your player runs to wherever your thumb is (they stand just above it so you can still see them; lift off and they stop). Tap anywhere on their side with your other finger to choose where each return goes (tap the kitchen for a dink or drop, deep for a drive). Tap again or drag to change it before you hit. No tap means a normal auto shot. High CTL paddles land closer, and aiming right on the lines can go out. LOB, POWER and SPIN still work in every mode.</span></div>
+        <div><i>🎮</i><span><b>Controls</b> (pause menu, tap to switch): <b>AUTO</b> is the default: you move with the joystick and your shot angle comes from where you catch the ball, with some randomness. <b>MANUAL</b> adds a pink radar that shows where your shot will land as the ball comes to you: move left or right of the ball to change it, and the faint circle is how far it can wobble. <b>PRO</b> has no joystick: a mini court sits bottom-left. Put your thumb on it and slide: wherever your thumb is on the mini court, your player runs to that spot on the real court (the pink dot is you; lift off and they stop). Tap anywhere on their side with your other thumb to choose where each return goes (tap the kitchen for a dink or drop, deep for a drive). Tap again or drag to change it before you hit. No tap means a normal auto shot. High CTL paddles land closer, and aiming right on the lines can go out. LOB, POWER and SPIN still work in every mode.</span></div>
         <div><i>⚡</i><span><b>LOB</b> lofts your next shot. <b>POWER</b> rips a hard drive (riskier). <b>SPIN</b> curves and dips it, and kicks off the bounce. Paddles with a high SPN stat make it nastier; low-spin paddles make it weak and wild.</span></div>
         <div><i>📏</i><span><b>Rules:</b> serve and return must bounce. No volleys from the kitchen, and if your follow-through after a volley carries you into the kitchen, that's a fault too. Only the server scores. Win by 2. Every game goes to 11. Easy is chill, Medium is faster, Hard is blazing fast.</span></div>
         <div><i>✨</i><span><b>Sprites</b> float beside you in CPU matches. Each gives a passive boost and has a power that charges as you hit. Tap the sprite button when its ring is full. Level them up to 5. New sprites only drop when you win: harder modes and tournaments drop rarer ones.</span></div>
@@ -1551,7 +1557,7 @@ const $ = id => document.getElementById(id);
 const cv = $('c');
 const hud = $('hud'), lobBtn = $('lob'), powBtn = $('pow'), joyEl = $('joy'), knob = $('knob'), pauseBtn = $('pauseBtn'), lob2 = $('lob2'), pow2 = $('pow2'), spinB = $('spinB'), spin2 = $('spin2'), joyEl2 = $('joy2'), knob2 = $('knob2');
 function showControls(on) {
-  lobBtn.style.display = powBtn.style.display = spinB.style.display = on ? 'flex' : 'none'; joyEl.style.display = on && !proOn() ? 'block' : 'none'; pauseBtn.style.display = on ? 'flex' : 'none';
+  lobBtn.style.display = powBtn.style.display = spinB.style.display = on ? 'flex' : 'none'; joyEl.style.display = on && !proOn() ? 'block' : 'none'; proPad.style.display = on && proOn() ? 'block' : 'none'; pauseBtn.style.display = on ? 'flex' : 'none';
   const two = on && mode === 'local';
   updateSprBtn();
   lob2.style.display = pow2.style.display = spin2.style.display = two ? 'flex' : 'none'; joyEl2.style.display = two ? 'block' : 'none';
@@ -2887,11 +2893,22 @@ function moveJoy(J, e) {
 const proOn = () => SAVE.aim === 'pro' && mode !== 'local' && mode !== 'online';
 let aimT = null, aimId = null, proHint = 0;
 // Pro movement: your character runs to wherever your thumb is on your side (sitting a little above it so your finger doesn't hide them)
-const PRO_LIFT = 60, proF = { id: null, x: 0, y: 0 };
+const proF = { id: null, x: 0, y: 0 }, proPad = $('proPad'), proDot = proPad.querySelector('.dot');
+const PAD = { x0: 12 / 150, x1: 138 / 150, y0: 7 / 166, y1: 144 / 166 };
+function padToCourt(cx, cy) {
+  const r = proPad.getBoundingClientRect();
+  const u = ((cx - r.left) / r.width - PAD.x0) / (PAD.x1 - PAD.x0), v = ((cy - r.top) / r.height - PAD.y0) / (PAD.y1 - PAD.y0);
+  return [clamp(u * W, -0.9, W + 0.9), clamp(NET + v * (L - NET), NET + 0.35, L + 1.2)];
+}
+function proPadTick() {
+  if (proPad.style.display === 'none') return;
+  proPad.classList.toggle('live', proF.id !== null);
+  const u = PAD.x0 + clamp(player.x / W, -0.1, 1.1) * (PAD.x1 - PAD.x0), v = PAD.y0 + clamp((player.y - NET) / (L - NET), 0, 1.07) * (PAD.y1 - PAD.y0);
+  proDot.style.left = (u * 100) + '%'; proDot.style.top = (v * 100) + '%';
+}
 function proMove(dt) {
   if (proF.id === null || (phase === 'serve' && server === 'p')) { player.tx = player.x; player.ty = player.y; player.spd = 0; return; }
-  const w = toWorld(proF.x, proF.y - PRO_LIFT);
-  if (!w) { player.spd = 0; return; }
+  const w = padToCourt(proF.x, proF.y);
   player.tx = clamp(w[0], -1.3, W + 1.3); player.ty = clamp(w[1], NET + 0.35, L + 1.8);
   const boost = sprIs('zephyr') ? 1 + 0.05 * spr.m : sprIs('pixel') ? 1 + 0.035 * spr.m : sprIs('matrix') ? 1 + 0.03 * spr.m : 1;
   moveToward(player, player.tx, player.ty, player.speed * boost * csprSpeed(), dt);
@@ -2946,9 +2963,14 @@ cv.addEventListener('pointerdown', e => {
   }
   if (proOn()) {
     // Pro: no joystick. Tap to serve; during a rally, tap their side to pick where your next return goes
+    // left side of the screen = movement pad (thumb spot on the mini court = your spot on the court)
+    if (e.clientX < cw * 0.5 && e.clientY > ch * 0.42) {
+      if (proF.id === null) { proF.id = e.pointerId; proF.x = e.clientX; proF.y = e.clientY; }
+      if (phase === 'serve' && server === mySide()) doServe('p');
+      return;
+    }
     if (phase === 'serve' && server === mySide()) { doServe('p'); return; }
-    if (phase === 'rally' && setAim(e)) { aimId = e.pointerId; return; }
-    if (proF.id === null) { proF.id = e.pointerId; proF.x = e.clientX; proF.y = e.clientY; }
+    if (phase === 'rally' && setAim(e)) aimId = e.pointerId;
     return;
   }
   if (phase === 'serve' && server === mySide()) { if (role === 'guest') net.serveId++; else doServe('p'); }
@@ -3068,7 +3090,7 @@ pauseBtn.addEventListener('click', () => {
 function aimTogLabel() { $('aimTog').textContent = SAVE.aim === 'manual' ? '📡 Controls: MANUAL' : SAVE.aim === 'pro' ? '🏆 Controls: PRO' : '🎲 Controls: AUTO'; }
 aimTogLabel();
 $('aimTog').addEventListener('click', () => { SAVE.aim = SAVE.aim === 'manual' ? 'pro' : SAVE.aim === 'pro' ? 'auto' : 'manual'; aimT = null; proF.id = null; resetJoy(); aimTogLabel(); if (phase !== 'menu' && phase !== 'over' && phase !== 'shop') showControls(true);
-  if (SAVE.aim === 'pro' && !SAVE.proTip) { SAVE.proTip = 1; flash('🏆 PRO: slide your thumb on your side to run. Tap their side to aim', '#ffd34d', 3.5); } persist(); });
+  if (SAVE.aim === 'pro' && !SAVE.proTip) { SAVE.proTip = 1; flash('🏆 PRO: slide on the mini court (bottom-left) to run. Tap their side to aim', '#ffd34d', 3.5); } persist(); });
 $('resume').addEventListener('click', () => { paused = false; $('paused').classList.add('hidden'); });
 document.addEventListener('visibilitychange', () => {
   if (document.hidden && mode !== 'online' && (phase === 'rally' || phase === 'serve')) { paused = true; $('paused').classList.remove('hidden'); }
@@ -4348,7 +4370,7 @@ function moveToward(o, tx, ty, sp, dt) {
   o.spd = dt > 0 ? Math.hypot(o.x - px, o.y - py) / dt : 0;
 }
 function update(dtReal) {
-  serveOptsTick();
+  serveOptsTick(); proPadTick();
   if (msgT > 0 && msgT < 50) msgT -= dtReal;
   if (hintT > 0) hintT -= dtReal;
   if (kitchenFlash > 0) kitchenFlash -= dtReal;
