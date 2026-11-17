@@ -435,7 +435,7 @@
       <p class="sub">Take a breather.</p>
       <button class="bigbtn" id="resume">RESUME</button>
       <div style="height:10px"></div>
-      <button class="bigbtn ghost sm" id="aimTog">🎲 Aim: AUTO</button>
+      <button class="bigbtn ghost sm" id="aimTog">🎲 Controls: AUTO</button>
       <div style="height:14px"></div>
       <button class="bigbtn ghost sm" id="quit">Quit to home</button>
     </div>
@@ -449,7 +449,7 @@
       <div class="help">
         <div><i>🕹️</i><span><b>Move</b> with the joystick. Touch anywhere on the left half and it appears under your thumb.</span></div>
         <div><i>🏓</i><span><b>Hitting</b> is automatic. Catch the ball on the edge of your paddle to angle it. Near the net you dink, from the back you drive.</span></div>
-        <div><i>📡</i><span><b>Aim:</b> AUTO by default (your shot angle comes from where you catch the ball, with some randomness). Switch to <b>MANUAL</b> in the pause menu for the radar: as the ball comes to you, a pink target shows where your shot will land. Move left or right of the ball to change the angle: ball on your right side goes right, ball on your left goes left, ball in the middle goes straight. Near the net it shows a dink, from the back a drive; LOB, POWER and SPIN move it too. The faint pink circle is how far it can wobble (better CTL = smaller). It goes dim if you can't reach the ball yet.</span></div>
+        <div><i>🎮</i><span><b>Controls</b> (pause menu, tap to switch): <b>AUTO</b> is the default: you move with the joystick and your shot angle comes from where you catch the ball, with some randomness. <b>MANUAL</b> adds a pink radar that shows where your shot will land as the ball comes to you: move left or right of the ball to change it, and the faint circle is how far it can wobble. <b>PRO</b> has no joystick: your player runs to the ball on their own, and you tap anywhere on their side to choose where each return goes (tap the kitchen for a dink or drop, deep for a drive). Tap again or drag to change it before you hit. No tap means a normal auto shot. High CTL paddles land closer, and aiming right on the lines can go out. LOB, POWER and SPIN still work in every mode.</span></div>
         <div><i>⚡</i><span><b>LOB</b> lofts your next shot. <b>POWER</b> rips a hard drive (riskier). <b>SPIN</b> curves and dips it, and kicks off the bounce. Paddles with a high SPN stat make it nastier; low-spin paddles make it weak and wild.</span></div>
         <div><i>📏</i><span><b>Rules:</b> serve and return must bounce. No volleys from the kitchen, and if your follow-through after a volley carries you into the kitchen, that's a fault too. Only the server scores. Win by 2. Every game goes to 11. Easy is chill, Medium is faster, Hard is blazing fast.</span></div>
         <div><i>✨</i><span><b>Sprites</b> float beside you in CPU matches. Each gives a passive boost and has a power that charges as you hit. Tap the sprite button when its ring is full. Level them up to 5. New sprites only drop when you win: harder modes and tournaments drop rarer ones.</span></div>
@@ -1551,7 +1551,7 @@ const $ = id => document.getElementById(id);
 const cv = $('c');
 const hud = $('hud'), lobBtn = $('lob'), powBtn = $('pow'), joyEl = $('joy'), knob = $('knob'), pauseBtn = $('pauseBtn'), lob2 = $('lob2'), pow2 = $('pow2'), spinB = $('spinB'), spin2 = $('spin2'), joyEl2 = $('joy2'), knob2 = $('knob2');
 function showControls(on) {
-  lobBtn.style.display = powBtn.style.display = spinB.style.display = on ? 'flex' : 'none'; joyEl.style.display = on ? 'block' : 'none'; pauseBtn.style.display = on ? 'flex' : 'none';
+  lobBtn.style.display = powBtn.style.display = spinB.style.display = on ? 'flex' : 'none'; joyEl.style.display = on && !proOn() ? 'block' : 'none'; pauseBtn.style.display = on ? 'flex' : 'none';
   const two = on && mode === 'local';
   updateSprBtn();
   lob2.style.display = pow2.style.display = spin2.style.display = two ? 'flex' : 'none'; joyEl2.style.display = two ? 'block' : 'none';
@@ -2318,7 +2318,7 @@ function initAudio() { if (actx) return; try { actx = new (window.AudioContext |
 
 // ================= game state =================
 let D = DIFFS[1];
-const player = { x: W / 2, y: L + 0.4, tx: W / 2, ty: L + 0.4, swing: 0, speed: 6.0, spd: 0 };
+const player = { x: W / 2, y: L + 0.4, tx: W / 2, ty: L + 0.4, swing: 0, speed: 6.0, spd: 0, leave: false, plan: null, replan: 0, react: 0, laneSign: 1 };
 const ai = { x: W / 2, y: -0.4, tx: W / 2, ty: -0.4, swing: 0, leave: false, plan: null, replan: 0, react: 0, spd: 0, side: 'a', laneSign: -1 };
 // doubles: your CPU partner and a second opponent
 const partner = { x: W * 0.25, y: L - 1, tx: W * 0.25, ty: L - 1, swing: 0, leave: false, plan: null, replan: 0, react: 0, spd: 0, side: 'p', laneSign: -1 };
@@ -2335,7 +2335,12 @@ const teamOf = o => (o === player || o === partner) ? 'p' : 'a';
 const mate = o => { const t = team(teamOf(o)); return t[0] === o ? t[1] : t[0]; };
 function currentServer() { return doubles ? srvObj : team(server)[0]; }
 const PARTNER_D = { ...DIFFS[1], ue: 0.06 };
-const botD = o => o === partner ? PARTNER_D : D;
+const botD = o => o === partner ? PARTNER_D : o === player ? proD() : D;
+function proD() {
+  const boost = sprIs('zephyr') ? 1 + 0.05 * spr.m : sprIs('pixel') ? 1 + 0.035 * spr.m : sprIs('matrix') ? 1 + 0.03 * spr.m : 1;
+  // mirror match: you run and react like the CPU at this difficulty; your aiming is the edge
+  return { ...D, speed: Math.min(player.speed, D.speed) * boost * csprSpeed(), react: D.react + 0.06, judge: 0 };
+}
 const ROUND_NAMES = ['Quarterfinal', 'Semifinal', 'Final'];
 const TOUR_TO = [11, 11, 15];   // tournament games to 11, final to 15, win by 2
 const TOUR_D = [{ ...DIFFS[1] }, { ...DIFFS[2] }, { ...DIFFS[2], ue: 0.03, speed: 5.8, react: 0.08, err: 0.2, pace: 0.86, judge: 0.95 }];
@@ -2468,7 +2473,8 @@ function setupServe() {
   rallyHits = 0; setTimeout(updateSprBtn, 0);
   phase = 'serve'; clearQueued(); resetJoy();
   Object.assign(ball, { live: false, held: true, bounces: 0 }); trailPts.length = 0; landMarker = null;
-  for (const o of [ai, ai2, partner]) { o.leave = false; o.plan = null; o.react = 0; }
+  for (const o of [ai, ai2, partner, player]) { o.leave = false; o.plan = null; o.react = 0; }
+  aimT = null;
   const RX = sd => sd === 'p' ? W * 0.75 : W * 0.25;   // each team's right court, as the players face the net
   const sx = doubles ? (currentServer() === rightOf[server] ? RX(server) : W - RX(server)) : serveSide(server), rx = W - sx;
   const base = sd => sd === 'p' ? L + 0.35 : -0.35, kline = sd => sd === 'p' ? NET + K + 0.45 : NET - K - 0.45;
@@ -2487,7 +2493,7 @@ function setupServe() {
   else flash(mode === 'local' ? 'P2 · tap to serve' : 'Friend is serving', '#e8f542', 99);
   updateHud();
 }
-function planTeam(sd, fresh) { for (const o of team(sd)) if (isBot(o)) planBot(o, fresh); }
+function planTeam(sd, fresh) { for (const o of team(sd)) if (isBot(o) || (o === player && proOn())) planBot(o, fresh); }
 function doServe(who, kind) {
   const srv = currentServer();
   serveFromX = srv.x;
@@ -2671,7 +2677,7 @@ function humanShot(side, me = side === 'p' ? player : ai) {
   const offset = clamp((ball.x - me.x) / playerReach(side), -1, 1);
   // control tightens your aim; extra power makes it a bit wilder
   const aim = 0.32 * (1 - 0.55 * cf) + Math.max(0, pf) * 0.14;
-  const rp = side === 'p' && radarOn() ? radarPlan(me, ball, queued[side]) : null;
+  const rp = side === 'p' && radarOn() && !proOn() ? radarPlan(me, ball, queued[side]) : null;
   const depthErr = 0.55 * (1 - 0.6 * cf) + Math.max(0, pf) * 0.25;
   const q = queued[side];
   let tx = W / 2 + offset * W * 0.5 + rand(-aim, aim), ty, T, label = '', spin = 0, curve = 0;
@@ -2695,12 +2701,31 @@ function humanShot(side, me = side === 'p' ? player : ai) {
   }
   else if (nearNet && ball.bounces === 0 && ball.z > 1.25) { ty = rand(NET - K - 2.5, NET - K - 0.2); T = 0.48 * (1 - 0.16 * pf); spin = Math.max(0, 0.2 + 0.3 * sf); label = 'SMASH!'; }
   else if (nearNet) { ty = NET - (1.15 + rand(-0.65, 0.75) * (1 - 0.45 * cf)); T = 1.05; spin = Math.max(0, 0.08 * sf); }
-  else if (!rp && !mustBounce[side] && ball.bounces === 1 && myY > L - 2.5 && Math.random() < 0.3 + 0.15 * cf) { ty = NET - (1.1 + rand(-0.5, 0.5) * (1 - 0.4 * cf)); T = 1.2; label = 'Drop'; }
+  else if (!rp && !(side === 'p' && proOn()) && !mustBounce[side] && ball.bounces === 1 && myY > L - 2.5 && Math.random() < 0.3 + 0.15 * cf) { ty = NET - (1.1 + rand(-0.5, 0.5) * (1 - 0.4 * cf)); T = 1.2; label = 'Drop'; }
   else {
     spin = clamp(0.1 + 0.42 * sf, 0, 0.6);
     ty = rand(1.2, 4.0) + gauss() * depthErr; T = 0.82 * (1 - 0.17 * pf) * (1 - 0.18 * spin);
     if (spin > 0.4 && Math.random() < 0.35) label = 'Topspin!';
     else if (pd.pw >= 8 && Math.random() < 0.25) label = 'Rip!';
+  }
+  // Pro: you tapped where this return should go; CTL and stretching still add error
+  if (side === 'p' && proOn() && aimT) {
+    const ex = aim * 1.15 + Math.abs(offset) * 0.45, soft = at => at.y > NET - K, spinny = ['WICKED SPIN!', 'Spin!', 'Weak spin'].includes(label);
+    tx = aimT.x + rand(-ex, ex) + gauss() * ex * 0.25;
+    if (label === 'Lob') ty = clamp(aimT.y + gauss() * depthErr * 0.5, 0.3, NET - K - 0.6);
+    else if (label === 'SMASH!') ty = clamp(aimT.y + gauss() * 0.4, 0.3, NET - 0.3);
+    else if (soft(aimT) && label !== 'POWER!' && !spinny) {
+      ty = clamp(aimT.y + gauss() * 0.35 * (1 - 0.4 * cf), NET - K - 0.25, NET - 0.3);
+      T = nearNet ? 1.05 : 1.2; spin = Math.min(spin, 0.08); label = nearNet ? '' : 'Drop';
+    } else {
+      ty = clamp(aimT.y + gauss() * depthErr * 0.6, -0.6, NET - 0.3);
+      if (label === 'Drop' || (nearNet && T >= 1.0 && !spinny)) { T = nearNet ? 0.72 : 0.85; label = nearNet ? 'Speed-up!' : ''; }
+    }
+  }
+  if (side === 'p' && proOn()) {
+    aimT = null; proHint = 0;
+    // auto-run players aren't perfect: same unforced-error chance as the CPU you're playing
+    if (label !== 'SMASH!' && Math.random() < D.ue + 0.03) { if (Math.random() < 0.5) ty = -0.35 - rand(0, 0.9); else tx = tx < W / 2 ? -0.35 - rand(0, 0.5) : W + 0.35 + rand(0, 0.5); label = 'Oops!'; }
   }
   // radar: the shot goes where the radar showed, plus a small CTL-based wobble
   if (rp) { tx = rp.tx + rand(-rp.ex, rp.ex); ty = rp.ty + gauss() * rp.ey; }
@@ -2866,6 +2891,16 @@ function moveJoy(J, e) {
   J.kn.style.transform = J.flip ? `translate(${-dx}px,${-dy}px)` : `translate(${dx}px,${dy}px)`;
 }
 // ---- radar aim: where the ball meets your paddle (left/right of your body) sets the angle; the radar shows the landing spot
+const proOn = () => SAVE.aim === 'pro' && mode !== 'local' && mode !== 'online';
+let aimT = null, aimId = null, proHint = 0;
+function setAim(e) {
+  const w = toWorld(e.clientX, e.clientY);
+  if (!w || w[1] > NET + 0.2) return false;   // anything past the net counts (the far court is small on a phone); it snaps onto their court
+  const first = !aimT;
+  aimT = { x: clamp(w[0], 0.1, W - 0.1), y: clamp(w[1], 0.1, NET - 0.3) };
+  if (first) { buzz(6); beep(1100, 0.03, 0.05); }
+  return true;
+}
 const radarOn = () => SAVE.aim === 'manual' && mode !== 'local' && mode !== 'online';
 function radarPlan(me, b, q) {
   const { p: pd, pf, cf } = paddleFactors('p');
@@ -2906,11 +2941,17 @@ cv.addEventListener('pointerdown', e => {
     if (J.id === null && (top ? e.clientX > cw * 0.3 : e.clientX < cw * 0.7)) startJoy(J, e);
     return;
   }
+  if (proOn()) {
+    // Pro: no joystick. Tap to serve; during a rally, tap their side to pick where your next return goes
+    if (phase === 'serve' && server === mySide()) { doServe('p'); return; }
+    if (phase === 'rally' && setAim(e)) aimId = e.pointerId;
+    return;
+  }
   if (phase === 'serve' && server === mySide()) { if (role === 'guest') net.serveId++; else doServe('p'); }
   if (e.clientX < cw * 0.55 && joy.id === null) startJoy(joy, e);
 });
-cv.addEventListener('pointermove', e => { if (e.pointerId === joy.id) moveJoy(joy, e); else if (e.pointerId === joy2.id) moveJoy(joy2, e); });
-const up = e => { if (e.pointerId === joy.id) resetJoy(joy); if (e.pointerId === joy2.id) resetJoy(joy2); };
+cv.addEventListener('pointermove', e => { if (e.pointerId === aimId && proOn() && phase === 'rally') setAim(e); if (e.pointerId === joy.id) moveJoy(joy, e); else if (e.pointerId === joy2.id) moveJoy(joy2, e); });
+const up = e => { if (e.pointerId === aimId) aimId = null; if (e.pointerId === joy.id) resetJoy(joy); if (e.pointerId === joy2.id) resetJoy(joy2); };
 cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up);
 function refreshQueueUI() {
   const me = mySide();
@@ -3020,9 +3061,10 @@ pauseBtn.addEventListener('click', () => {
   $('quit').textContent = mode === 'online' ? 'Leave match' : 'Quit to home';
   $('paused').classList.remove('hidden');
 });
-function aimTogLabel() { $('aimTog').textContent = SAVE.aim === 'manual' ? '📡 Aim: MANUAL' : '🎲 Aim: AUTO'; }
+function aimTogLabel() { $('aimTog').textContent = SAVE.aim === 'manual' ? '📡 Controls: MANUAL' : SAVE.aim === 'pro' ? '🏆 Controls: PRO' : '🎲 Controls: AUTO'; }
 aimTogLabel();
-$('aimTog').addEventListener('click', () => { SAVE.aim = SAVE.aim === 'manual' ? 'auto' : 'manual'; aimTogLabel(); persist(); });
+$('aimTog').addEventListener('click', () => { SAVE.aim = SAVE.aim === 'manual' ? 'pro' : SAVE.aim === 'pro' ? 'auto' : 'manual'; aimT = null; resetJoy(); aimTogLabel(); if (phase !== 'menu' && phase !== 'over' && phase !== 'shop') showControls(true);
+  if (SAVE.aim === 'pro' && !SAVE.proTip) { SAVE.proTip = 1; flash('🏆 PRO: you run to the ball yourself. Tap their side to aim each return', '#ffd34d', 3.5); } persist(); });
 $('resume').addEventListener('click', () => { paused = false; $('paused').classList.add('hidden'); });
 document.addEventListener('visibilitychange', () => {
   if (document.hidden && mode !== 'online' && (phase === 'rally' || phase === 'serve')) { paused = true; $('paused').classList.remove('hidden'); }
@@ -4319,15 +4361,17 @@ function update(dtReal) {
     if (pointTimer <= 0) { gameOverPending ? gameOver() : setupServe(); }
     return;
   }
-  moveHuman(player, 'p', phase === 'serve' && server === 'p' ? [0, 0] : inputVec('p'), dt);
+  if (!proOn()) moveHuman(player, 'p', phase === 'serve' && server === 'p' ? [0, 0] : inputVec('p'), dt);
+  else if (phase === 'serve') player.spd = 0;
   if (ctrl.a === 'human') moveHuman(ai, 'a', phase === 'serve' && server === 'a' ? [0, 0] : inputVec('a'), dt);
   const bots = [ai, ai2, partner].filter(o => isBot(o) && team(o.side).includes(o));
+  if (proOn()) bots.push(player);
   if (phase === 'serve') {
     bots.forEach(o => o.spd = 0);
     if (isBot(currentServer())) { serveTimer -= dtReal; if (serveTimer <= 0) doServe(server); }
     return;
   }
-  if (doubles) partner.laneSign = player.x < W / 2 ? 1 : -1;
+  if (doubles) { partner.laneSign = player.x < W / 2 ? 1 : -1; player.laneSign = -partner.laneSign; }
   for (const bot of bots) {
     const sd = bot.side;
     if (lastHitter !== sd) {
@@ -4514,6 +4558,13 @@ function visuals(dt) {
   // radar: while the ball is on its way to you, show where your shot will land
   const rc = radarOn() && phase === 'rally' && ball.live && lastHitter !== 'p' && !paused ? radarContact() : null;
   aimMark.visible = radarDisc.visible = radarLine.visible = !!rc;
+  const pro = proOn() && phase === 'rally';
+  if (pro && aimT) {
+    aimMark.visible = true; aimMark.userData.mat.opacity = 0.95;
+    aimMark.position.copy(T3(aimT.x, aimT.y, 0.03)); aimMark.scale.setScalar(1.8 + Math.sin(t * 8) * 0.1);
+  }
+  // Pro nudge: ball coming at you and no target yet
+  if (pro && !aimT && ball.live && lastHitter !== 'p' && proHint < 3 && hintT <= 0) { proHint++; showHint('👆 Tap their side to aim', 0.9); }
   if (rc) {
     const pl = radarPlan(player, rc.b, queued.p), op = rc.ok ? 0.95 : 0.3;
     aimMark.position.copy(T3(pl.tx, pl.ty, 0.03)); aimMark.scale.setScalar(rc.ok ? 1.8 + Math.sin(t * 8) * 0.1 : 1.5);
