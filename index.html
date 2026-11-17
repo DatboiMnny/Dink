@@ -264,7 +264,7 @@
   .dots::after{content:'';animation:dots 1.2s steps(4) infinite}
   @keyframes dots{0%{content:''}25%{content:'.'}50%{content:'..'}75%{content:'...'}}
   .modeHint{font-size:12.5px;opacity:.7;margin:8px 2px 16px;line-height:1.35}
-  #sprBtn{position:absolute;right:112px;bottom:calc(var(--bot) + 180px);width:66px;height:66px;border-radius:50%;display:none;align-items:center;justify-content:center;touch-action:none;padding:4px;
+  #sprBtn{position:absolute;right:26px;bottom:calc(var(--bot) + 222px);width:66px;height:66px;border-radius:50%;display:none;align-items:center;justify-content:center;touch-action:none;padding:4px;
     background:conic-gradient(var(--sc,#e8f542) calc(var(--p,0) * 1%), rgba(255,255,255,.16) 0);box-shadow:0 6px 16px rgba(0,0,0,.35);transition:transform .08s}
   #sprBtn:active{transform:scale(.92)}
   #sprBtn .in{width:100%;height:100%;border-radius:50%;background:radial-gradient(circle at 50% 35%,rgba(255,255,255,.28),rgba(12,20,50,.88) 72%);display:flex;align-items:center;justify-content:center;overflow:hidden}
@@ -4496,7 +4496,7 @@ function gameCamera() {
   const dNear = Math.hypot(pos.y, pos.z - NET);
   const tanH = (W / 2 + 1.25) / dNear;
   const fov = clamp(2 * Math.atan(tanH / aspect) * 180 / Math.PI, 42, 82);
-  return { pos, look, fov, offset: 0 };
+  return { pos, look, fov, offset: ch * 0.13 };   // pan the court up so the buttons sit below the near baseline
 }
 function homeCamera() {
   const base = T3(player.x, player.y, 0);
