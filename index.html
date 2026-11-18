@@ -482,7 +482,7 @@
         <div><i>✨</i><span><b>Sprites</b> float beside you in CPU matches. Each gives a passive boost and has a power that charges as you hit. Tap the sprite button when its ring is full. Level them up to 5. New sprites only drop when you win: harder modes and tournaments drop rarer ones.</span></div>
         <div><i>🕹️</i><span><b>Arcade</b> is an endless ladder: beat 3 players to 3 points, then a boss to 5 (rally scoring, win by 2), and keep going as it gets harder. Bosses drop Arcade-exclusive characters, paddles, a ball and an arena that you can't get anywhere else.</span></div>
         <div><i>🐒</i><span><b>Orlando</b> has a special <b>SPIN</b> serve: heavy sidespin that bends and kicks off the bounce, so it's much harder to return (small risk of curling wide).</span></div>
-        <div><i>🎄</i><span><b>Christmas Drop</b>: every December, 16 festive Locker items (1,500 each) go on sale until New Year's. Buy them and they're yours forever.</span></div>
+        <div><i>🎄</i><span><b>Christmas Drop</b>: from 18 November, 16 festive Locker items (1,500 each) are on sale until New Year's. Buy them and they're yours forever.</span></div>
         <div><i>🏆</i><span><b>Pro Tour mythics</b> (3,000 dinks, Locker): Blaze, Maestro, Rocket and Twister each have a signature <b>serve</b> button and a special shot. Their matching paddles (1,500) make the specials 1.5x stronger.</span></div>
         <div><i>♿</i><span><b>Juan</b> plays by real wheelchair pickleball rules: he may let the ball bounce <b>twice</b> on his side (the second bounce can land anywhere).</span></div>
         <div><i>🎾</i><span><b>Serving:</b> tap the court for a normal serve, or pick <b>SHORT</b> (floats just past the kitchen, pulls them forward) or <b>DEEP</b> (fast to the baseline, harder to return). Both carry a little risk of a fault.</span></div>
@@ -2747,10 +2747,11 @@ function makeShot(tx, ty, T, spin = 0, curve = 0, raw = false) {
   Object.assign(ball, { z, vx, vy, vz, spin, curve, bounces: 0, live: true, held: false });
 }
 function curPaddle() { return findItem('paddle', SAVE.equip.paddle); }
-// ================= 🎄 Christmas Drop: on sale 1 Dec → New Year's (player's local time); teaser in November; owners keep items forever =================
+// ================= 🎄 Christmas Drop: on sale 18 Nov → New Year's (player's local time); owners keep items forever =================
 const XMAS_TEST = /[?&]xmas=on/.test(location.search);   // preview the drop early: add ?xmas=on to the URL
-const xmasLive = () => XMAS_TEST || new Date().getMonth() === 11;
-const xmasSoon = () => !xmasLive() && new Date().getMonth() === 10;
+const XMAS_FROM = 18;   // day of November the drop opens each year
+const xmasLive = () => { const n = new Date(); return XMAS_TEST || n.getMonth() === 11 || (n.getMonth() === 10 && n.getDate() >= XMAS_FROM); };
+const xmasSoon = () => !xmasLive() && new Date().getMonth() === 10;   // early November: teaser
 const xmasDaysLeft = () => { const n = new Date(); return Math.max(1, Math.ceil((new Date(n.getFullYear() + 1, 0, 1) - n) / 864e5)); };   // until next 1 Jan
 const xmasShown = it => it.exclusive !== 'xmas' || SAVE.owned.includes(it.id) || xmasLive() || xmasSoon();
 // Pro Tour mythics: the player's pro (if any) and whether its signature paddle is equipped
@@ -3560,7 +3561,7 @@ function renderShop() {
     let act;
     if (eq) act = `<button class="act eq">Equipped</button>`;
     else if (owned) act = `<button class="act">Equip</button>`;
-    else if (it.exclusive === 'xmas') act = xmasLive() ? `<button class="act ${SAVE.dinks >= it.price ? 'buy' : 'no'}"><span class="coin"></span> ${it.price}</button>` : `<button class="act no">🎄 1 Dec</button>`;
+    else if (it.exclusive === 'xmas') act = xmasLive() ? `<button class="act ${SAVE.dinks >= it.price ? 'buy' : 'no'}"><span class="coin"></span> ${it.price}</button>` : `<button class="act no">🎄 ${XMAS_FROM} Nov</button>`;
     else if (it.exclusive === 'logo') act = `<button class="act no">🤫 Secret</button>`;
     else if (it.exclusive === 'spin') act = `<button class="act no">🎡 Daily Spin</button>`;
     else if (it.exclusive === 'inf') act = `<button class="act no">♾️ Extract</button>`;
@@ -3581,7 +3582,7 @@ function renderShop() {
           `<div><span>${l}</span><i style="--v:${v * 10}%;--c:${c}"></i><b>${v}</b></div>`).join('')}</div>`;
     }
     const hide = (it.exclusive === 'secret' || it.exclusive === 'logo') && !owned;
-    d.innerHTML = `<img src="${thumb(shopTab, it)}" alt=""${hide ? ' style="filter:brightness(0) drop-shadow(0 0 6px #00ff66)"' : ''}>${rar}${shopTab === 'paddle' ? extra.split('<div class="stats">')[0] : ''}<div class="nm">${hide ? '???' : it.name}</div>${it.exclusive === 'xmas' && !owned ? `<div class="xm">${xmasLive() ? `⏳ Leaves in ${xmasDaysLeft()} day${xmasDaysLeft() === 1 ? '' : 's'}` : '🎄 Arrives 1 December'}</div>` : ''}${it.pro ? `<div class="pro">🎾 ${it.pro.serve} serve · ${it.pro.shot}</div>` : ''}${it.sig ? `<div class="pro">⚡ Made for ${findItem('char', it.sig).name}: specials 1.5x stronger</div>` : ''}${shopTab === 'paddle' ? '<div class="stats">' + extra.split('<div class="stats">')[1] : ''}${act}`;
+    d.innerHTML = `<img src="${thumb(shopTab, it)}" alt=""${hide ? ' style="filter:brightness(0) drop-shadow(0 0 6px #00ff66)"' : ''}>${rar}${shopTab === 'paddle' ? extra.split('<div class="stats">')[0] : ''}<div class="nm">${hide ? '???' : it.name}</div>${it.exclusive === 'xmas' && !owned ? `<div class="xm">${xmasLive() ? `⏳ Leaves in ${xmasDaysLeft()} day${xmasDaysLeft() === 1 ? '' : 's'}` : `🎄 Arrives ${XMAS_FROM} November`}</div>` : ''}${it.pro ? `<div class="pro">🎾 ${it.pro.serve} serve · ${it.pro.shot}</div>` : ''}${it.sig ? `<div class="pro">⚡ Made for ${findItem('char', it.sig).name}: specials 1.5x stronger</div>` : ''}${shopTab === 'paddle' ? '<div class="stats">' + extra.split('<div class="stats">')[1] : ''}${act}`;
     d.addEventListener('click', ev => {
       initAudio();
       const isBtn = ev.target.closest('.act');
@@ -3589,7 +3590,7 @@ function renderShop() {
       if (isBtn) {
         if (eq) {}
         else if (owned) { SAVE.equip[shopTab] = it.id; persist(); toast(it.shout ? `${it.name}: ${it.shout}` : `Equipped ${it.brand ? it.brand + ' ' : ''}${it.name}`); if (it.shout) strum(); }
-        else if (it.exclusive === 'xmas' && !xmasLive()) toast('🎄 The Christmas Drop arrives 1 December!');
+        else if (it.exclusive === 'xmas' && !xmasLive()) toast(`🎄 The Christmas Drop arrives ${XMAS_FROM} November!`);
         else if (it.exclusive === 'xmas' && SAVE.dinks < it.price) toast(`Need ${it.price - SAVE.dinks} more dinks`);
         else if (it.exclusive === 'xmas') {
           SAVE.dinks -= it.price; SAVE.owned.push(it.id); SAVE.equip[shopTab] = it.id; persist(); refreshBalance();
@@ -4626,9 +4627,9 @@ function showChaosLadder() {
 }
 // ================= What's New: shows once after an update. To announce a feature, add an entry at the TOP with the next v =================
 const NEWS = [
-  { v: 3, date: '18 Nov 2026', items: [
-    ['🎄', '<b>The Christmas Drop</b> lands in the Locker on <b>1 December</b>: 16 festive items, 4 characters, 4 paddles, 4 balls and 4 arenas (Santa, a reindeer, a snowman, an elf, Winter Wonderland, North Pole and more).'],
-    ['⏳', 'They\'re <b>only on sale until New Year\'s</b>. Anything you buy is yours forever. Start saving your dinks!'],
+  { v: 4, date: '18 Nov 2026', items: [
+    ['🎄', '<b>The Christmas Drop is here!</b> 16 festive items in the Locker: <b>Santa</b>, <b>Blitzen</b> the reindeer, <b>Snowy</b> the snowman and <b>Jingles</b> the elf, plus Christmas paddles, balls and 4 new arenas (Winter Wonderland, North Pole, Gingerbread Town, Festive Lights).'],
+    ['⏳', '<b>Only on sale until New Year\'s.</b> 1,500 dinks each, and anything you buy is yours forever.'],
   ] },
   { v: 2, date: '18 Nov 2026', items: [
     ['🏆', '<b>Pro Tour mythics</b> are in the Locker (3,000 dinks): <b>Blaze</b> (kick serve, Phenom Drive), <b>Maestro</b> (pinpoint serve, the Erne), <b>Rocket</b> (cannon serve, rocket drives) and <b>Twister</b> (chainsaw serve, around-the-post shots).'],
