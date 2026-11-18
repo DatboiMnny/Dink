@@ -179,6 +179,8 @@
   .item.legend{background:linear-gradient(160deg,#6b4d16,#2a2a6a 60%)}
   .item.epic{background:linear-gradient(160deg,#4d2a86,#26337c 60%)}
   .item.mythic{background:linear-gradient(160deg,#7a0f2a,#3b0a5c 55%,#1a1a5a);box-shadow:inset 0 0 0 2px rgba(255,59,92,.55),0 0 18px rgba(255,59,92,.25)}
+  .item.festive{background:linear-gradient(160deg,#14532d,#7f1d1d 70%);box-shadow:inset 0 0 0 2px rgba(255,255,255,.35)}
+  .item .xm{font-size:10px;font-weight:900;color:#bbf7d0;margin:1px 0 3px}
   .item .pro{font-size:10px;font-weight:800;color:#ffb3c0;line-height:1.25;margin:2px 0 4px}
   .sect{grid-column:1/-1;font-weight:900;font-size:12px;letter-spacing:.16em;text-transform:uppercase;opacity:.75;margin:6px 2px -2px}
   .rar{font-size:10px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;margin-bottom:-4px}
@@ -480,6 +482,7 @@
         <div><i>✨</i><span><b>Sprites</b> float beside you in CPU matches. Each gives a passive boost and has a power that charges as you hit. Tap the sprite button when its ring is full. Level them up to 5. New sprites only drop when you win: harder modes and tournaments drop rarer ones.</span></div>
         <div><i>🕹️</i><span><b>Arcade</b> is an endless ladder: beat 3 players to 3 points, then a boss to 5 (rally scoring, win by 2), and keep going as it gets harder. Bosses drop Arcade-exclusive characters, paddles, a ball and an arena that you can't get anywhere else.</span></div>
         <div><i>🐒</i><span><b>Orlando</b> has a special <b>SPIN</b> serve: heavy sidespin that bends and kicks off the bounce, so it's much harder to return (small risk of curling wide).</span></div>
+        <div><i>🎄</i><span><b>Christmas Drop</b>: every December, 16 festive Locker items (1,500 each) go on sale until New Year's. Buy them and they're yours forever.</span></div>
         <div><i>🏆</i><span><b>Pro Tour mythics</b> (3,000 dinks, Locker): Blaze, Maestro, Rocket and Twister each have a signature <b>serve</b> button and a special shot. Their matching paddles (1,500) make the specials 1.5x stronger.</span></div>
         <div><i>♿</i><span><b>Juan</b> plays by real wheelchair pickleball rules: he may let the ball bounce <b>twice</b> on his side (the second bounce can land anywhere).</span></div>
         <div><i>🎾</i><span><b>Serving:</b> tap the court for a normal serve, or pick <b>SHORT</b> (floats just past the kitchen, pulls them forward) or <b>DEEP</b> (fast to the baseline, harder to return). Both carry a little risk of a fault.</span></div>
@@ -625,8 +628,8 @@ const DIFFS = [
 ];
 
 // ================= character roster =================
-const RARITY = { starter:['Starter','#b9c2cc'], common:['Common','#3ddc84'], rare:['Rare','#3fa9ff'], epic:['Epic','#c27bff'], legendary:['Legendary','#ffc93c'], mythic:['Mythic','#ff3b5c'], arcade:['Arcade','#ff4fd8'], secret:['Secret','#00ff66'] };
-const GROUPS = [['starter','Starter'], ['animals','Animals'], ['legends','Legends'], ['aliens','Aliens'], ['myth','Mythology'], ['squad','👑 The Squad'], ['pros','🏆 Pro Tour (Mythic)'], ['arcade','🕹️ Arcade exclusives'], ['secret','🤫 Secret & special']];
+const RARITY = { starter:['Starter','#b9c2cc'], common:['Common','#3ddc84'], rare:['Rare','#3fa9ff'], epic:['Epic','#c27bff'], legendary:['Legendary','#ffc93c'], mythic:['Mythic','#ff3b5c'], festive:['🎄 Christmas','#4ade80'], arcade:['Arcade','#ff4fd8'], secret:['Secret','#00ff66'] };
+const GROUPS = [['starter','Starter'], ['animals','Animals'], ['legends','Legends'], ['aliens','Aliens'], ['myth','Mythology'], ['squad','👑 The Squad'], ['pros','🏆 Pro Tour (Mythic)'], ['xmas','🎄 Christmas Drop (limited)'], ['arcade','🕹️ Arcade exclusives'], ['secret','🤫 Secret & special']];
 const SKIN = '#f0c9a0';
 const sph = (r, w = 18, h = 14) => new THREE.SphereGeometry(r, w, h);
 const cyl = (rt, rb, h, s = 12) => new THREE.CylinderGeometry(rt, rb, h, s);
@@ -1235,6 +1238,77 @@ const CHARS = [
       smile(k, '#0b1a3a');
     } },
   // ---- arcade exclusives (only from beating an Arcade boss)
+  // ---- 🎄 Christmas Drop characters (exclusive:'xmas', 1500, only in the shop during December)
+  { id:'c_santa', name:'Santa', price:1500, exclusive:'xmas', group:'xmas', rarity:'festive', shout:'Ho ho ho! 🎅',
+    c:{ body:'#d62828', head:'#f2c4a0', limb:'#d62828', hand:'#1d1d24', legs:'#d62828', foot:'#1d1d24' },
+    deco: k => {
+      cheeks(k, '#ff8a8a');
+      const fur = k.M('#ffffff', { roughness: 0.95, clearcoat: 0 });
+      const bd = k.mk(sph(0.21, 22, 16), fur, 0, -0.13, -0.09, k.head); bd.scale.set(1.15, 0.95, 1);
+      const mu = k.mk(sph(0.07, 14, 10), fur, -0.06, -0.06, -0.225, k.head); mu.scale.set(1.3, 0.6, 0.6);
+      const mu2 = k.mk(sph(0.07, 14, 10), fur, 0.06, -0.06, -0.225, k.head); mu2.scale.set(1.3, 0.6, 0.6);
+      // floppy hat with a white band and pom-pom
+      const hat = k.mk(cone(0.22, 0.42, 20), '#d62828', 0.05, 0.36, 0.06, k.head); hat.rotation.z = -0.45; hat.rotation.x = 0.25;
+      k.mk(new THREE.TorusGeometry(0.235, 0.05, 10, 30), fur, 0, 0.17, 0, k.head).rotation.x = Math.PI / 2;
+      k.mk(sph(0.06), fur, 0.22, 0.48, 0.12, k.head);
+      // white trim, black belt + gold buckle
+      belt(k, '#1d1d24', 0.66, 0.315, 0.045);
+      k.mk(box(0.12, 0.09, 0.03), k.M('#ffd23f', { metalness: 0.9, roughness: 0.2 }), 0, 0.66, -0.33, k.upper);
+      k.mk(box(0.07, 0.45, 0.02), fur, 0, 0.88, -0.29, k.upper);
+      for (const a of k.arms) k.mk(new THREE.TorusGeometry(0.075, 0.025, 8, 20), fur, 0, -0.27, 0, a).rotation.x = Math.PI / 2;
+    } },
+  { id:'c_blitzen', name:'Blitzen', price:1500, exclusive:'xmas', group:'xmas', rarity:'festive', shout:'Dash away! 🦌',
+    c:{ body:'#8b5a2b', limb:'#8b5a2b', hand:'#3b2414', legs:'#8b5a2b', foot:'#3b2414' },
+    deco: k => {
+      const fur = k.M('#8b5a2b', { roughness: 0.8, clearcoat: 0.1 }), light = k.M('#e8cfa8', { roughness: 0.8 });
+      const mz = k.mk(sph(0.12, 20, 14), light, 0, -0.07, -0.19, k.head); mz.scale.set(1.15, 0.85, 0.7);
+      k.mk(sph(0.04, 12, 10), '#1d1d24', 0, -0.04, -0.27, k.head);
+      smile(k, '#3b2414');
+      for (const sx of [-1, 1]) { const e = k.mk(sph(0.07, 14, 10), fur, sx * 0.24, 0.1, 0.0, k.head); e.scale.set(0.4, 1, 0.7); e.rotation.z = sx * -0.6; }
+      // antlers
+      const ant = k.M('#d9b98a', { roughness: 0.6 });
+      for (const sx of [-1, 1]) {
+        const m = k.mk(cyl(0.022, 0.03, 0.3, 8), ant, sx * 0.12, 0.32, 0.02, k.head); m.rotation.z = sx * -0.45;
+        for (const [y, len, rz] of [[0.36, 0.14, -1.1], [0.43, 0.12, 0.2]]) { const b = k.mk(cyl(0.016, 0.02, len, 8), ant, sx * (0.17 + len * 0.3), y, 0.02, k.head); b.rotation.z = sx * rz; }
+      }
+      belly(k, '#e8cfa8');
+      // red collar with a gold bell
+      k.mk(new THREE.TorusGeometry(0.2, 0.03, 8, 28), '#d62828', 0, 1.06, 0, k.upper).rotation.x = Math.PI / 2;
+      k.mk(sph(0.045), k.M('#ffd23f', { metalness: 0.9, roughness: 0.2 }), 0, 1.0, -0.2, k.upper);
+      tail(k, g => { const t = new THREE.Mesh(sph(0.07, 12, 10), light); t.castShadow = true; g.add(t); }, 0, 0.55);
+    } },
+  { id:'c_snowy', name:'Snowy', price:1500, exclusive:'xmas', group:'xmas', rarity:'festive', shout:'Chill out ☃️',
+    c:{ body:'#f7fbff', head:'#f7fbff', limb:'#6b4423', hand:'#6b4423', legs:'#f7fbff', foot:'#f7fbff' },
+    deco: k => {
+      // carrot nose, coal smile and buttons
+      const n = k.mk(cone(0.035, 0.16, 12), '#ff7a1a', 0, -0.01, -0.29, k.head); n.rotation.x = -Math.PI / 2;
+      for (let i = 0; i < 5; i++) { const a = -0.6 + i * 0.3; k.mk(sph(0.014, 8, 6), '#1d1d24', Math.sin(a) * 0.075, -0.125 + (1 - Math.cos(a)) * 0.22, -0.222, k.head); }
+      for (let i = 0; i < 3; i++) k.mk(sph(0.03, 10, 8), '#1d1d24', 0, 0.98 - i * 0.16, -0.29 + i * 0.01, k.upper);
+      // top hat + red scarf
+      const hat = k.M('#1d1d24', { roughness: 0.4 });
+      k.mk(cyl(0.3, 0.3, 0.025, 28), hat, 0, 0.19, 0, k.head);
+      k.mk(cyl(0.17, 0.18, 0.26, 24), hat, 0, 0.33, 0, k.head);
+      k.mk(cyl(0.182, 0.182, 0.05, 24), '#d62828', 0, 0.23, 0, k.head);
+      k.mk(new THREE.TorusGeometry(0.2, 0.05, 10, 28), '#d62828', 0, 1.07, 0, k.upper).rotation.x = Math.PI / 2;
+      const tl = k.mk(box(0.09, 0.3, 0.03), '#d62828', 0.12, 0.92, -0.25, k.upper); tl.rotation.z = 0.15;
+      for (const y of [0.85, 0.95]) k.mk(box(0.092, 0.02, 0.032), '#2e7d32', 0.125, y, -0.25, k.upper).rotation.z = 0.15;
+    } },
+  { id:'c_jingles', name:'Jingles', price:1500, exclusive:'xmas', group:'xmas', rarity:'festive', shout:'Jingle all the way! 🔔',
+    c:{ body:'#2e7d32', head:'#f2c4a0', limb:'#2e7d32', hand:'#f2c4a0', legs:'#d62828', foot:'#2e7d32' },
+    deco: k => {
+      smile(k); cheeks(k, '#ff8a8a');
+      // pointy ears
+      for (const sx of [-1, 1]) { const e = k.mk(cone(0.05, 0.18, 10), '#f2c4a0', sx * 0.27, 0.04, 0.02, k.head); e.rotation.z = sx * -1.2; }
+      // tall striped elf hat with a bell
+      const hat = k.mk(cone(0.21, 0.5, 20), '#2e7d32', 0.04, 0.4, 0.05, k.head); hat.rotation.z = -0.3;
+      k.mk(new THREE.TorusGeometry(0.225, 0.035, 8, 28), '#d62828', 0, 0.17, 0, k.head).rotation.x = Math.PI / 2;
+      k.mk(sph(0.045), k.M('#ffd23f', { metalness: 0.9, roughness: 0.2 }), 0.2, 0.6, 0.1, k.head);
+      // zigzag collar + belt with buckle, curly-toed shoes
+      for (let i = 0; i < 10; i++) { const a = i / 10 * Math.PI * 2, t = k.mk(cone(0.05, 0.1, 6), '#d62828', Math.cos(a) * 0.24, 1.0, Math.sin(a) * 0.24, k.upper); t.rotation.x = Math.PI; }
+      belt(k, '#1d1d24', 0.66, 0.31, 0.04);
+      k.mk(box(0.1, 0.08, 0.03), k.M('#ffd23f', { metalness: 0.9, roughness: 0.2 }), 0, 0.66, -0.33, k.upper);
+      for (const l of k.legs) { const c = k.mk(cone(0.045, 0.14, 10), '#2e7d32', 0, -0.36, -0.14, l); c.rotation.x = -1.2; k.mk(sph(0.03), '#ffd23f', 0, -0.33, -0.2, l); }
+    } },
   // ---- 🏆 Pro Tour mythics: original characters inspired by pro playstyles. Each has a signature serve (def.pro.serve) and special shot, boosted by its signature paddle (paddle.sig)
   { id:'c_blaze', name:'Blaze', price:3000, group:'pros', rarity:'mythic', shout:'Too fast? 🔥',
     pro:{ k:'blaze', serve:'KICK', serveSub:'topspin jump serve', shot:'POWER = Phenom Drive: heavy topspin that dips in. Quick hands at the net.' },
@@ -1499,6 +1573,11 @@ const SHOP = {
     { id:'p_inf1', brand:'Void', name:'Loop Pro',      price:0, exclusive:'inf', rarity:'rare',      type:'hybrid',   shape:'hex', style:'void', a:'#060d1c', b:'#3fa9ff', mark:'VOID', pw:7, ct:7, sp:8 },
     { id:'p_inf2', brand:'Void', name:'Event Horizon', price:0, exclusive:'inf', rarity:'epic',      type:'spin',     shape:'hex', style:'void', a:'#0e0618', b:'#c27bff', mark:'VOID', pw:8, ct:8, sp:9 },
     { id:'p_inf3', brand:'Void', name:'Infinity Edge', price:0, exclusive:'inf', rarity:'legendary', type:'hybrid',   shape:'hex', style:'void', a:'#140d00', b:'#ffc93c', mark:'VOID', metal:true, pw:9, ct:10, sp:9 },
+    // ---- 🎄 Christmas Drop paddles
+    { id:'p_candy',     brand:'North Pole', name:'Candy Cane',   price:1500, exclusive:'xmas', rarity:'festive', type:'power',   shape:'long',  style:'stripes', a:'#ffffff', b:'#e11d48', mark:'CANDY', ink:'#14532d', pw:9, ct:7, sp:8 },
+    { id:'p_evergreen', brand:'Frost',      name:'Evergreen',    price:1500, exclusive:'xmas', rarity:'festive', type:'control', shape:'tear',  style:'snow',    a:'#14532d', b:'#ffffff', mark:'EVERGREEN', pw:7, ct:10, sp:8 },
+    { id:'p_frostbite', brand:'Frost',      name:'Frostbite',    price:1500, exclusive:'xmas', rarity:'festive', type:'spin',    shape:'hybrid', style:'snow',   a:'#1e6fd9', b:'#e0f2ff', mark:'FROSTBITE', pw:8, ct:8, sp:10 },
+    { id:'p_ginger',    brand:'Bakery',     name:'Gingerbread',  price:1500, exclusive:'xmas', rarity:'festive', type:'hybrid',  shape:'round', style:'ginger',  a:'#a0612b', b:'#fff6e6', pw:8, ct:9, sp:8 },
     // ---- Pro Tour signature paddles: 1500 each, and their pro's specials are 1.5x stronger with them
     { id:'p_blaze',   brand:'Blaze',     name:'Phenom 16',       price:1500, rarity:'mythic', sig:'c_blaze',   type:'power',  shape:'long',   style:'flames', a:'#1a1a1a', b:'#ff3d8b', mark:'PHENOM', pw:9, ct:8, sp:9 },
     { id:'p_maestro', brand:'Maestro',   name:'GOAT Gen 4',      price:1500, rarity:'mythic', sig:'c_maestro', type:'hybrid', shape:'hybrid', style:'gold',   a:'#fff7d6', b:'#d4a017', mark:'GOAT', ink:'#5a3d00', metal:true, pw:8, ct:10, sp:9 },
@@ -1513,6 +1592,10 @@ const SHOP = {
     { id:'b_neon',    name:'Neon Glow', price:150, color:'#39ff88', emissive:'#39ff88', glow:true, trail:'#39ff88' },
     { id:'b_fire',    name:'Fireball',  price:300, color:'#ffb030', emissive:'#ff5a00', glow:true, trail:'fire' },
     { id:'b_pixel',   name:'Pixel Ball', price:0, exclusive:'arcade', color:'#ff4fd8', emissive:'#ff4fd8', glow:true, trail:'#00f0ff' },
+    { id:'b_bauble',   name:'Bauble',      price:1500, exclusive:'xmas', rarity:'festive', color:'#d61f3c', emissive:'#ff2d55', glow:true, trail:'#ffd23f' },
+    { id:'b_snowball', name:'Snowball',    price:1500, exclusive:'xmas', rarity:'festive', color:'#f4fbff', emissive:'#cfeaff', glow:true, trail:'#bfe6ff' },
+    { id:'b_gingerb',  name:'Gingerbread', price:1500, exclusive:'xmas', rarity:'festive', color:'#b5651d', trail:'#fff1d6' },
+    { id:'b_star',     name:'North Star',  price:1500, exclusive:'xmas', rarity:'festive', color:'#ffe066', emissive:'#ffd23f', glow:true, trail:'#fff6c2' },
     { id:'b_rainbow', name:'Rainbow',   price:400, color:'#ffffff', emissive:'#ffffff', glow:true, trail:'rainbow' },
   ],
   arena: [
@@ -1531,6 +1614,19 @@ const SHOP = {
     { id:'a_arcade',  name:'Retro Arcade', price:0, exclusive:'arcade', deco:'night', glow:true,
       sky:['#12002b','#ff2bd6'], fog:'#2a0640', ground:'#0b0118', apron:'#150a30', court:'#1a0b3a', kitchen:'#33105a', lines:'#ff4fd8',
       hemi:['#ff7ad9','#12002b',0.8], sun:['#ffb0f0',1.1,[4,12,6]] },
+    // ---- 🎄 Christmas Drop arenas
+    { id:'a_wonder', name:'Winter Wonderland', price:1500, exclusive:'xmas', rarity:'festive', deco:'xwonder',
+      sky:['#9cc8f0','#f4f9ff'], fog:'#eaf2fb', ground:'#f4f8ff', apron:'#e2ebf6', court:'#c62828', kitchen:'#2e7d32', lines:'#ffffff',
+      hemi:['#ffffff','#9fb4cc',1.8], sun:['#fff8ec',2.3,[6,10,4]] },
+    { id:'a_northpole', name:'North Pole', price:1500, exclusive:'xmas', rarity:'festive', deco:'xpole', night:true,
+      sky:['#04122b','#1d4e6e'], fog:'#0e2a45', ground:'#e8f1ff', apron:'#cfdff2', court:'#1e5aa8', kitchen:'#3d7fd0', lines:'#ffffff',
+      hemi:['#cfe8ff','#20304a',1.1], sun:['#d8ecff',1.6,[4,12,6]] },
+    { id:'a_ginger', name:'Gingerbread Town', price:1500, exclusive:'xmas', rarity:'festive', deco:'xginger',
+      sky:['#ffb3c7','#fff1e0'], fog:'#ffe3d6', ground:'#f7efe6', apron:'#e8d2b8', court:'#a0612b', kitchen:'#c98a4b', lines:'#fff6e6',
+      hemi:['#fff0e0','#a07850',1.6], sun:['#fff0d8',2.4,[-5,12,7]] },
+    { id:'a_lights', name:'Festive Lights', price:1500, exclusive:'xmas', rarity:'festive', deco:'xlights', glow:true, night:true,
+      sky:['#020617','#1e1b4b'], fog:'#0c0a24', ground:'#dfe8f5', apron:'#0f2a1e', court:'#123d2a', kitchen:'#7a1020', lines:'#ffd84a',
+      hemi:['#8fa8ff','#0b0b20',0.8], sun:['#ffe6b0',1.1,[4,12,6]] },
     { id:'a_stadium', name:'Stadium',     price:500, deco:'stadium',
       sky:['#1f3f80','#8fb9ea'], fog:'#9fbde0', ground:'#3a3a44', apron:'#2e6b3f', court:'#2f8f4f', kitchen:'#3aa860', lines:'#ffffff',
       hemi:['#e6f0ff','#40404a',1.5], sun:['#fff3dd',2.6,[-5,14,8]] },
@@ -1819,12 +1915,12 @@ function outsideSpot(minX, maxX, zMin, zMax) {
 function buildArena(a) {
   if (arenaGroup) { scene.remove(arenaGroup); arenaGroup.traverse(o => { o.geometry && o.geometry.dispose(); }); }
   arenaGroup = new THREE.Group(); arenaAnim = []; crowd = null; snow = null;
-  scene.background = gradientTex(a.sky[0], a.sky[1], a.deco === 'night');
+  scene.background = gradientTex(a.sky[0], a.sky[1], a.deco === 'night' || !!a.night);
   scene.fog = new THREE.Fog(a.fog, 30, 95);
   hemi.color.set(a.hemi[0]); hemi.groundColor.set(a.hemi[1]); hemi.intensity = a.hemi[2] * 0.6;
   sun.color.set(a.sun[0]); sun.intensity = a.sun[1] * 0.95; sun.position.set(...a.sun[2]);
 
-  const gk = a.deco === 'beach' ? 'sand' : a.deco === 'snow' ? 'snow' : a.deco === 'night' ? 'dark' : 'grass';
+  const gk = a.deco === 'beach' ? 'sand' : a.deco === 'snow' || a.deco === 'xwonder' || a.deco === 'xpole' || a.deco === 'xlights' || a.deco === 'xginger' ? 'snow' : a.deco === 'night' ? 'dark' : 'grass';
   const ground = new THREE.Mesh(new THREE.PlaneGeometry(220, 220), new THREE.MeshStandardMaterial({ map: groundTex(a.ground, gk), roughness: 1, envMapIntensity: 0.25 }));
   ground.rotation.x = -Math.PI / 2; ground.position.y = -0.01; ground.receiveShadow = true; arenaGroup.add(ground);
   const tex = courtTexture(a);
@@ -1889,6 +1985,7 @@ function buildArena(a) {
       arenaAnim.push(t => { arc.material.color.setHSL(((t * 0.05) + (s < 0 ? 0.85 : 0.5)) % 1, 1, 0.55); });
     }
   }
+  if (D[0] === 'x') buildXmasArena(D);
   if (D === 'stadium') { clouds(arenaGroup, '#ffffff', 6);
     const standMat = std('#5a5f6e'), rows = 5;
     const dummy = new THREE.Object3D(), spots = [];
@@ -2010,6 +2107,112 @@ function hills(group, col, n = 9, rMin = 18, rMax = 34, h = 0.32) {
     const d = rnd(70, 105); m.position.set(Math.cos(a) * d * 1.3, -1, Math.sin(a) * d); m.scale.y = h * rnd(0.7, 1.3); group.add(m);
   }
 }
+// ---- 🎄 Christmas scenery
+function xmasSnow(n = 600) {
+  const pos = new Float32Array(n * 3);
+  for (let i = 0; i < n; i++) { pos[i * 3] = rnd(-25, 25); pos[i * 3 + 1] = rnd(0, 18); pos[i * 3 + 2] = rnd(-30, 16); }
+  const gg = new THREE.BufferGeometry(); gg.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  snow = new THREE.Points(gg, new THREE.PointsMaterial({ color:'#ffffff', size: 0.09, map: GLOW, transparent: true, depthWrite: false }));
+  arenaGroup.add(snow);
+}
+const BAUBLES = ['#e11d48', '#facc15', '#3b82f6', '#f472b6', '#ffffff'];
+function xmasTree(x, z, s, lights = false) {   // a pine with baubles and a gold star
+  const g = pine(x, z, s);
+  for (let i = 0; i < 14; i++) {
+    const lvl = i % 3, r = (1.1 - lvl * 0.28) * s * 0.75, a = i * 2.4, y = (0.95 + lvl * 0.75) * s + 0.25 * s;
+    const b = new THREE.Mesh(new THREE.SphereGeometry(0.09 * s, 10, 8), lights ? new THREE.MeshBasicMaterial({ color: BAUBLES[i % 5] }) : std(BAUBLES[i % 5], { metalness: 0.6, roughness: 0.25 }));
+    b.position.set(Math.cos(a) * r, y, Math.sin(a) * r); g.add(b);
+    if (lights) arenaAnim.push(t => b.material.color.set(BAUBLES[(i + Math.floor(t * 2)) % 5]));
+  }
+  const star = new THREE.Mesh(new THREE.OctahedronGeometry(0.22 * s), new THREE.MeshStandardMaterial({ color:'#ffd23f', emissive:'#ffb800', emissiveIntensity: 1.2, metalness: 0.6 }));
+  star.position.y = 3.6 * s; g.add(star); arenaAnim.push(t => { star.rotation.y = t; });
+  return g;
+}
+function giftBox(x, z, s = 1, col = '#e11d48', rib = '#facc15') {
+  const g = new THREE.Group();
+  const b = new THREE.Mesh(new THREE.BoxGeometry(0.6 * s, 0.5 * s, 0.6 * s), std(col)); b.position.y = 0.25 * s; b.castShadow = true; g.add(b);
+  for (const ry of [0, Math.PI / 2]) { const r = new THREE.Mesh(new THREE.BoxGeometry(0.62 * s, 0.52 * s, 0.1 * s), std(rib, { metalness: 0.4 })); r.position.y = 0.25 * s; r.rotation.y = ry; g.add(r); }
+  for (const sx of [-1, 1]) { const l = new THREE.Mesh(new THREE.TorusGeometry(0.1 * s, 0.03 * s, 6, 14), std(rib)); l.position.set(sx * 0.08 * s, 0.55 * s, 0); l.rotation.y = Math.PI / 2; g.add(l); }
+  g.position.set(x, 0, z); g.rotation.y = rnd(0, 6); return g;
+}
+function candyCane(x, z, s = 1) {
+  const g = new THREE.Group(), h = 2.2 * s, n = 12;
+  for (let i = 0; i < n; i++) { const c = new THREE.Mesh(new THREE.CylinderGeometry(0.09 * s, 0.09 * s, h / n, 12), std(i % 2 ? '#e11d48' : '#ffffff', { roughness: 0.3 })); c.position.y = h / n * (i + 0.5); g.add(c); }
+  const hook = new THREE.Mesh(new THREE.TorusGeometry(0.3 * s, 0.09 * s, 10, 20, Math.PI), std('#e11d48', { roughness: 0.3 })); hook.position.set(0.3 * s, h, 0); g.add(hook);
+  g.position.set(x, 0, z); g.rotation.y = rnd(0, 6); return g;
+}
+function snowman(x, z, s = 1) {
+  const g = new THREE.Group(), w = std('#ffffff', { roughness: 0.9 });
+  [[0.55, 0.5], [0.4, 1.25], [0.28, 1.82]].forEach(([r, y]) => { const b = new THREE.Mesh(new THREE.SphereGeometry(r * s, 16, 12), w); b.position.y = y * s; b.castShadow = true; g.add(b); });
+  const n = new THREE.Mesh(new THREE.ConeGeometry(0.06 * s, 0.3 * s, 10), std('#ff7a1a')); n.rotation.x = Math.PI / 2; n.position.set(0, 1.84 * s, 0.32 * s); g.add(n);
+  const hat = new THREE.Mesh(new THREE.CylinderGeometry(0.2 * s, 0.2 * s, 0.32 * s, 14), std('#1d1d24')); hat.position.y = 2.18 * s; g.add(hat);
+  const brim = new THREE.Mesh(new THREE.CylinderGeometry(0.32 * s, 0.32 * s, 0.03 * s, 16), std('#1d1d24')); brim.position.y = 2.03 * s; g.add(brim);
+  g.position.set(x, 0, z); g.rotation.y = Math.atan2(-x, -z); return g;
+}
+function gingerHouse(x, z, s = 1) {
+  const g = new THREE.Group(), wall = std('#a0612b', { roughness: 0.8 }), ice = std('#fff6e6', { roughness: 0.6 });
+  const body = new THREE.Mesh(new THREE.BoxGeometry(2.2 * s, 1.6 * s, 1.8 * s), wall); body.position.y = 0.8 * s; body.castShadow = true; g.add(body);
+  for (const sx of [-1, 1]) { const r = new THREE.Mesh(new THREE.BoxGeometry(1.45 * s, 0.14 * s, 2.0 * s), ice); r.position.set(sx * 0.55 * s, 1.95 * s, 0); r.rotation.z = -sx * 0.7; g.add(r); }
+  const door = new THREE.Mesh(new THREE.BoxGeometry(0.5 * s, 0.8 * s, 0.05 * s), std('#5a3416')); door.position.set(0, 0.4 * s, 0.91 * s); g.add(door);
+  ['#e11d48', '#22c55e', '#facc15', '#3b82f6'].forEach((c, i) => { const d = new THREE.Mesh(new THREE.SphereGeometry(0.1 * s, 10, 8), std(c, { roughness: 0.3 })); d.position.set(-0.75 * s + i * 0.5 * s, 1.45 * s, 0.92 * s); g.add(d); });
+  g.position.set(x, 0, z); g.rotation.y = Math.atan2(-x, -z); return g;
+}
+function lollipop(x, z, s = 1) {
+  const g = new THREE.Group();
+  const st = new THREE.Mesh(new THREE.CylinderGeometry(0.04 * s, 0.04 * s, 1.6 * s, 8), std('#ffffff')); st.position.y = 0.8 * s; g.add(st);
+  const c = new THREE.Mesh(new THREE.CylinderGeometry(0.4 * s, 0.4 * s, 0.1 * s, 24), std(['#f472b6', '#22c55e', '#facc15'][Math.floor(rnd(0, 3))], { roughness: 0.25 })); c.rotation.x = Math.PI / 2; c.position.y = 1.75 * s; g.add(c);
+  g.position.set(x, 0, z); g.rotation.y = Math.atan2(-x, -z); return g;
+}
+function stringLights(group) {   // twinkling bulbs along the top of the fence
+  const X = W / 2 + 2.7, Z = NET + 3.7, cols = ['#ff2d55', '#22c55e', '#facc15', '#3b82f6'], pts = [];
+  for (let z = -Z; z <= Z; z += 0.6) pts.push([-X, z], [X, z]);
+  for (let x = -X; x <= X; x += 0.6) pts.push([x, -Z]);
+  pts.forEach(([x, z], i) => {
+    const b = new THREE.Mesh(new THREE.SphereGeometry(0.08, 8, 6), new THREE.MeshBasicMaterial({ color: cols[i % 4] }));
+    b.position.set(x, 2.3 + Math.sin(i * 0.9) * 0.08, z); group.add(b);
+    arenaAnim.push(t => { b.visible = Math.sin(t * 3 + i * 1.7) > -0.6; });
+  });
+}
+function buildXmasArena(D) {
+  if (D === 'xwonder') {
+    clouds(arenaGroup, '#ffffff', 6); hills(arenaGroup, '#e9f1fb', 6, 14, 26, 0.18);
+    for (let i = 0; i < 16; i++) { const [x, z] = outsideSpot(W / 2 + 3.5, W / 2 + 14, -24, 14); arenaGroup.add(i % 3 ? pine(x, z, rnd(0.8, 1.4)) : xmasTree(x, z, rnd(0.9, 1.3))); }
+    for (const [x, z] of [[-(W / 2 + 2.4), -3], [W / 2 + 2.4, 2.5]]) arenaGroup.add(snowman(x, z, 0.8));
+    for (let i = 0; i < 8; i++) { const [x, z] = outsideSpot(W / 2 + 1.8, W / 2 + 3, -NET - 2, NET + 2); arenaGroup.add(giftBox(x, z, rnd(0.6, 0.9), BAUBLES[i % 4], i % 2 ? '#facc15' : '#ffffff')); }
+    fence(arenaGroup, '#7f1d1d'); xmasSnow();
+  }
+  if (D === 'xpole') {
+    // aurora ribbons in the sky
+    for (let i = 0; i < 3; i++) {
+      const au = new THREE.Mesh(new THREE.PlaneGeometry(140, 18), new THREE.MeshBasicMaterial({ color: i % 2 ? '#34d399' : '#a78bfa', transparent: true, opacity: 0.18, side: THREE.DoubleSide, fog: false, depthWrite: false }));
+      au.position.set(0, 26 + i * 6, -110 - i * 10); au.rotation.x = 0.3; arenaGroup.add(au);
+      arenaAnim.push(t => { au.material.opacity = 0.12 + 0.1 * Math.sin(t * 0.6 + i * 2); au.position.x = Math.sin(t * 0.1 + i) * 12; });
+    }
+    for (let i = 0; i < 12; i++) { const [x, z] = outsideSpot(W / 2 + 3.5, W / 2 + 14, -24, 14); arenaGroup.add(pine(x, z, rnd(0.8, 1.4))); }
+    for (const sx of [-1, 1]) for (const sz of [-1, 1]) arenaGroup.add(candyCane(sx * (W / 2 + 2.2), sz * (NET + 2.6), 1.2));
+    // the workshop behind the far baseline
+    const ws = gingerHouse(0, -(NET + 9), 2.2); ws.children[0].material = std('#7f1d1d'); ws.rotation.y = 0; arenaGroup.add(ws);
+    for (const sx of [-1, 1]) { const w = new THREE.Mesh(new THREE.PlaneGeometry(0.9, 0.9), new THREE.MeshBasicMaterial({ color:'#ffd27a' })); w.position.set(sx * 1.4, 1.9, -(NET + 9) + 2.0); arenaGroup.add(w); }
+    for (let i = 0; i < 10; i++) { const [x, z] = outsideSpot(W / 2 + 1.8, W / 2 + 3.2, -NET - 2, NET + 2); arenaGroup.add(giftBox(x, z, rnd(0.6, 1), BAUBLES[i % 4])); }
+    const pl = new THREE.PointLight('#ffd27a', 30, 25, 2); pl.position.set(0, 6, -NET - 5); arenaGroup.add(pl);
+    xmasSnow(500);
+  }
+  if (D === 'xginger') {
+    clouds(arenaGroup, '#fff5ee', 6); hills(arenaGroup, '#f7e3cf', 6, 14, 26, 0.18);
+    for (let i = 0; i < 7; i++) { const [x, z] = outsideSpot(W / 2 + 4.5, W / 2 + 14, -26, 12); arenaGroup.add(gingerHouse(x, z, rnd(0.9, 1.3))); }
+    for (let i = 0; i < 10; i++) { const [x, z] = outsideSpot(W / 2 + 2.2, W / 2 + 4.2, -NET - 3, NET + 3); arenaGroup.add(i % 2 ? candyCane(x, z, rnd(0.7, 1)) : lollipop(x, z, rnd(0.8, 1.1))); }
+    for (let i = 0; i < 6; i++) { const [x, z] = outsideSpot(W / 2 + 1.8, W / 2 + 2.6, -NET - 2, NET + 2); arenaGroup.add(giftBox(x, z, rnd(0.5, 0.8), '#f472b6', '#ffffff')); }
+  }
+  if (D === 'xlights') {
+    const moon = new THREE.Mesh(new THREE.CircleGeometry(4, 32), new THREE.MeshBasicMaterial({ color:'#f3f0ff', fog: false })); moon.position.set(25, 30, -120); arenaGroup.add(moon);
+    fence(arenaGroup, '#14532d'); stringLights(arenaGroup);
+    const big = xmasTree(0, -(NET + 7.5), 2.6, true); arenaGroup.add(big);
+    for (let i = 0; i < 12; i++) { const [x, z] = outsideSpot(W / 2 + 4, W / 2 + 14, -24, 14); arenaGroup.add(xmasTree(x, z, rnd(0.8, 1.2), true)); }
+    for (let i = 0; i < 8; i++) { const [x, z] = outsideSpot(W / 2 + 1.8, W / 2 + 2.6, -NET - 2, NET + 2); arenaGroup.add(giftBox(x, z, rnd(0.6, 0.9), BAUBLES[i % 4])); }
+    for (const [c, x] of [['#ff2d55', -6], ['#22c55e', 6]]) { const pl = new THREE.PointLight(c, 25, 20, 2); pl.position.set(x, 5, 0); arenaGroup.add(pl); }
+    xmasSnow(400);
+  }
+}
 function pine(x, z, s) {
   const g = new THREE.Group();
   const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.1 * s, 0.14 * s, 0.8 * s, 6), std('#5a3d22')); trunk.position.y = 0.4 * s; g.add(trunk);
@@ -2095,6 +2298,20 @@ function paddleCanvas(p) {
     const cols = ['#ff4fd8', '#00f0ff', '#ffe45c'];
     inv.forEach((row, j) => [...row].forEach((v, i) => { if (v === '1') { x.fillStyle = cols[(i + j) % 3]; x.fillRect(9 + i * 10, 40 + j * 10, 9, 9); } }));
     x.fillStyle = 'rgba(255,255,255,.06)'; for (let yy = 0; yy < 160; yy += 4) x.fillRect(0, yy, 128, 1);
+  }
+  if (p.style === 'snow') {   // solid colour dusted with six-armed snowflakes
+    x.fillStyle = p.a; x.fillRect(0, 0, 128, 160); x.strokeStyle = p.b; x.lineCap = 'round';
+    for (const [fx, fy, r] of [[24, 26, 11], [92, 20, 8], [64, 64, 15], [20, 104, 9], [104, 92, 12], [46, 140, 10], [100, 146, 7], [74, 112, 6]]) {
+      x.lineWidth = r > 10 ? 2.6 : 2; for (let i = 0; i < 6; i++) { const a = i / 6 * Math.PI * 2, ex = fx + Math.cos(a) * r, ey = fy + Math.sin(a) * r;
+        x.beginPath(); x.moveTo(fx, fy); x.lineTo(ex, ey); x.stroke();
+        for (const s of [-1, 1]) { x.beginPath(); x.moveTo(fx + Math.cos(a) * r * 0.6, fy + Math.sin(a) * r * 0.6); x.lineTo(fx + Math.cos(a + s * 0.5) * r * 0.85, fy + Math.sin(a + s * 0.5) * r * 0.85); x.stroke(); } }
+    }
+  }
+  if (p.style === 'ginger') {   // gingerbread with a white icing zigzag and gumdrop buttons
+    x.fillStyle = p.a; x.fillRect(0, 0, 128, 160); x.strokeStyle = p.b; x.lineWidth = 5; x.lineJoin = 'round';
+    x.beginPath(); for (let i = 0; i <= 16; i++) x.lineTo(8 + i * 7, i % 2 ? 18 : 10); x.stroke();
+    x.beginPath(); for (let i = 0; i <= 16; i++) x.lineTo(8 + i * 7, i % 2 ? 150 : 142); x.stroke();
+    [['#e11d48', 64, 56], ['#22c55e', 64, 82], ['#facc15', 64, 108]].forEach(([c, gx, gy]) => { x.fillStyle = c; x.beginPath(); x.arc(gx, gy, 9, 0, 7); x.fill(); x.fillStyle = 'rgba(255,255,255,.5)'; x.beginPath(); x.arc(gx - 3, gy - 3, 3, 0, 7); x.fill(); });
   }
   if (p.style === 'gold') { const g = x.createLinearGradient(0, 0, 128, 160); g.addColorStop(0, '#fff2b0'); g.addColorStop(0.4, p.a); g.addColorStop(1, p.b); x.fillStyle = g; x.fillRect(0, 0, 128, 160); }
   if (p.style === 'brand') {
@@ -2530,6 +2747,12 @@ function makeShot(tx, ty, T, spin = 0, curve = 0, raw = false) {
   Object.assign(ball, { z, vx, vy, vz, spin, curve, bounces: 0, live: true, held: false });
 }
 function curPaddle() { return findItem('paddle', SAVE.equip.paddle); }
+// ================= 🎄 Christmas Drop: on sale 1 Dec → New Year's (player's local time); teaser in November; owners keep items forever =================
+const XMAS_TEST = /[?&]xmas=on/.test(location.search);   // preview the drop early: add ?xmas=on to the URL
+const xmasLive = () => XMAS_TEST || new Date().getMonth() === 11;
+const xmasSoon = () => !xmasLive() && new Date().getMonth() === 10;
+const xmasDaysLeft = () => { const n = new Date(); return Math.max(1, Math.ceil((new Date(n.getFullYear() + 1, 0, 1) - n) / 864e5)); };   // until next 1 Jan
+const xmasShown = it => it.exclusive !== 'xmas' || SAVE.owned.includes(it.id) || xmasLive() || xmasSoon();
 // Pro Tour mythics: the player's pro (if any) and whether its signature paddle is equipped
 function proChar() { const d = playerModel && playerModel.userData.def; return d && d.pro ? d.pro : null; }
 function proSyn() { const d = playerModel && playerModel.userData.def, p = curPaddle(); return !!(d && d.pro && p && p.sig === d.id); }
@@ -3324,7 +3547,9 @@ function renderShop() {
   if (shopTab === 'paddle') grid.appendChild(customiser());
   if (shopTab === 'char') grid.appendChild(lookEditor());
   let lastGroup = null;
-  for (const it of SHOP[shopTab]) {
+  const list = SHOP[shopTab].filter(xmasShown);
+  list.sort((a, b) => (b.exclusive === 'xmas') - (a.exclusive === 'xmas'));   // festive items on top
+  for (const it of list) {
     if (it.group && it.group !== lastGroup) {
       lastGroup = it.group; const h = document.createElement('div'); h.className = 'sect';
       h.textContent = GROUPS.find(g => g[0] === it.group)[1]; grid.appendChild(h);
@@ -3335,6 +3560,7 @@ function renderShop() {
     let act;
     if (eq) act = `<button class="act eq">Equipped</button>`;
     else if (owned) act = `<button class="act">Equip</button>`;
+    else if (it.exclusive === 'xmas') act = xmasLive() ? `<button class="act ${SAVE.dinks >= it.price ? 'buy' : 'no'}"><span class="coin"></span> ${it.price}</button>` : `<button class="act no">🎄 1 Dec</button>`;
     else if (it.exclusive === 'logo') act = `<button class="act no">🤫 Secret</button>`;
     else if (it.exclusive === 'spin') act = `<button class="act no">🎡 Daily Spin</button>`;
     else if (it.exclusive === 'inf') act = `<button class="act no">♾️ Extract</button>`;
@@ -3345,7 +3571,7 @@ function renderShop() {
     else act = `<button class="act ${SAVE.dinks >= it.price ? 'buy' : 'no'}"><span class="coin"></span> ${it.price}</button>`;
     const rr = itemRarity(shopTab, it);
     const rar = `<div class="rar" style="color:${RARITY[rr][1]}">${RARITY[rr][0]}</div>`;
-    if (rr === 'legendary') d.classList.add('legend'); if (rr === 'epic') d.classList.add('epic'); if (rr === 'mythic') d.classList.add('mythic');
+    if (rr === 'legendary') d.classList.add('legend'); if (rr === 'epic') d.classList.add('epic'); if (rr === 'mythic') d.classList.add('mythic'); if (rr === 'festive') d.classList.add('festive');
     let extra = '';
     if (shopTab === 'paddle') {
       const t = PTYPES[it.type];
@@ -3355,7 +3581,7 @@ function renderShop() {
           `<div><span>${l}</span><i style="--v:${v * 10}%;--c:${c}"></i><b>${v}</b></div>`).join('')}</div>`;
     }
     const hide = (it.exclusive === 'secret' || it.exclusive === 'logo') && !owned;
-    d.innerHTML = `<img src="${thumb(shopTab, it)}" alt=""${hide ? ' style="filter:brightness(0) drop-shadow(0 0 6px #00ff66)"' : ''}>${rar}${shopTab === 'paddle' ? extra.split('<div class="stats">')[0] : ''}<div class="nm">${hide ? '???' : it.name}</div>${it.pro ? `<div class="pro">🎾 ${it.pro.serve} serve · ${it.pro.shot}</div>` : ''}${it.sig ? `<div class="pro">⚡ Made for ${findItem('char', it.sig).name}: specials 1.5x stronger</div>` : ''}${shopTab === 'paddle' ? '<div class="stats">' + extra.split('<div class="stats">')[1] : ''}${act}`;
+    d.innerHTML = `<img src="${thumb(shopTab, it)}" alt=""${hide ? ' style="filter:brightness(0) drop-shadow(0 0 6px #00ff66)"' : ''}>${rar}${shopTab === 'paddle' ? extra.split('<div class="stats">')[0] : ''}<div class="nm">${hide ? '???' : it.name}</div>${it.exclusive === 'xmas' && !owned ? `<div class="xm">${xmasLive() ? `⏳ Leaves in ${xmasDaysLeft()} day${xmasDaysLeft() === 1 ? '' : 's'}` : '🎄 Arrives 1 December'}</div>` : ''}${it.pro ? `<div class="pro">🎾 ${it.pro.serve} serve · ${it.pro.shot}</div>` : ''}${it.sig ? `<div class="pro">⚡ Made for ${findItem('char', it.sig).name}: specials 1.5x stronger</div>` : ''}${shopTab === 'paddle' ? '<div class="stats">' + extra.split('<div class="stats">')[1] : ''}${act}`;
     d.addEventListener('click', ev => {
       initAudio();
       const isBtn = ev.target.closest('.act');
@@ -3363,6 +3589,13 @@ function renderShop() {
       if (isBtn) {
         if (eq) {}
         else if (owned) { SAVE.equip[shopTab] = it.id; persist(); toast(it.shout ? `${it.name}: ${it.shout}` : `Equipped ${it.brand ? it.brand + ' ' : ''}${it.name}`); if (it.shout) strum(); }
+        else if (it.exclusive === 'xmas' && !xmasLive()) toast('🎄 The Christmas Drop arrives 1 December!');
+        else if (it.exclusive === 'xmas' && SAVE.dinks < it.price) toast(`Need ${it.price - SAVE.dinks} more dinks`);
+        else if (it.exclusive === 'xmas') {
+          SAVE.dinks -= it.price; SAVE.owned.push(it.id); SAVE.equip[shopTab] = it.id; persist(); refreshBalance();
+          coinSound(); buzz(20); toast(it.shout ? `Unlocked ${it.name}! ${it.shout}` : `🎄 Unlocked ${it.name}!`); if (it.shout) setTimeout(strum, 250);
+          burst(T3(player.x, player.y, 1.4), '#4ade80', 24, 3, 0.22);
+        }
         else if (it.exclusive === 'logo') toast('🤫 This one is hiding somewhere on the home screen…');
         else if (it.exclusive === 'spin') toast('Win this on the Daily Spin. Good luck!');
         else if (it.exclusive === 'inf') toast('Extract in Infinite Arcade and pick a paddle to win this');
@@ -4393,6 +4626,10 @@ function showChaosLadder() {
 }
 // ================= What's New: shows once after an update. To announce a feature, add an entry at the TOP with the next v =================
 const NEWS = [
+  { v: 3, date: '18 Nov 2026', items: [
+    ['🎄', '<b>The Christmas Drop</b> lands in the Locker on <b>1 December</b>: 16 festive items, 4 characters, 4 paddles, 4 balls and 4 arenas (Santa, a reindeer, a snowman, an elf, Winter Wonderland, North Pole and more).'],
+    ['⏳', 'They\'re <b>only on sale until New Year\'s</b>. Anything you buy is yours forever. Start saving your dinks!'],
+  ] },
   { v: 2, date: '18 Nov 2026', items: [
     ['🏆', '<b>Pro Tour mythics</b> are in the Locker (3,000 dinks): <b>Blaze</b> (kick serve, Phenom Drive), <b>Maestro</b> (pinpoint serve, the Erne), <b>Rocket</b> (cannon serve, rocket drives) and <b>Twister</b> (chainsaw serve, around-the-post shots).'],
     ['⚡', 'Each pro has a <b>signature paddle</b> (1,500) that makes their specials 1.5x stronger.'],
