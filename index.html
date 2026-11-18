@@ -757,12 +757,14 @@ function strawTex() {
 }
 function cape(k, color) {
   // hangs from the shoulders and wraps round the back of the torso; the pivot at the collar lets it flare out when running
-  const pivot = new THREE.Group(); pivot.position.set(0, 1.13, 0.02); k.upper.add(pivot);
-  const geo = new THREE.CylinderGeometry(0.29, 0.4, 0.78, 24, 6, true, -1.25, 2.5); geo.translate(0, -0.39, 0);
+  const pivot = new THREE.Group(); pivot.position.set(0, k.tall ? 1.43 : 1.13, k.tall ? 0.0 : 0.02); (k.tall || k.upper).add(pivot);
+  const geo = k.tall ? new THREE.CylinderGeometry(0.2, 0.3, 0.9, 16, 6, true, -1.3, 2.6) : new THREE.CylinderGeometry(0.29, 0.4, 0.78, 24, 6, true, -1.25, 2.5);
+  geo.translate(0, k.tall ? -0.45 : -0.39, 0);
   const m = k.mk(geo, k.M(color, { side: DS, roughness: 0.55 }), 0, 0, 0, pivot); m.scale.z = 0.98;
   const clasp = k.M('#ffd23f', { metalness: 0.9, roughness: 0.25 });
-  for (const sx of [-1, 1]) k.mk(sph(0.035, 12, 10), clasp, sx * 0.17, 0.0, -0.17, pivot);   // clasps on the collarbones
-  const tie = k.mk(new THREE.TorusGeometry(0.17, 0.014, 6, 20, Math.PI), clasp, 0, 0.005, -0.1, pivot); tie.rotation.x = Math.PI / 2; tie.rotation.z = Math.PI;
+  const cs = k.tall ? 0.72 : 1;
+  for (const sx of [-1, 1]) k.mk(sph(0.035, 12, 10), clasp, sx * 0.17 * cs, 0.0, -0.17 * cs, pivot);   // clasps on the collarbones
+  const tie = k.mk(new THREE.TorusGeometry(0.17 * cs, 0.014, 6, 20, Math.PI), clasp, 0, 0.005, -0.1 * cs, pivot); tie.rotation.x = Math.PI / 2; tie.rotation.z = Math.PI;
   k.cape = pivot;
 }
 function frontHalf(r, t0, tl) { return new THREE.SphereGeometry(r, 20, 12, Math.PI, Math.PI, t0, tl); }
@@ -2397,6 +2399,76 @@ function makePaddle(p, custom) {
 }
 
 const BODY_R = 0.32, BODY_L = 0.45, BODY_Y = 0.97;
+
+// ================= Tall rig: skinnier, taller bodies with long realistic arms and legs (like the low-poly reels).
+// Decos were written for the chibi rig, so they're mapped across: torso decos go into a scaled anchor that squeezes the old
+// torso space onto the slimmer torso; arm/leg decos keep their size but have their positions stretched down the longer limbs.
+const RIG_TALL = false;
+function makeTall(def, paddle, custom, c, M, mk, g, matOpts, limb, hand) {
+  const headC = c.head || c.body, human = !!c.head && /^#(f|e|d|c|a|9|8|7|6)/i.test(headC) && headC !== c.body;
+  const pantsC = c.legs || (human ? '#2f4f7f' : shade(c.body, 0.72));
+  const bareLegs = c.legs && c.legs === c.head;
+  const HIP = 0.76, LEG = 0.74, ARM_HAND = -0.58;
+  // legs: long trousers (or bare legs) and chunky shoes
+  const legs = [], legA = [];
+  const shoeCol = c.foot || '#2f3a5c', sole = M('#f4f4f4', { roughness: 0.6, clearcoat: 0 });
+  for (const s of [-1, 1]) {
+    const leg = new THREE.Group(); leg.position.set(s * 0.105, HIP, 0); g.add(leg);
+    const lr = bareLegs ? 0.058 : 0.076;
+    mk(new THREE.CapsuleGeometry(lr, LEG - 0.17, 2, 8), M(bareLegs ? c.legs : pantsC, matOpts), 0, -(LEG - 0.08) / 2, 0, leg);
+    // thigh that widens into the hips, so the legs don't look stuck on
+    const th = mk(new THREE.CapsuleGeometry(lr * 1.3, 0.16, 2, 8), M(bareLegs ? c.legs : pantsC, matOpts), 0, -0.1, 0, leg); th.scale.z = 0.95;
+    const up = mk(new THREE.CapsuleGeometry(0.068, 0.11, 2, 8), M(shoeCol, { roughness: 0.6 }), 0, -LEG + 0.07, -0.04, leg); up.rotation.x = Math.PI / 2; up.scale.set(1.05, 1, 0.85);
+    const so = mk(new THREE.CapsuleGeometry(0.074, 0.12, 2, 8), sole, 0, -LEG + 0.028, -0.045, leg); so.rotation.x = Math.PI / 2; so.scale.set(1.1, 1, 0.4);
+    const a = new THREE.Group(); leg.add(a); legA.push(a);
+    legs.push(leg);
+  }
+  const upper = new THREE.Group(); g.add(upper);
+  if (!bareLegs) { const hips = mk(new THREE.CapsuleGeometry(0.21, 0.06, 2, 9), M(pantsC, matOpts), 0, HIP + 0.03, 0, upper); hips.scale.set(1.02, 0.62, 0.82); }
+  // slim torso, a little wider at the shoulders
+  const tGeo = new THREE.CapsuleGeometry(0.225, 0.3, 3, 9);
+  { const pa = tGeo.attributes.position; for (let i = 0; i < pa.count; i++) { const y = pa.getY(i), f = 0.94 + 0.12 * clamp((y + 0.37) / 0.74, 0, 1); pa.setX(i, pa.getX(i) * f); pa.setZ(i, pa.getZ(i) * f); } tGeo.computeVertexNormals(); }
+  const torso = mk(tGeo, def.bodyMat ? def.bodyMat() : M(c.body, matOpts), 0, 1.08, 0, upper); torso.scale.set(1, 1, 0.8);
+  const trim = M(shade(c.body, 0.78), matOpts);
+  const col = mk(new THREE.TorusGeometry(0.11, 0.022, 5, 14), trim, 0, 1.44, -0.01, upper); col.rotation.x = Math.PI / 2 - 0.15;
+  if (!bareLegs) { const hem = mk(new THREE.TorusGeometry(0.225, 0.018, 5, 14), trim, 0, 0.77, 0, upper); hem.rotation.x = Math.PI / 2; hem.scale.y = 0.8; }
+  mk(cyl(0.07, 0.08, 0.12, 10), M(headC, matOpts), 0, 1.5, 0, upper);   // neck
+  const head = new THREE.Group(); head.position.set(0, 1.83, 0); head.scale.setScalar(1.36); upper.add(head);
+  const headMesh = mk(def.lowPoly || LOWPOLY ? new THREE.IcosahedronGeometry(0.235, 2) : new THREE.SphereGeometry(0.235, 32, 24), def.headMat ? def.headMat() : M(headC, matOpts), 0, 0, 0, head); headMesh.scale.set(1.04, 1.0, 1);
+  if (human) {
+    for (const s of [-1, 1]) { const e = mk(sph(0.05, 14, 10), M(headC, matOpts), s * 0.245, -0.01, 0.01, head); e.scale.set(0.6, 1, 0.8); }
+    mk(sph(0.03, 12, 10), M(shade(headC, 0.92)), 0, -0.035, -0.236, head).scale.set(1, 0.8, 0.7);
+  }
+  // long arms: short sleeve, slim arm, hand with a thumb
+  const arms = [], armA = [];
+  for (const s of [-1, 1]) {
+    const arm = new THREE.Group(); arm.position.set(s * 0.25, 1.36, 0); upper.add(arm);
+    // rounded shoulder joint in the shirt colour so the arm grows out of the torso
+    const sh = mk(sph(0.088, 9, 7), c.sleeve ? M(c.sleeve, matOpts) : def.bodyMat ? def.bodyMat() : M(c.body, matOpts), s * 0.235, 1.37, 0, upper); sh.scale.set(1, 0.9, 0.85);
+    mk(new THREE.CapsuleGeometry(0.07, 0.12, 2, 8), c.sleeve ? M(c.sleeve, matOpts) : def.bodyMat ? def.bodyMat() : M(c.body, matOpts), 0, -0.09, 0, arm);
+    mk(new THREE.CapsuleGeometry(0.052, 0.34, 2, 7), M(limb, matOpts), 0, -0.33, 0, arm);
+    const hd = mk(sph(0.066, 9, 7), M(hand, matOpts), 0, ARM_HAND, -0.005, arm); hd.scale.set(0.95, 1.12, 0.8);
+    mk(sph(0.027, 7, 6), M(hand, matOpts), -s * 0.05, ARM_HAND + 0.03, -0.03, arm);
+    const a = new THREE.Group(); arm.add(a); armA.push(a);
+    arms.push(arm);
+  }
+  const pad = makePaddle(paddle, custom); pad.position.y = ARM_HAND - 0.02; pad.scale.setScalar(0.9); arms[1].add(pad);
+  // torso decos: map chibi torso space (y 0.48..1.12, r 0.3) onto the slim torso (y 0.75..1.49, r 0.2)
+  const upA = new THREE.Group(); upA.position.y = 1.08 - 0.8 * 1.1; upA.scale.set(0.76, 1.1, 0.68); upper.add(upA);
+  const k = { g, upper: upA, tall: upper, head, headMesh, torso, mk, M, c, arms: armA, legs: legA, matOpts, tail: null, wings: null, snakes: null, cape: null, wheels: null };
+  if (!def.noEyes) eyes(k);
+  if (def.deco) def.deco(k);
+  // arm/leg decos keep their size; stretch their positions down the longer limbs
+  const remap = (anchors, fy) => anchors.forEach(a => [...a.children].forEach(ch => { ch.position.y *= fy; a.parent.add(ch); }));
+  remap(armA, ARM_HAND / -0.41); remap(legA, LEG / 0.44);
+  if (k.tail) k.tail.position.y += HIP - 0.5;
+  if (def.scale) g.scale.setScalar(def.scale);
+  const blob = new THREE.Mesh(new THREE.PlaneGeometry(1.0, 1.0), new THREE.MeshBasicMaterial({ map: BLOB, transparent: true, depthWrite: false, opacity: 0.7 }));
+  blob.rotation.x = -Math.PI / 2; blob.position.y = 0.012; g.add(blob);
+  const root = new THREE.Group(); root.add(g); root.scale.setScalar(1.0);
+  root.userData = { legs, arms, upper, torso, run: 0, pad, wheels: k.wheels, seated: k.seated, tail: k.tail, wings: k.wings, snakes: k.snakes, cape: k.cape, def, eyes: k.eyes || [], blink: 1 + Math.random() * 3 };
+  return root;
+}
 function shade(hex, f) { return '#' + new THREE.Color(hex).multiplyScalar(f).getHexString(); }
 // ================= Art style: faceted low-poly, flat matte colours (like the animated low-poly reels Manny liked). Set LOWPOLY = false to go back to the glossy look.
 const LOWPOLY = true;
@@ -2407,9 +2479,10 @@ function lpMat(color, o = {}) {   // matte, flat-shaded; metals keep a bit of sh
 function lpGeo(geo) {   // rebuild round geometry with fewer segments so the facets show
   const P = geo.parameters || {}, t = geo.type;
   try {
-    if (t === 'SphereGeometry') { if (P.widthSegments <= 9) return geo; geo.dispose(); return new THREE.SphereGeometry(P.radius, Math.min(P.widthSegments, 9), Math.min(P.heightSegments, 7), P.phiStart, P.phiLength, P.thetaStart, P.thetaLength); }
+    // partial spheres are hair caps, visors, beards etc.: keep them as made so they hug the head (and keep hand-shaped hairlines)
+    if (t === 'SphereGeometry') { if (P.widthSegments <= 9 || P.phiLength < 6.28 || P.thetaLength < 3.14) return geo; geo.dispose(); return new THREE.SphereGeometry(P.radius, Math.min(P.widthSegments, 9), Math.min(P.heightSegments, 7), P.phiStart, P.phiLength, P.thetaStart, P.thetaLength); }
     if (t === 'CapsuleGeometry') { if (P.radialSegments <= 9) return geo; geo.dispose(); return new THREE.CapsuleGeometry(P.radius, P.length, 2, Math.min(P.radialSegments, 8)); }
-    if (t === 'CylinderGeometry') { if (P.radialSegments <= 10) return geo; geo.dispose(); return new THREE.CylinderGeometry(P.radiusTop, P.radiusBottom, P.height, 10, P.heightSegments, P.openEnded, P.thetaStart, P.thetaLength); }
+    if (t === 'CylinderGeometry') { if (P.radialSegments <= 10 || P.thetaLength < 6) return geo; geo.dispose(); return new THREE.CylinderGeometry(P.radiusTop, P.radiusBottom, P.height, 10, P.heightSegments, P.openEnded, P.thetaStart, P.thetaLength); }
     if (t === 'ConeGeometry') { if (P.radialSegments <= 8) return geo; geo.dispose(); return new THREE.ConeGeometry(P.radius, P.height, 8, P.heightSegments, P.openEnded, P.thetaStart, P.thetaLength); }
     if (t === 'TorusGeometry') { if (P.tubularSegments <= 14) return geo; geo.dispose(); return new THREE.TorusGeometry(P.radius, P.tube, Math.min(P.radialSegments, 5), Math.min(P.tubularSegments, 14), P.arc); }
   } catch (e) {}
@@ -2485,6 +2558,7 @@ function makeCharacter(def, paddle, custom) {
     const m = new THREE.Mesh(geo, typeof mat === 'string' ? M(mat) : mat); m.position.set(x, y, z); m.castShadow = true; parent.add(m); return m;
   };
   if (def.bean) return makeBean(def, paddle, custom);
+  if (RIG_TALL && !def.wheelchair) return makeTall(def, paddle, custom, c, M, mk, g, matOpts, limb, hand);
   // ---- chibi build: big separate head, stocky shirt torso, sleeves + mitten hands, trousers and chunky shoes
   const headC = c.head || c.body, human = !!c.head && /^#(f|e|d|c|a|9|8|7|6)/i.test(headC) && headC !== c.body;
   const pantsC = c.legs || (human ? '#2f4f7f' : shade(c.body, 0.72));
