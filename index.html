@@ -178,6 +178,8 @@
   .item .act.no{background:rgba(0,0,0,.25);color:#ffffff80}
   .item.legend{background:linear-gradient(160deg,#6b4d16,#2a2a6a 60%)}
   .item.epic{background:linear-gradient(160deg,#4d2a86,#26337c 60%)}
+  .item.mythic{background:linear-gradient(160deg,#7a0f2a,#3b0a5c 55%,#1a1a5a);box-shadow:inset 0 0 0 2px rgba(255,59,92,.55),0 0 18px rgba(255,59,92,.25)}
+  .item .pro{font-size:10px;font-weight:800;color:#ffb3c0;line-height:1.25;margin:2px 0 4px}
   .sect{grid-column:1/-1;font-weight:900;font-size:12px;letter-spacing:.16em;text-transform:uppercase;opacity:.75;margin:6px 2px -2px}
   .rar{font-size:10px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;margin-bottom:-4px}
   .ptype{font-size:10px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;margin-bottom:-4px}
@@ -280,7 +282,7 @@
   #serveOpts{position:absolute;left:50%;bottom:calc(var(--bot) + 250px);transform:translateX(-50%);display:none;gap:10px;z-index:6}
   #serveOpts button{border:0;border-radius:16px;padding:10px 16px;font-family:'Lilita One',system-ui;font-size:17px;letter-spacing:.04em;color:#fff;box-shadow:0 4px 0 rgba(0,0,0,.35),0 8px 18px rgba(0,0,0,.35);line-height:1.05}
   #serveOpts button small{display:block;font-family:'Nunito';font-weight:900;font-size:9.5px;letter-spacing:.06em;opacity:.85}
-  #srvDeep{background:linear-gradient(#ff7a4a,#e0442a)} #srvSpin{background:linear-gradient(#c27bff,#7c3aed)} #srvShort{background:linear-gradient(#4ab3ff,#2563eb)}
+  #srvDeep{background:linear-gradient(#ff7a4a,#e0442a)} #srvSpin{background:linear-gradient(#c27bff,#7c3aed)} #srvSig{background:linear-gradient(#ff5a7a,#be123c)} #srvShort{background:linear-gradient(#4ab3ff,#2563eb)}
   #serveOpts button:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.35)}
   #csprB{position:absolute;right:16px;top:calc(env(safe-area-inset-top) + 92px);width:52px;height:52px;border-radius:50%;display:none;align-items:center;justify-content:center;padding:3px;pointer-events:none;z-index:5;
     background:conic-gradient(#ff5a5a calc(var(--p,0)*1%),rgba(255,255,255,.14) 0)}
@@ -387,7 +389,7 @@
     <path d="M60 18l8-7 8 7"/><path d="M60 118l8 7 8-7"/><path d="M18 60l-7 8 7 8"/><path d="M118 60l7 8-7 8"/></svg></div><div id="knob"></div></div>
   <div id="proPad"><svg viewBox="0 0 150 166" fill="none" stroke="#fff" stroke-width="2"><rect x="1" y="1" width="148" height="164" rx="14" fill="rgba(20,40,90,.35)" stroke="rgba(255,255,255,.35)"/><rect x="12" y="7" width="126" height="137" fill="rgba(70,130,220,.35)"/><line x1="6" y1="7" x2="144" y2="7" stroke-width="4" stroke-dasharray="3 3"/><line x1="12" y1="51" x2="138" y2="51"/><line x1="75" y1="51" x2="75" y2="144"/></svg><div class="dot"></div><div class="hint">SLIDE TO MOVE</div></div>
   <div id="sprBtn"><div class="in"><img alt=""></div><div class="lbl"></div></div>
-  <div id="serveOpts"><button id="srvShort">SHORT<small>just past the kitchen</small></button><button id="srvDeep">DEEP<small>to the baseline</small></button><button id="srvSpin" style="display:none">SPIN<small>Orlando special</small></button></div>
+  <div id="serveOpts"><button id="srvShort">SHORT<small>just past the kitchen</small></button><button id="srvDeep">DEEP<small>to the baseline</small></button><button id="srvSpin" style="display:none">SPIN<small>Orlando special</small></button><button id="srvSig" style="display:none">SIG<small>pro serve</small></button></div>
   <div id="csprB"><div class="in"><img alt=""></div><div class="lbl"></div></div>
   <div id="spinB" class="sbtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 12a8 8 0 1 1-2.6-5.9"/><path d="M18.2 2.6l-.7 3.6 3.6.6"/><path d="M15.2 12a3.2 3.2 0 1 1-3.2-3.2"/></svg><span>SPIN</span></div>
   <div id="pow" class="sbtn"><svg viewBox="0 0 24 24"><path d="M13.5 2L5 13.5h6L9.5 22 19 9.5h-6.2L13.5 2z" fill="currentColor"/></svg><span>POWER</span></div>
@@ -478,6 +480,7 @@
         <div><i>✨</i><span><b>Sprites</b> float beside you in CPU matches. Each gives a passive boost and has a power that charges as you hit. Tap the sprite button when its ring is full. Level them up to 5. New sprites only drop when you win: harder modes and tournaments drop rarer ones.</span></div>
         <div><i>🕹️</i><span><b>Arcade</b> is an endless ladder: beat 3 players to 3 points, then a boss to 5 (rally scoring, win by 2), and keep going as it gets harder. Bosses drop Arcade-exclusive characters, paddles, a ball and an arena that you can't get anywhere else.</span></div>
         <div><i>🐒</i><span><b>Orlando</b> has a special <b>SPIN</b> serve: heavy sidespin that bends and kicks off the bounce, so it's much harder to return (small risk of curling wide).</span></div>
+        <div><i>🏆</i><span><b>Pro Tour mythics</b> (3,000 dinks, Locker): Blaze, Maestro, Rocket and Twister each have a signature <b>serve</b> button and a special shot. Their matching paddles (1,500) make the specials 1.5x stronger.</span></div>
         <div><i>♿</i><span><b>Juan</b> plays by real wheelchair pickleball rules: he may let the ball bounce <b>twice</b> on his side (the second bounce can land anywhere).</span></div>
         <div><i>🎾</i><span><b>Serving:</b> tap the court for a normal serve, or pick <b>SHORT</b> (floats just past the kitchen, pulls them forward) or <b>DEEP</b> (fast to the baseline, harder to return). Both carry a little risk of a fault.</span></div>
         <div><i>😈</i><span><b>CPU sprites:</b> Arcade bosses and Infinite opponents from level 10 bring a sprite too (never in Singles, Doubles or Tour). Watch its red ring top-right: when it fills, they fire a power at you (slow you down, freeze you, shrink your reach, or hit a power shot).</span></div>
@@ -622,8 +625,8 @@ const DIFFS = [
 ];
 
 // ================= character roster =================
-const RARITY = { starter:['Starter','#b9c2cc'], common:['Common','#3ddc84'], rare:['Rare','#3fa9ff'], epic:['Epic','#c27bff'], legendary:['Legendary','#ffc93c'], arcade:['Arcade','#ff4fd8'], secret:['Secret','#00ff66'] };
-const GROUPS = [['starter','Starter'], ['animals','Animals'], ['legends','Legends'], ['aliens','Aliens'], ['myth','Mythology'], ['squad','👑 The Squad'], ['arcade','🕹️ Arcade exclusives'], ['secret','🤫 Secret & special']];
+const RARITY = { starter:['Starter','#b9c2cc'], common:['Common','#3ddc84'], rare:['Rare','#3fa9ff'], epic:['Epic','#c27bff'], legendary:['Legendary','#ffc93c'], mythic:['Mythic','#ff3b5c'], arcade:['Arcade','#ff4fd8'], secret:['Secret','#00ff66'] };
+const GROUPS = [['starter','Starter'], ['animals','Animals'], ['legends','Legends'], ['aliens','Aliens'], ['myth','Mythology'], ['squad','👑 The Squad'], ['pros','🏆 Pro Tour (Mythic)'], ['arcade','🕹️ Arcade exclusives'], ['secret','🤫 Secret & special']];
 const SKIN = '#f0c9a0';
 const sph = (r, w = 18, h = 14) => new THREE.SphereGeometry(r, w, h);
 const cyl = (rt, rb, h, s = 12) => new THREE.CylinderGeometry(rt, rb, h, s);
@@ -697,6 +700,17 @@ function cheeks(k, color = '#ffadc0') { for (const s of [-1, 1]) k.mk(sph(0.045)
 function belly(k, color, y = 0.82, sx = 1, sy = 1.35) { const m = k.mk(sph(0.2), color, 0, y - 0.03, -0.235, k.upper); m.scale.set(sx, sy * 0.9, 0.5); return m; }
 function belt(k, color, y = 0.62, r = 0.3, t = 0.03) { const m = k.mk(new THREE.TorusGeometry(r, t, 8, 32), color, 0, y, 0, k.upper); m.rotation.x = Math.PI / 2; m.scale.y = 0.92; return m; }
 function smile(k, color = '#3a1414') { const m = k.mk(new THREE.TorusGeometry(0.058, 0.014, 8, 24, Math.PI), color, 0, -0.075, -0.222, k.head); m.rotation.z = Math.PI; m.rotation.x = -0.25; }
+function swirlMat() {   // Twister's spiral-print shirt
+  const c = document.createElement('canvas'); c.width = c.height = 256; const x = c.getContext('2d');
+  x.fillStyle = '#0f766e'; x.fillRect(0, 0, 256, 256);
+  for (const [cx, cy, col] of [[64, 64, '#2ee6c8'], [192, 70, '#a78bfa'], [70, 190, '#a78bfa'], [196, 196, '#2ee6c8']]) {
+    x.strokeStyle = col; x.lineWidth = 7; x.beginPath();
+    for (let a = 0; a < 16; a += 0.1) { const r = a * 3.4; x.lineTo(cx + Math.cos(a) * r, cy + Math.sin(a) * r); }
+    x.stroke();
+  }
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(1.6, 1.2);
+  return new THREE.MeshPhysicalMaterial({ map: t, roughness: 0.55, clearcoat: 0.2 });
+}
 function hawaiiMat() {
   // red aloha shirt print: white hibiscus with yellow centres and green leaves
   const c = document.createElement('canvas'); c.width = c.height = 256; const x = c.getContext('2d');
@@ -1221,6 +1235,80 @@ const CHARS = [
       smile(k, '#0b1a3a');
     } },
   // ---- arcade exclusives (only from beating an Arcade boss)
+  // ---- 🏆 Pro Tour mythics: original characters inspired by pro playstyles. Each has a signature serve (def.pro.serve) and special shot, boosted by its signature paddle (paddle.sig)
+  { id:'c_blaze', name:'Blaze', price:3000, group:'pros', rarity:'mythic', shout:'Too fast? 🔥',
+    pro:{ k:'blaze', serve:'KICK', serveSub:'topspin jump serve', shot:'POWER = Phenom Drive: heavy topspin that dips in. Quick hands at the net.' },
+    c:{ body:'#ff7a1a', head:'#e8b48a', limb:'#e8b48a', hand:'#e8b48a', legs:'#e8b48a', foot:'#ffffff' },
+    deco: k => {
+      smile(k, '#5a1a10'); cheeks(k, '#ff9e8a');
+      const hair = k.M('#f2c14e', { roughness: 0.55, clearcoat: 0.3 });
+      k.mk(new THREE.SphereGeometry(0.25, 28, 16, 0, Math.PI * 2, 0, Math.PI * 0.42), hair, 0, 0.012, 0.012, k.head);
+      // high ponytail swinging behind
+      const pt = k.mk(new THREE.CapsuleGeometry(0.065, 0.3, 6, 12), hair, 0, 0.12, 0.26, k.head); pt.rotation.x = 0.9;
+      k.mk(new THREE.TorusGeometry(0.05, 0.016, 8, 16), '#ff3d8b', 0, 0.2, 0.2, k.head).rotation.x = 0.9;
+      // hot-pink visor: band + front brim
+      const pink = k.M('#ff3d8b', { clearcoat: 0.8 });
+      k.mk(new THREE.TorusGeometry(0.245, 0.02, 8, 36), pink, 0, 0.12, 0, k.head).rotation.x = Math.PI / 2;
+      const brim = k.mk(new THREE.CylinderGeometry(0.2, 0.2, 0.016, 28, 1, false, -Math.PI / 2 - 0.9, 1.8), pink, 0, 0.12, -0.12, k.head); brim.rotation.x = -0.15;
+      // flame stripes on the shirt
+      for (const [x, rz] of [[-0.13, 0.35], [0.0, 0.0], [0.13, -0.35]]) { const f = k.mk(cone(0.05, 0.22, 10), k.M('#ffd23f', { clearcoat: 0.5 }), x, 0.72, -0.27, k.upper); f.rotation.z = rz; f.scale.z = 0.25; }
+      // pink skort + wristbands
+      k.mk(cyl(0.3, 0.38, 0.22, 28), k.M('#ff3d8b', { roughness: 0.5 }), 0, 0.56, 0, k.upper);
+      for (const a of k.arms) k.mk(cyl(0.05, 0.05, 0.07, 14), '#ffffff', 0, -0.33, 0, a);
+    } },
+  { id:'c_maestro', name:'Maestro', price:3000, group:'pros', rarity:'mythic', shout:'Easy work. 🐐',
+    pro:{ k:'maestro', serve:'PINPOINT', serveSub:'deep into the corner', shot:'ERNE: leaps out wide at the net to volley winners. Longer reach at the kitchen.' },
+    c:{ body:'#f8f8f8', head:'#e8b48a', limb:'#e8b48a', hand:'#e8b48a', legs:'#1f2937', foot:'#ffffff' },
+    deco: k => {
+      smile(k, '#4a1a10');
+      k.mk(new THREE.SphereGeometry(0.245, 28, 16, 0, Math.PI * 2, 0, Math.PI * 0.4), k.M('#3a2414', { roughness: 0.9, clearcoat: 0 }), 0, 0.015, 0.01, k.head);
+      // backwards white cap with a gold button + little gold goat horns (the GOAT)
+      const cap = k.M('#ffffff', { roughness: 0.5 }), gold = k.M('#ffd23f', { metalness: 0.9, roughness: 0.2 });
+      k.mk(new THREE.SphereGeometry(0.255, 28, 14, 0, Math.PI * 2, 0, Math.PI * 0.38), cap, 0, 0.03, 0, k.head);
+      const bill = k.mk(cyl(0.13, 0.13, 0.02, 24), cap, 0, 0.12, 0.25, k.head); bill.scale.set(1, 1, 0.75); bill.rotation.x = 0.25;
+      k.mk(sph(0.025), gold, 0, 0.285, 0, k.head);
+      for (const sx of [-1, 1]) { const h = k.mk(cone(0.035, 0.16, 10), gold, sx * 0.13, 0.27, 0.02, k.head); h.rotation.z = -sx * 0.6; h.rotation.x = 0.25; }
+      // gold collar trim, gold #1, gold wristband
+      belt(k, '#ffd23f', 1.06, 0.2, 0.02);
+      jerseyNum(k, '1', 0.84, -0.285, Math.PI, 0.17, '#d4a017'); jerseyNum(k, '1', 0.84, 0.285, 0, 0.22, '#d4a017');
+      k.mk(cyl(0.05, 0.05, 0.07, 14), gold, 0, -0.33, 0, k.arms[1]);
+    } },
+  { id:'c_rocket', name:'Rocket', price:3000, group:'pros', rarity:'mythic', shout:'Bombs away! 🚀',
+    pro:{ k:'rocket', serve:'CANNON', serveSub:'flat and blazing fast', shot:'POWER = Rocket: the hardest drive in the game. All drives come in hotter.' },
+    c:{ body:'#111318', head:'#c68a5a', limb:'#c68a5a', hand:'#c68a5a', sleeve:'#c68a5a', legs:'#b91c1c', foot:'#111111' },
+    deco: k => {
+      smile(k, '#3a1008');
+      const hair = k.M('#1a120c', { roughness: 0.9, clearcoat: 0 });
+      k.mk(new THREE.SphereGeometry(0.245, 28, 16, 0, Math.PI * 2, 0, Math.PI * 0.35), hair, 0, 0.02, 0.01, k.head);
+      // big beard
+      const bd = k.mk(sph(0.2, 22, 16), hair, 0, -0.12, -0.08, k.head); bd.scale.set(1.15, 0.85, 1);
+      k.mk(new THREE.TorusGeometry(0.058, 0.014, 8, 24, Math.PI), '#f4e1d0', 0, -0.06, -0.238, k.head).rotation.z = Math.PI;
+      // red sweatband
+      k.mk(new THREE.TorusGeometry(0.248, 0.03, 8, 36), '#e11d48', 0, 0.11, 0, k.head).rotation.x = Math.PI / 2;
+      // rocket on the chest: body, nose, flame
+      const rk = new THREE.Group(); rk.position.set(0, 0.82, -0.29); rk.rotation.z = -0.5; k.upper.add(rk);
+      k.mk(cyl(0.035, 0.035, 0.14, 12), '#e5e7eb', 0, 0, 0, rk); k.mk(cone(0.035, 0.07, 12), '#e11d48', 0, 0.105, 0, rk);
+      k.mk(cone(0.03, 0.08, 10), '#ff9a1f', 0, -0.11, 0, rk).rotation.x = Math.PI;
+      // tattoo bands on both arms
+      for (const a of k.arms) for (const y of [-0.05, -0.12]) k.mk(new THREE.TorusGeometry(0.07, 0.009, 6, 20), '#1e293b', 0, y, 0, a).rotation.x = Math.PI / 2;
+    } },
+  { id:'c_twister', name:'Twister', price:3000, group:'pros', rarity:'mythic', shout:'Watch it bend 🌀',
+    pro:{ k:'twister', serve:'CHAINSAW', serveSub:'wicked sidespin', shot:'SPIN always bends hard. Balls pulled out wide come back AROUND THE POST.' },
+    c:{ body:'#0f766e', head:SKIN, limb:SKIN, hand:SKIN, legs:'#3b0764', foot:'#2ee6c8' },
+    bodyMat: () => swirlMat(),
+    deco: k => {
+      smile(k);
+      // purple bucket hat
+      const hat = k.M('#6d28d9', { roughness: 0.7 });
+      k.mk(cyl(0.21, 0.25, 0.17, 28), hat, 0, 0.23, 0, k.head);
+      k.mk(cyl(0.36, 0.3, 0.05, 32), hat, 0, 0.145, 0, k.head);
+      k.mk(cyl(0.252, 0.252, 0.03, 28), '#2ee6c8', 0, 0.19, 0, k.head);
+      // wraparound shades
+      const sh = k.M('#0b0b12', { clearcoat: 1, roughness: 0.05 });
+      for (const sx of [-1, 1]) k.mk(box(0.12, 0.06, 0.02), sh, sx * 0.075, 0.03, -0.24, k.head).rotation.y = sx * -0.15;
+      k.mk(box(0.05, 0.015, 0.015), sh, 0, 0.045, -0.245, k.head);
+      for (const a of k.arms) k.mk(cyl(0.05, 0.05, 0.07, 14), '#2ee6c8', 0, -0.33, 0, a);
+    } },
   { id:'c_retrobot', name:'Retro Bot', price:0, exclusive:'arcade', group:'arcade', rarity:'arcade', c:{ body:'#9aa5b8', limb:'#5b6478', foot:'#2b2f3a' },
     matOpts:{ metalness: 0.65, roughness: 0.3 }, noEyes:true,
     deco: k => {
@@ -1411,6 +1499,11 @@ const SHOP = {
     { id:'p_inf1', brand:'Void', name:'Loop Pro',      price:0, exclusive:'inf', rarity:'rare',      type:'hybrid',   shape:'hex', style:'void', a:'#060d1c', b:'#3fa9ff', mark:'VOID', pw:7, ct:7, sp:8 },
     { id:'p_inf2', brand:'Void', name:'Event Horizon', price:0, exclusive:'inf', rarity:'epic',      type:'spin',     shape:'hex', style:'void', a:'#0e0618', b:'#c27bff', mark:'VOID', pw:8, ct:8, sp:9 },
     { id:'p_inf3', brand:'Void', name:'Infinity Edge', price:0, exclusive:'inf', rarity:'legendary', type:'hybrid',   shape:'hex', style:'void', a:'#140d00', b:'#ffc93c', mark:'VOID', metal:true, pw:9, ct:10, sp:9 },
+    // ---- Pro Tour signature paddles: 1500 each, and their pro's specials are 1.5x stronger with them
+    { id:'p_blaze',   brand:'Blaze',     name:'Phenom 16',       price:1500, rarity:'mythic', sig:'c_blaze',   type:'power',  shape:'long',   style:'flames', a:'#1a1a1a', b:'#ff3d8b', mark:'PHENOM', pw:9, ct:8, sp:9 },
+    { id:'p_maestro', brand:'Maestro',   name:'GOAT Gen 4',      price:1500, rarity:'mythic', sig:'c_maestro', type:'hybrid', shape:'hybrid', style:'gold',   a:'#fff7d6', b:'#d4a017', mark:'GOAT', ink:'#5a3d00', metal:true, pw:8, ct:10, sp:9 },
+    { id:'p_rocket',  brand:'Rocket',    name:'Launch 14mm',     price:1500, rarity:'mythic', sig:'c_rocket',  type:'power',  shape:'long',   style:'carbon', a:'#18181c', b:'#ff3b1a', mark:'ROCKET', pw:10, ct:6, sp:7 },
+    { id:'p_twister', brand:'Twister',   name:'Chainsaw Blade',  price:1500, rarity:'mythic', sig:'c_twister', type:'spin',   shape:'blade',  style:'galaxy', a:'#06221f', b:'#2ee6c8', mark:'TWISTER', pw:7, ct:8, sp:10 },
     { id:'p_gold',    brand:'Midas',     name:'24K Signature',   price:750, type:'hybrid',   shape:'tear',  style:'gold',    a:'#ffd34d', b:'#b8860b', mark:'MIDAS', ink:'#5a3d00', metal:true, pw:8, ct:9, sp:8 },
   ],
   ball: [
@@ -2437,6 +2530,9 @@ function makeShot(tx, ty, T, spin = 0, curve = 0, raw = false) {
   Object.assign(ball, { z, vx, vy, vz, spin, curve, bounces: 0, live: true, held: false });
 }
 function curPaddle() { return findItem('paddle', SAVE.equip.paddle); }
+// Pro Tour mythics: the player's pro (if any) and whether its signature paddle is equipped
+function proChar() { const d = playerModel && playerModel.userData.def; return d && d.pro ? d.pro : null; }
+function proSyn() { const d = playerModel && playerModel.userData.def, p = curPaddle(); return !!(d && d.pro && p && p.sig === d.id); }
 function paddleFactors(side = 'p') {
   const p = side === 'p' ? curPaddle() : (padA || CPU_PADDLE);
   let pw = p.pw, ct = p.ct;
@@ -2448,6 +2544,9 @@ function playerReach(side = 'p') {
   let r = REACH * (1 + 0.05 * cf + (PSHAPE[p.shape] || PSHAPE.std).reach);
   if (side === 'p' && sprOn()) { if (spr.spc.k === 'tide') r *= 1 + 0.06 * spr.m; if (spr.spc.k === 'pixel') r *= 1 + 0.04 * spr.m; if (spr.reachT > 0) r *= 1.5 + 0.1 * spr.m; }
   if (side === 'p' && csprOn() && cspr.shrinkT > 0) r *= 0.72;
+  const pro = side === 'p' ? proChar() : null;
+  if (pro && pro.k === 'blaze') r *= proSyn() ? 1.09 : 1.06;
+  if (pro && pro.k === 'maestro' && player.y < NET + K + 1.3) r *= proSyn() ? 1.22 : 1.15;
   return r * cx_('reach', 1);
 }
 const rand = rnd;
@@ -2531,6 +2630,13 @@ function doServe(who, kind) {
     if (kind === 'spin') {   // heavy sidespin: bends away and kicks off the bounce. Harder to return, small risk of curling wide.
       ty = rand(1.4, NET - K - 1.2); T = 1.25; eb = 0.2; label = 'SPIN SERVE!'; spinS = 0.32; curveS = (tgtX < W / 2 ? -1 : 1) * 4.5;
       if (Math.random() < 0.06) tx = tgtX < W / 2 ? rand(-0.6, -0.15) : W + rand(0.15, 0.6);
+    }
+    if (kind === 'sig' && proChar()) {   // Pro Tour signature serves (stronger with the matching paddle)
+      const pk = proChar().k, sy = proSyn() ? 1.5 : 1, side_ = tgtX < W / 2 ? -1 : 1;
+      if (pk === 'blaze') { ty = rand(0.6, 2.2); T = 1.08; spinS = 0.45; eb = 0.14 * sy; label = 'KICK SERVE!'; if (Math.random() < 0.05) ty = rand(-0.5, -0.1); }
+      if (pk === 'maestro') { tx = tgtX < W / 2 ? rand(0.25, 0.7) : W - rand(0.25, 0.7); ty = rand(0.35, 0.9); T = 1.15; eb = 0.12 * sy; label = 'PINPOINT SERVE!'; if (Math.random() < 0.04) tx = side_ < 0 ? rand(-0.4, -0.1) : W + rand(0.1, 0.4); }
+      if (pk === 'rocket') { ty = rand(0.3, 1.2); T = 0.92; spinS = 0.1; eb = 0.17 * sy; label = 'CANNON SERVE!'; if (Math.random() < 0.09) ty = rand(-0.6, -0.1); }
+      if (pk === 'twister') { ty = rand(1.2, NET - K - 1.2); T = 1.22; eb = 0.26 * sy; spinS = 0.4; curveS = side_ * 6.5; label = 'CHAINSAW SERVE!'; if (Math.random() < 0.07) tx = side_ < 0 ? rand(-0.6, -0.15) : W + rand(0.15, 0.6); }
     }
     if (kind === 'short') { ty = Math.random() < 0.07 ? NET - K + rand(0.15, 0.6) : NET - K - rand(0.25, 0.9); T = 1.55; eb = 0.04; label = 'Short serve!'; }
     if (who === 'a') ty = L - ty;
@@ -2763,6 +2869,25 @@ function humanShot(side, me = side === 'p' ? player : ai) {
   }
   // radar: the shot goes where the radar showed, plus a small CTL-based wobble
   if (rp) { tx = rp.tx + rand(-rp.ex, rp.ex); ty = rp.ty + gauss() * rp.ey; }
+  // Pro Tour specials
+  let proBoost = 0;
+  const pro = side === 'p' ? proChar() : null, syn = pro && proSyn() ? 1.5 : 1;
+  if (pro) {
+    const spinny = ['WICKED SPIN!', 'Spin!', 'Weak spin'].includes(label);
+    if (pro.k === 'blaze' && label === 'POWER!') { spin = Math.max(spin, 0.48); T *= 0.94; ty = clamp(ty, 0.7, NET - K - 0.4); label = 'PHENOM DRIVE!'; proBoost = 0.12 * syn; }
+    if (pro.k === 'rocket') {
+      if (label === 'POWER!') { T *= 0.8; tx = W / 2 + (tx - W / 2) * 0.85; label = 'ROCKET!'; proBoost = 0.16 * syn; }
+      else if (!nearNet && label !== 'Lob' && label !== 'Drop') { T *= 0.92; proBoost = 0.04 * syn; }
+    }
+    if (pro.k === 'maestro' && nearNet && ball.bounces === 0 && Math.abs(ball.x - W / 2) > 1.7 && label !== 'Lob') {
+      tx = ball.x < W / 2 ? rand(0.35, 0.9) : W - rand(0.35, 0.9); ty = NET - K - rand(0.4, 1.6); T = 0.46; spin = 0.15; curve = 0; label = 'ERNE!'; proBoost = 0.3 * syn;
+    }
+    if (pro.k === 'twister') {
+      if (ball.bounces >= 1 && (ball.x < -0.25 || ball.x > W + 0.25)) {   // pulled out wide: wrap it around the net post
+        tx = ball.x < 0 ? rand(0.3, 1.1) : W - rand(0.3, 1.1); ty = rand(0.8, 2.6); T = 0.62; spin = 0.2; curve = 0; label = 'AROUND THE POST!'; proBoost = 0.35 * syn;
+      } else if (spinny) { spin = Math.max(spin, 0.62); curve = Math.sign(tx - W / 2 || 1) * 4.6; label = 'CHAINSAW SPIN!'; proBoost = 0.1 * syn; }
+    }
+  }
   let sprBoost = 0, fire = false;
   if (side === 'p' && sprOn() && spr.next) {
     const m = spr.m;
@@ -2774,10 +2899,10 @@ function humanShot(side, me = side === 'p' ? player : ai) {
   }
   ty = mir(ty);
   if (ball.bounces >= 1) mustBounce[side] = false;
-  const big = ['SMASH!', 'POWER!', 'WICKED SPIN!', 'FIREBALL!', 'GUST!', 'GLEAM!'].includes(label);
+  const big = ['SMASH!', 'POWER!', 'WICKED SPIN!', 'FIREBALL!', 'GUST!', 'GLEAM!', 'PHENOM DRIVE!', 'ROCKET!', 'ERNE!', 'AROUND THE POST!', 'CHAINSAW SPIN!'].includes(label);
   hitFx(big); noteHit(side, big, label);
   makeShot(tx, ty, T, spin, curve);
-  ball.errBoost = sprBoost; ball.fxFire = fire;
+  ball.errBoost = sprBoost + proBoost; ball.fxFire = fire;
   if (side === 'p') sprCharge();
   rallyHits++;
   lastHitter = side; isServe = false;
@@ -3040,9 +3165,9 @@ const serveOpts = $('serveOpts');
 let serveOptsOn = false;
 function serveOptsTick() {
   const on = phase === 'serve' && !paused && server === 'p' && currentServer() === player && (mode === 'cpu' || mode === 'local');
-  if (on !== serveOptsOn) { serveOptsOn = on; serveOpts.style.display = on ? 'flex' : 'none'; if (on) $('srvSpin').style.display = playerModel && playerModel.userData.def.spinServe ? '' : 'none'; }
+  if (on !== serveOptsOn) { serveOptsOn = on; serveOpts.style.display = on ? 'flex' : 'none'; if (on) { $('srvSpin').style.display = playerModel && playerModel.userData.def.spinServe ? '' : 'none'; const pr = proChar(); $('srvSig').style.display = pr ? '' : 'none'; if (pr) $('srvSig').innerHTML = `${pr.serve}<small>${pr.serveSub}</small>`; } }
 }
-for (const [id, kind] of [['srvDeep', 'deep'], ['srvShort', 'short'], ['srvSpin', 'spin']]) $(id).addEventListener('pointerdown', e => {
+for (const [id, kind] of [['srvDeep', 'deep'], ['srvShort', 'short'], ['srvSpin', 'spin'], ['srvSig', 'sig']]) $(id).addEventListener('pointerdown', e => {
   e.stopPropagation(); e.preventDefault(); initAudio();
   if (phase === 'serve' && server === 'p' && currentServer() === player && !paused) { doServe('p', kind); serveOptsTick(); }
 });
@@ -3220,7 +3345,7 @@ function renderShop() {
     else act = `<button class="act ${SAVE.dinks >= it.price ? 'buy' : 'no'}"><span class="coin"></span> ${it.price}</button>`;
     const rr = itemRarity(shopTab, it);
     const rar = `<div class="rar" style="color:${RARITY[rr][1]}">${RARITY[rr][0]}</div>`;
-    if (rr === 'legendary') d.classList.add('legend'); if (rr === 'epic') d.classList.add('epic');
+    if (rr === 'legendary') d.classList.add('legend'); if (rr === 'epic') d.classList.add('epic'); if (rr === 'mythic') d.classList.add('mythic');
     let extra = '';
     if (shopTab === 'paddle') {
       const t = PTYPES[it.type];
@@ -3230,7 +3355,7 @@ function renderShop() {
           `<div><span>${l}</span><i style="--v:${v * 10}%;--c:${c}"></i><b>${v}</b></div>`).join('')}</div>`;
     }
     const hide = (it.exclusive === 'secret' || it.exclusive === 'logo') && !owned;
-    d.innerHTML = `<img src="${thumb(shopTab, it)}" alt=""${hide ? ' style="filter:brightness(0) drop-shadow(0 0 6px #00ff66)"' : ''}>${rar}${shopTab === 'paddle' ? extra.split('<div class="stats">')[0] : ''}<div class="nm">${hide ? '???' : it.name}</div>${shopTab === 'paddle' ? '<div class="stats">' + extra.split('<div class="stats">')[1] : ''}${act}`;
+    d.innerHTML = `<img src="${thumb(shopTab, it)}" alt=""${hide ? ' style="filter:brightness(0) drop-shadow(0 0 6px #00ff66)"' : ''}>${rar}${shopTab === 'paddle' ? extra.split('<div class="stats">')[0] : ''}<div class="nm">${hide ? '???' : it.name}</div>${it.pro ? `<div class="pro">🎾 ${it.pro.serve} serve · ${it.pro.shot}</div>` : ''}${it.sig ? `<div class="pro">⚡ Made for ${findItem('char', it.sig).name}: specials 1.5x stronger</div>` : ''}${shopTab === 'paddle' ? '<div class="stats">' + extra.split('<div class="stats">')[1] : ''}${act}`;
     d.addEventListener('click', ev => {
       initAudio();
       const isBtn = ev.target.closest('.act');
@@ -4268,6 +4393,10 @@ function showChaosLadder() {
 }
 // ================= What's New: shows once after an update. To announce a feature, add an entry at the TOP with the next v =================
 const NEWS = [
+  { v: 2, date: '18 Nov 2026', items: [
+    ['🏆', '<b>Pro Tour mythics</b> are in the Locker (3,000 dinks): <b>Blaze</b> (kick serve, Phenom Drive), <b>Maestro</b> (pinpoint serve, the Erne), <b>Rocket</b> (cannon serve, rocket drives) and <b>Twister</b> (chainsaw serve, around-the-post shots).'],
+    ['⚡', 'Each pro has a <b>signature paddle</b> (1,500) that makes their specials 1.5x stronger.'],
+  ] },
   { v: 1, date: '17 Nov 2026', items: [
     ['🎮', '<b>New controls</b> in the pause menu: <b>Auto</b> (classic), <b>Manual</b> (a pink radar shows where your shot lands) and <b>Pro</b> (slide on the mini court to move, tap their side to aim).'],
     ['🎲', '<b>Chaos Arcade</b>: every point rolls a random twist. Giant ball, tiny paddles, turbo, wind, ghost ball and more.'],
