@@ -180,6 +180,15 @@
   .item.epic{background:linear-gradient(160deg,#4d2a86,#26337c 60%)}
   .item.mythic{background:linear-gradient(160deg,#7a0f2a,#3b0a5c 55%,#1a1a5a);box-shadow:inset 0 0 0 2px rgba(255,59,92,.55),0 0 18px rgba(255,59,92,.25)}
   .item.festive{background:linear-gradient(160deg,#14532d,#7f1d1d 70%);box-shadow:inset 0 0 0 2px rgba(255,255,255,.35)}
+  .item.krampus{background:linear-gradient(160deg,#3b0a0a,#120406 70%);box-shadow:inset 0 0 0 2px rgba(255,77,77,.6),0 0 16px rgba(255,40,40,.3)}
+  #krBtn{display:none;align-self:stretch;border:0;border-radius:16px;padding:9px 12px;color:#fff;font-weight:900;font-size:15px;letter-spacing:.03em;
+    background:linear-gradient(90deg,#7f1d1d,#b91c1c 45%,#14532d);box-shadow:0 4px 16px rgba(185,28,28,.45),inset 0 0 0 2px rgba(255,255,255,.35);animation:krPulse 2.2s ease-in-out infinite}
+  #krBtn small{display:block;font-size:10.5px;font-weight:800;opacity:.9;letter-spacing:0}
+  @keyframes krPulse{0%,100%{box-shadow:0 4px 16px rgba(185,28,28,.45),inset 0 0 0 2px rgba(255,255,255,.35)}50%{box-shadow:0 4px 26px rgba(255,60,60,.8),inset 0 0 0 2px rgba(255,255,255,.6)}}
+  .krRow{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.07);border-radius:14px;padding:6px 10px;margin:6px 0;text-align:left}
+  .krRow img{width:46px;height:46px;object-fit:contain}
+  .krRow b{margin-left:auto;font-size:13px;white-space:nowrap}
+  .krRow.got{background:rgba(74,222,128,.18)}
   .item .xm{font-size:10px;font-weight:900;color:#bbf7d0;margin:1px 0 3px}
   .item .pro{font-size:10px;font-weight:800;color:#ffb3c0;line-height:1.25;margin:2px 0 4px}
   .sect{grid-column:1/-1;font-weight:900;font-size:12px;letter-spacing:.16em;text-transform:uppercase;opacity:.75;margin:6px 2px -2px}
@@ -416,6 +425,7 @@
     <div class="spacer"></div>
     <div class="homeBottom">
       <div class="charTag glass" id="charTag"></div>
+      <button id="krBtn">👹 KRAMPUS SHOWDOWN<small>Christmas boss event · exclusive rewards · until New Year's</small></button>
       <div class="seg" id="modeSeg"><button data-m="single" class="sel">Singles</button><button data-m="doubles">Doubles</button><button data-m="tour">🏆 Tour</button><button data-m="arcade">🕹️ Arcade</button></div>
       <div class="seg hidden" id="arcSeg"><button data-a="classic" class="sel">Classic<small>bosses</small></button><button data-a="inf">♾️ Infinite<small>extract</small></button><button data-a="chaos">🎲 Chaos<small>twists</small></button><button data-a="surv">❤️ Survival<small>1 life</small></button></div>
       <div class="seg" id="diff"><button data-d="0">Easy<small>to 11 · chill</small></button><button data-d="1" class="sel">Medium<small>to 11 · fast</small></button><button data-d="2">Hard<small>to 11 · blazing</small></button></div>
@@ -457,6 +467,18 @@
     </div>
   </div>
 
+  <!-- KRAMPUS SHOWDOWN (Christmas boss event) -->
+  <div class="modal hidden" id="krM">
+    <div class="panel" style="background:linear-gradient(170deg,#3b0a0a,#14070d 60%,#0b1a10)">
+      <button class="x" data-close="krM">✕</button>
+      <h2 style="color:#ff6b6b">👹 Krampus Showdown</h2>
+      <p class="sub" id="krSub"></p>
+      <img id="krImg" alt="" style="width:120px;height:120px;object-fit:contain;display:block;margin:0 auto">
+      <div id="krList"></div>
+      <button class="bigbtn" id="krGo" style="margin-top:10px;background:linear-gradient(#ff5a5a,#b91c1c);color:#fff">FIGHT KRAMPUS</button>
+    </div>
+  </div>
+
   <!-- WHAT'S NEW -->
   <div class="modal hidden" id="newsM">
     <div class="panel">
@@ -483,6 +505,7 @@
         <div><i>🕹️</i><span><b>Arcade</b> is an endless ladder: beat 3 players to 3 points, then a boss to 5 (rally scoring, win by 2), and keep going as it gets harder. Bosses drop Arcade-exclusive characters, paddles, a ball and an arena that you can't get anywhere else.</span></div>
         <div><i>🐒</i><span><b>Orlando</b> has a special <b>SPIN</b> serve: heavy sidespin that bends and kicks off the bounce, so it's much harder to return (small risk of curling wide).</span></div>
         <div><i>🎄</i><span><b>Christmas Drop</b>: from 18 November, 16 festive Locker items (1,500 each) are on sale until New Year's. Buy them and they're yours forever.</span></div>
+        <div><i>👹</i><span><b>Krampus Showdown</b> (Christmas event, until New Year's): a super-hard boss, first to 7. Beat him 1, 3, 5 and 10 times for event-only rewards: Lump of Coal ball, Chain Breaker paddle, Krampus Lair arena, and Krampus himself. +250 dinks every win.</span></div>
         <div><i>🏆</i><span><b>Pro Tour mythics</b> (3,000 dinks, Locker): Blaze, Maestro, Rocket and Twister each have a signature <b>serve</b> button and a special shot. Their matching paddles (1,500) make the specials 1.5x stronger.</span></div>
         <div><i>♿</i><span><b>Juan</b> plays by real wheelchair pickleball rules: he may let the ball bounce <b>twice</b> on his side (the second bounce can land anywhere).</span></div>
         <div><i>🎾</i><span><b>Serving:</b> tap the court for a normal serve, or pick <b>SHORT</b> (floats just past the kitchen, pulls them forward) or <b>DEEP</b> (fast to the baseline, harder to return). Both carry a little risk of a fault.</span></div>
@@ -628,7 +651,7 @@ const DIFFS = [
 ];
 
 // ================= character roster =================
-const RARITY = { starter:['Starter','#b9c2cc'], common:['Common','#3ddc84'], rare:['Rare','#3fa9ff'], epic:['Epic','#c27bff'], legendary:['Legendary','#ffc93c'], mythic:['Mythic','#ff3b5c'], festive:['🎄 Christmas','#4ade80'], arcade:['Arcade','#ff4fd8'], secret:['Secret','#00ff66'] };
+const RARITY = { starter:['Starter','#b9c2cc'], common:['Common','#3ddc84'], rare:['Rare','#3fa9ff'], epic:['Epic','#c27bff'], legendary:['Legendary','#ffc93c'], mythic:['Mythic','#ff3b5c'], festive:['🎄 Christmas','#4ade80'], krampus:['👹 Event','#ff4d4d'], arcade:['Arcade','#ff4fd8'], secret:['Secret','#00ff66'] };
 const GROUPS = [['starter','Starter'], ['animals','Animals'], ['legends','Legends'], ['aliens','Aliens'], ['myth','Mythology'], ['squad','👑 The Squad'], ['pros','🏆 Pro Tour (Mythic)'], ['xmas','🎄 Christmas Drop (limited)'], ['arcade','🕹️ Arcade exclusives'], ['secret','🤫 Secret & special']];
 const SKIN = '#f0c9a0';
 const sph = (r, w = 18, h = 14) => new THREE.SphereGeometry(r, w, h);
@@ -1251,6 +1274,35 @@ const CHARS = [
       smile(k, '#0b1a3a');
     } },
   // ---- arcade exclusives (only from beating an Arcade boss)
+  // ---- 👹 Krampus Showdown: event-only, won by beating the Christmas boss (exclusive:'krampus', kr = wins needed)
+  { id:'c_krampus', name:'Krampus', price:0, exclusive:'krampus', kr:10, group:'xmas', rarity:'krampus', shout:'Naughty list! 👹', noEyes:true, scale:1.08,
+    c:{ body:'#2a1c14', head:'#3a271b', limb:'#2a1c14', hand:'#15100c', legs:'#1d140e', foot:'#0b0908' },
+    deco: k => {
+      eyes(k, { glow: '#ff2020', color: '#ff4040', r: 0.036 });
+      const fur = k.M('#2a1c14', { roughness: 0.95 });
+      // long goat muzzle, wide toothy grin and a long red tongue
+      const mz = k.mk(sph(0.12, 14, 10), k.M('#4a3224', { roughness: 0.9 }), 0, -0.08, -0.18, k.head); mz.scale.set(1.2, 0.9, 0.85);
+      k.mk(box(0.16, 0.02, 0.02), '#f4ecd8', 0, -0.1, -0.285, k.head);
+      const tg = k.mk(box(0.05, 0.16, 0.02), '#d6203a', 0.02, -0.19, -0.27, k.head); tg.rotation.z = 0.15;
+      // big curled horns
+      const horn = k.M('#d8c8a8', { roughness: 0.6 });
+      for (const sx of [-1, 1]) {
+        const pts = [[0, 0, 0], [sx * 0.06, 0.12, 0.02], [sx * 0.16, 0.22, 0.06], [sx * 0.28, 0.24, 0.12], [sx * 0.34, 0.16, 0.16]].map(p_ => new THREE.Vector3(...p_));
+        const h = new THREE.Mesh(new THREE.TubeGeometry(new THREE.CatmullRomCurve3(pts), 16, 0.035, 6), horn); h.position.set(sx * 0.12, 0.17, 0.02); h.castShadow = true; k.head.add(h);
+        const tip = k.mk(cone(0.035, 0.09, 6), horn, sx * 0.46, 0.3, 0.2, k.head); tip.rotation.z = sx * 2.2;
+        const e = k.mk(cone(0.05, 0.14, 6), fur, sx * 0.26, 0.05, 0.02, k.head); e.rotation.z = sx * -1.3;
+      }
+      // shaggy fur tufts on the shoulders and chest
+      for (let i = 0; i < 10; i++) { const a = i / 10 * Math.PI * 2, t = k.mk(cone(0.07, 0.2, 5), fur, Math.cos(a) * 0.26, 1.02, Math.sin(a) * 0.22, k.upper); t.rotation.x = Math.sin(a) * 0.9; t.rotation.z = -Math.cos(a) * 0.9; }
+      // rusty chain across the chest with bells
+      const iron = k.M('#6b6b70', { metalness: 0.8, roughness: 0.4 });
+      for (let i = 0; i < 7; i++) { const l = k.mk(new THREE.TorusGeometry(0.035, 0.012, 5, 10), iron, -0.22 + i * 0.075, 1.0 - i * 0.07, -0.29, k.upper); l.rotation.y = i % 2 ? Math.PI / 2 : 0; l.rotation.z = 0.7; }
+      for (const [x, y] of [[-0.24, 1.02], [0.24, 0.55]]) k.mk(sph(0.045, 8, 6), k.M('#ffd23f', { metalness: 0.9, roughness: 0.25 }), x, y, -0.3, k.upper);
+      // birch switch in the free hand
+      const sw = new THREE.Group(); sw.position.set(0.0, -0.44, -0.05); sw.rotation.set(0.3, 0, 0.4); k.arms[0].add(sw);
+      for (const r of [-0.25, 0, 0.25]) { const b = k.mk(cyl(0.007, 0.01, 0.5, 5), '#5a4030', 0, 0.2, 0, sw); b.rotation.z = r; }
+      tail(k, g => { const t = new THREE.Mesh(cone(0.06, 0.28, 6), fur); t.rotation.x = Math.PI / 2; t.position.z = 0.12; g.add(t); }, 0.4, 0.55);
+    } },
   // ---- 🎄 Christmas Drop characters (exclusive:'xmas', 1500, only in the shop during December)
   { id:'c_santa', name:'Santa', price:1500, exclusive:'xmas', group:'xmas', rarity:'festive', shout:'Ho ho ho! 🎅',
     c:{ body:'#d62828', head:'#f2c4a0', limb:'#d62828', hand:'#1d1d24', legs:'#d62828', foot:'#1d1d24' },
@@ -1586,6 +1638,7 @@ const SHOP = {
     { id:'p_inf1', brand:'Void', name:'Loop Pro',      price:0, exclusive:'inf', rarity:'rare',      type:'hybrid',   shape:'hex', style:'void', a:'#060d1c', b:'#3fa9ff', mark:'VOID', pw:7, ct:7, sp:8 },
     { id:'p_inf2', brand:'Void', name:'Event Horizon', price:0, exclusive:'inf', rarity:'epic',      type:'spin',     shape:'hex', style:'void', a:'#0e0618', b:'#c27bff', mark:'VOID', pw:8, ct:8, sp:9 },
     { id:'p_inf3', brand:'Void', name:'Infinity Edge', price:0, exclusive:'inf', rarity:'legendary', type:'hybrid',   shape:'hex', style:'void', a:'#140d00', b:'#ffc93c', mark:'VOID', metal:true, pw:9, ct:10, sp:9 },
+    { id:'p_krampus', brand:'Krampus', name:'Chain Breaker', price:0, exclusive:'krampus', kr:3, rarity:'krampus', type:'power', shape:'blade', style:'flames', a:'#120606', b:'#ff2a2a', mark:'KRAMPUS', pw:10, ct:9, sp:9 },
     // ---- 🎄 Christmas Drop paddles
     { id:'p_candy',     brand:'North Pole', name:'Candy Cane',   price:1500, exclusive:'xmas', rarity:'festive', type:'power',   shape:'long',  style:'stripes', a:'#ffffff', b:'#e11d48', mark:'CANDY', ink:'#14532d', pw:9, ct:7, sp:8 },
     { id:'p_evergreen', brand:'Frost',      name:'Evergreen',    price:1500, exclusive:'xmas', rarity:'festive', type:'control', shape:'tear',  style:'snow',    a:'#14532d', b:'#ffffff', mark:'EVERGREEN', pw:7, ct:10, sp:8 },
@@ -1605,6 +1658,7 @@ const SHOP = {
     { id:'b_neon',    name:'Neon Glow', price:150, color:'#39ff88', emissive:'#39ff88', glow:true, trail:'#39ff88' },
     { id:'b_fire',    name:'Fireball',  price:300, color:'#ffb030', emissive:'#ff5a00', glow:true, trail:'fire' },
     { id:'b_pixel',   name:'Pixel Ball', price:0, exclusive:'arcade', color:'#ff4fd8', emissive:'#ff4fd8', glow:true, trail:'#00f0ff' },
+    { id:'b_coal', name:'Lump of Coal', price:0, exclusive:'krampus', kr:1, rarity:'krampus', color:'#1c1c1c', emissive:'#ff3b00', glow:true, trail:'fire' },
     { id:'b_bauble',   name:'Bauble',      price:1500, exclusive:'xmas', rarity:'festive', color:'#d61f3c', emissive:'#ff2d55', glow:true, trail:'#ffd23f' },
     { id:'b_snowball', name:'Snowball',    price:1500, exclusive:'xmas', rarity:'festive', color:'#f4fbff', emissive:'#cfeaff', glow:true, trail:'#bfe6ff' },
     { id:'b_gingerb',  name:'Gingerbread', price:1500, exclusive:'xmas', rarity:'festive', color:'#b5651d', trail:'#fff1d6' },
@@ -1627,6 +1681,9 @@ const SHOP = {
     { id:'a_arcade',  name:'Retro Arcade', price:0, exclusive:'arcade', deco:'night', glow:true,
       sky:['#12002b','#ff2bd6'], fog:'#2a0640', ground:'#0b0118', apron:'#150a30', court:'#1a0b3a', kitchen:'#33105a', lines:'#ff4fd8',
       hemi:['#ff7ad9','#12002b',0.8], sun:['#ffb0f0',1.1,[4,12,6]] },
+    { id:'a_lair', name:'Krampus Lair', price:0, exclusive:'krampus', kr:5, rarity:'krampus', deco:'xlair', night:true, glow:true,
+      sky:['#0d0106','#3b0b14'], fog:'#1a0508', ground:'#e6ecf5', apron:'#1a0d0d', court:'#2a0a0a', kitchen:'#4a0f14', lines:'#ff3b3b',
+      hemi:['#ff9a8a','#100508',0.75], sun:['#ff7a5a',1.2,[4,12,6]] },
     // ---- 🎄 Christmas Drop arenas
     { id:'a_wonder', name:'Winter Wonderland', price:1500, exclusive:'xmas', rarity:'festive', deco:'xwonder',
       sky:['#9cc8f0','#f4f9ff'], fog:'#eaf2fb', ground:'#f4f8ff', apron:'#e2ebf6', court:'#c62828', kitchen:'#2e7d32', lines:'#ffffff',
@@ -1745,6 +1802,7 @@ function mergeSaves(a, b) {
   out.infBest = Math.max(n.infBest || 0, o.infBest || 0);
   out.chaosBest = Math.max(n.chaosBest || 0, o.chaosBest || 0);
   out.survBest = Math.max(n.survBest || 0, o.survBest || 0);
+  out.krWins = Math.max(n.krWins || 0, o.krWins || 0);
   out.seenNews = Math.max(n.seenNews || 0, o.seenNews || 0);
   out.tourWins = Math.max(n.tourWins || 0, o.tourWins || 0);
   out.rec = { w: Math.max(n.rec?.w || 0, o.rec?.w || 0), l: Math.max(n.rec?.l || 0, o.rec?.l || 0) };
@@ -2215,6 +2273,21 @@ function buildXmasArena(D) {
     for (let i = 0; i < 7; i++) { const [x, z] = outsideSpot(W / 2 + 4.5, W / 2 + 14, -26, 12); arenaGroup.add(gingerHouse(x, z, rnd(0.9, 1.3))); }
     for (let i = 0; i < 10; i++) { const [x, z] = outsideSpot(W / 2 + 2.2, W / 2 + 4.2, -NET - 3, NET + 3); arenaGroup.add(i % 2 ? candyCane(x, z, rnd(0.7, 1)) : lollipop(x, z, rnd(0.8, 1.1))); }
     for (let i = 0; i < 6; i++) { const [x, z] = outsideSpot(W / 2 + 1.8, W / 2 + 2.6, -NET - 2, NET + 2); arenaGroup.add(giftBox(x, z, rnd(0.5, 0.8), '#f472b6', '#ffffff')); }
+  }
+  if (D === 'xlair') {   // dark pines, burning braziers, coal heaps and drifting snow
+    const moon = new THREE.Mesh(new THREE.CircleGeometry(4.5, 32), new THREE.MeshBasicMaterial({ color:'#ff5a4a', fog: false })); moon.position.set(-22, 28, -120); arenaGroup.add(moon);
+    for (let i = 0; i < 18; i++) { const [x, z] = outsideSpot(W / 2 + 3.5, W / 2 + 14, -24, 14); const p_ = pine(x, z, rnd(0.9, 1.6)); p_.traverse(o => { if (o.material && o.material.color && o.material.color.getHex() === 0xffffff) o.material = std('#3a3a44'); }); arenaGroup.add(p_); }
+    fence(arenaGroup, '#2a0a0a');
+    for (const sx of [-1, 1]) for (const sz of [-1, 1]) {
+      const x = sx * (W / 2 + 2.2), z = sz * (NET + 2.6);
+      const post = new THREE.Mesh(new THREE.CylinderGeometry(0.1, 0.16, 1.4, 8), std('#2b2b30', { metalness: 0.6 })); post.position.set(x, 0.7, z); arenaGroup.add(post);
+      const bowl = new THREE.Mesh(new THREE.CylinderGeometry(0.4, 0.22, 0.3, 10), std('#1d1d22', { metalness: 0.6 })); bowl.position.set(x, 1.5, z); arenaGroup.add(bowl);
+      const fire = new THREE.Mesh(new THREE.ConeGeometry(0.3, 0.7, 8), new THREE.MeshBasicMaterial({ color:'#ff7a1a' })); fire.position.set(x, 1.95, z); arenaGroup.add(fire);
+      const pl = new THREE.PointLight('#ff5a1a', 22, 14, 2); pl.position.set(x, 2.4, z); arenaGroup.add(pl);
+      arenaAnim.push(t => { const f = 0.85 + Math.sin(t * 13 + x) * 0.1 + Math.sin(t * 7.3 + z) * 0.08; fire.scale.set(f, f * 1.1, f); pl.intensity = 18 + f * 8; });
+    }
+    for (let i = 0; i < 8; i++) { const [x, z] = outsideSpot(W / 2 + 1.8, W / 2 + 3, -NET - 2, NET + 2); for (let j = 0; j < 5; j++) { const c_ = new THREE.Mesh(new THREE.DodecahedronGeometry(rnd(0.1, 0.22)), std('#151515', { roughness: 0.9 })); c_.position.set(x + rnd(-0.3, 0.3), 0.1, z + rnd(-0.3, 0.3)); arenaGroup.add(c_); } }
+    xmasSnow(450);
   }
   if (D === 'xlights') {
     const moon = new THREE.Mesh(new THREE.CircleGeometry(4, 32), new THREE.MeshBasicMaterial({ color:'#f3f0ff', fog: false })); moon.position.set(25, 30, -120); arenaGroup.add(moon);
@@ -2857,7 +2930,7 @@ const XMAS_FROM = 18;   // day of November the drop opens each year
 const xmasLive = () => { const n = new Date(); return XMAS_TEST || n.getMonth() === 11 || (n.getMonth() === 10 && n.getDate() >= XMAS_FROM); };
 const xmasSoon = () => !xmasLive() && new Date().getMonth() === 10;   // early November: teaser
 const xmasDaysLeft = () => { const n = new Date(); return Math.max(1, Math.ceil((new Date(n.getFullYear() + 1, 0, 1) - n) / 864e5)); };   // until next 1 Jan
-const xmasShown = it => it.exclusive !== 'xmas' || SAVE.owned.includes(it.id) || xmasLive() || xmasSoon();
+const xmasShown = it => (it.exclusive !== 'xmas' && it.exclusive !== 'krampus') || SAVE.owned.includes(it.id) || xmasLive() || (it.exclusive === 'xmas' && xmasSoon());
 // Pro Tour mythics: the player's pro (if any) and whether its signature paddle is equipped
 function proChar() { const d = playerModel && playerModel.userData.def; return d && d.pro ? d.pro : null; }
 function proSyn() { const d = playerModel && playerModel.userData.def, p = curPaddle(); return !!(d && d.pro && p && p.sig === d.id); }
@@ -2894,7 +2967,7 @@ function newGame(m = 'cpu', opts = {}) {
   if (!opts.arcade) arcade = null;
   doubles = m === 'cpu' && !!opts.doubles && !tour;
   D = arcade ? arcadeD() : tour ? TOUR_D[tour.round] : m === 'cpu' ? selD : DIFFS[1];
-  gameTo = arcade ? (arcade.surv ? 999 : arcade.inf || arcade.chaos || arcade.step === 3 ? 5 : 3) : tour ? TOUR_TO[tour.round] : m === 'cpu' ? 11 : 11;   // every difficulty is a game to 11; harder = faster
+  gameTo = arcade ? (arcade.krampus ? KR_TO : arcade.surv ? 999 : arcade.inf || arcade.chaos || arcade.step === 3 ? 5 : 3) : tour ? TOUR_TO[tour.round] : m === 'cpu' ? 11 : 11;   // every difficulty is a game to 11; harder = faster
   document.body.classList.toggle('local', m === 'local');
   score = { p: 0, a: 0 }; earnedThisGame = 0; gameOverPending = false; paused = false;
   server = Math.random() < 0.5 ? 'p' : 'a';
@@ -2914,7 +2987,7 @@ function newGame(m = 'cpu', opts = {}) {
   if (m === 'online' && role === 'guest') { phase = 'serve'; msgT = 0; updateHud(); return; }
   setupServe();
   const who = s => m === 'local' ? (s === 'p' ? 'P1' : 'P2') : s === 'p' ? 'you' : 'they';
-  const vs = arcade ? (arcade.surv ? `❤️ Survival · one life · vs ${cpuDef.name}` : arcade.chaos ? `🎲 Chaos level ${arcadeStage()} · vs ${cpuDef.name}` : arcade.inf ? `♾️ Level ${arcadeStage()} · vs ${cpuDef.name}` : arcade.step === 3 ? `👑 BOSS: ${cpuDef.boss ? '' : 'MEGA '}${cpuDef.name.toUpperCase()}` : `Stage ${arcadeStage()} · vs ${cpuDef.name}`) : tour ? `${ROUND_NAMES[tour.round]} · vs ${cpuDef.name}` : doubles ? `Doubles · ${partnerDef.name} & you` : m === 'cpu' ? `vs ${cpuDef.name}` : m === 'local' ? 'P1 vs P2' : 'vs Friend';
+  const vs = arcade ? (arcade.krampus ? `👹 KRAMPUS SHOWDOWN · first to ${KR_TO}` : arcade.surv ? `❤️ Survival · one life · vs ${cpuDef.name}` : arcade.chaos ? `🎲 Chaos level ${arcadeStage()} · vs ${cpuDef.name}` : arcade.inf ? `♾️ Level ${arcadeStage()} · vs ${cpuDef.name}` : arcade.step === 3 ? `👑 BOSS: ${cpuDef.boss ? '' : 'MEGA '}${cpuDef.name.toUpperCase()}` : `Stage ${arcadeStage()} · vs ${cpuDef.name}`) : tour ? `${ROUND_NAMES[tour.round]} · vs ${cpuDef.name}` : doubles ? `Doubles · ${partnerDef.name} & you` : m === 'cpu' ? `vs ${cpuDef.name}` : m === 'local' ? 'P1 vs P2' : 'vs Friend';
   if (radarOn() && !SAVE.radarTip) { SAVE.radarTip = 1; persist(); setTimeout(() => flash('📡 New: the pink radar shows where your shot will land. Move to change it', '#ff9ef0', 3.2), 2000); }
   flash(`${vs}${csprOn() ? ` + ${sprName(cspr.spc, cspr.t)}` : ''} · ${who(server)} serve${m === 'local' ? 's' : ''}`, '#e8f542', 1.8);
 }
@@ -3036,6 +3109,7 @@ function gameOver() {
     buzz([30, 60, 30]); cheerT = 3; return;
   }
   if (arcade && arcade.surv) return survOver();
+  if (arcade && arcade.krampus) return krampusOver(score[me] > score[op]);
   const win = score[me] > score[op];
   win ? SAVE.rec.w++ : SAVE.rec.l++;
   const RD = mode === 'online' ? DIFFS[1] : D;
@@ -3127,8 +3201,8 @@ function updateHud() {
   const me = mySide(), op = otherSide(me);
   $('numP').textContent = score[me]; $('numA').textContent = score[op];
   $('scP').classList.toggle('serving', server === me); $('scA').classList.toggle('serving', server === op);
-  $('cpuName').textContent = arcade && arcade.step === 3 && cpuDef ? (cpuDef.boss ? 'COACH' : `MEGA ${cpuDef.name.toUpperCase()}`) : mode === 'local' ? 'P2' : mode === 'online' ? 'FRIEND' : doubles ? 'THEM' : (cpuDef ? cpuDef.name.toUpperCase() : 'CPU');
-  $('midTxt').textContent = arcade && arcade.surv ? '❤️ ONE LIFE' : arcade ? `TO ${gameTo} · WIN BY 2` : doubles ? `${score[server]}-${score[otherSide(server)]}-${serverNum}` : `TO ${gameTo}`;
+  $('cpuName').textContent = arcade && arcade.krampus ? 'KRAMPUS' : arcade && arcade.step === 3 && cpuDef ? (cpuDef.boss ? 'COACH' : `MEGA ${cpuDef.name.toUpperCase()}`) : mode === 'local' ? 'P2' : mode === 'online' ? 'FRIEND' : doubles ? 'THEM' : (cpuDef ? cpuDef.name.toUpperCase() : 'CPU');
+  $('midTxt').textContent = arcade && arcade.krampus ? `👹 TO ${KR_TO} · WIN BY 2` : arcade && arcade.surv ? '❤️ ONE LIFE' : arcade ? `TO ${gameTo} · WIN BY 2` : doubles ? `${score[server]}-${score[otherSide(server)]}-${serverNum}` : `TO ${gameTo}`;
   $('meName').textContent = mode === 'local' ? 'P1' : 'YOU';
 }
 
@@ -3548,6 +3622,7 @@ $('again').addEventListener('click', () => {
   if (overNext === 'chaosNext') { $('over').classList.add('hidden'); chaosAdvance(); return; }
   if (overNext === 'chaosNew') { $('over').classList.add('hidden'); startChaos(); return; }
   if (overNext === 'survNew') { $('over').classList.add('hidden'); startSurvival(); return; }
+  if (overNext === 'krAgain') { $('over').classList.add('hidden'); startKrampus(); return; }
   if (overNext === 'next') { tour.round++; $('over').classList.add('hidden'); showBracket(); return; }
   if (overNext === 'newtour') { $('over').classList.add('hidden'); startTournament(); return; }
   newGame(mode, { doubles });
@@ -3653,7 +3728,8 @@ function renderShop() {
   if (shopTab === 'char') grid.appendChild(lookEditor());
   let lastGroup = null;
   const list = SHOP[shopTab].filter(xmasShown);
-  list.sort((a, b) => (b.exclusive === 'xmas') - (a.exclusive === 'xmas'));   // festive items on top
+  const fest = it => it.exclusive === 'krampus' ? 2 : it.exclusive === 'xmas' ? 1 : 0;
+  list.sort((a, b) => fest(b) - fest(a));   // event + festive items on top
   for (const it of list) {
     if (it.group && it.group !== lastGroup) {
       lastGroup = it.group; const h = document.createElement('div'); h.className = 'sect';
@@ -3665,6 +3741,7 @@ function renderShop() {
     let act;
     if (eq) act = `<button class="act eq">Equipped</button>`;
     else if (owned) act = `<button class="act">Equip</button>`;
+    else if (it.exclusive === 'krampus') act = `<button class="act no">👹 ${Math.min(it.kr, SAVE.krWins || 0)}/${it.kr} wins</button>`;
     else if (it.exclusive === 'xmas') act = xmasLive() ? `<button class="act ${SAVE.dinks >= it.price ? 'buy' : 'no'}"><span class="coin"></span> ${it.price}</button>` : `<button class="act no">🎄 ${XMAS_FROM} Nov</button>`;
     else if (it.exclusive === 'logo') act = `<button class="act no">🤫 Secret</button>`;
     else if (it.exclusive === 'spin') act = `<button class="act no">🎡 Daily Spin</button>`;
@@ -3676,7 +3753,7 @@ function renderShop() {
     else act = `<button class="act ${SAVE.dinks >= it.price ? 'buy' : 'no'}"><span class="coin"></span> ${it.price}</button>`;
     const rr = itemRarity(shopTab, it);
     const rar = `<div class="rar" style="color:${RARITY[rr][1]}">${RARITY[rr][0]}</div>`;
-    if (rr === 'legendary') d.classList.add('legend'); if (rr === 'epic') d.classList.add('epic'); if (rr === 'mythic') d.classList.add('mythic'); if (rr === 'festive') d.classList.add('festive');
+    if (rr === 'legendary') d.classList.add('legend'); if (rr === 'epic') d.classList.add('epic'); if (rr === 'mythic') d.classList.add('mythic'); if (rr === 'festive') d.classList.add('festive'); if (rr === 'krampus') d.classList.add('krampus');
     let extra = '';
     if (shopTab === 'paddle') {
       const t = PTYPES[it.type];
@@ -3686,7 +3763,7 @@ function renderShop() {
           `<div><span>${l}</span><i style="--v:${v * 10}%;--c:${c}"></i><b>${v}</b></div>`).join('')}</div>`;
     }
     const hide = (it.exclusive === 'secret' || it.exclusive === 'logo') && !owned;
-    d.innerHTML = `<img src="${thumb(shopTab, it)}" alt=""${hide ? ' style="filter:brightness(0) drop-shadow(0 0 6px #00ff66)"' : ''}>${rar}${shopTab === 'paddle' ? extra.split('<div class="stats">')[0] : ''}<div class="nm">${hide ? '???' : it.name}</div>${it.exclusive === 'xmas' && !owned ? `<div class="xm">${xmasLive() ? `⏳ Leaves in ${xmasDaysLeft()} day${xmasDaysLeft() === 1 ? '' : 's'}` : `🎄 Arrives ${XMAS_FROM} November`}</div>` : ''}${it.pro ? `<div class="pro">🎾 ${it.pro.serve} serve · ${it.pro.shot}</div>` : ''}${it.sig ? `<div class="pro">⚡ Made for ${findItem('char', it.sig).name}: specials 1.5x stronger</div>` : ''}${shopTab === 'paddle' ? '<div class="stats">' + extra.split('<div class="stats">')[1] : ''}${act}`;
+    d.innerHTML = `<img src="${thumb(shopTab, it)}" alt=""${hide ? ' style="filter:brightness(0) drop-shadow(0 0 6px #00ff66)"' : ''}>${rar}${shopTab === 'paddle' ? extra.split('<div class="stats">')[0] : ''}<div class="nm">${hide ? '???' : it.name}</div>${it.exclusive === 'krampus' && !owned ? `<div class="xm" style="color:#ffb3b3">👹 Beat Krampus ${it.kr} time${it.kr > 1 ? 's' : ''}</div>` : ''}${it.exclusive === 'xmas' && !owned ? `<div class="xm">${xmasLive() ? `⏳ Leaves in ${xmasDaysLeft()} day${xmasDaysLeft() === 1 ? '' : 's'}` : `🎄 Arrives ${XMAS_FROM} November`}</div>` : ''}${it.pro ? `<div class="pro">🎾 ${it.pro.serve} serve · ${it.pro.shot}</div>` : ''}${it.sig ? `<div class="pro">⚡ Made for ${findItem('char', it.sig).name}: specials 1.5x stronger</div>` : ''}${shopTab === 'paddle' ? '<div class="stats">' + extra.split('<div class="stats">')[1] : ''}${act}`;
     d.addEventListener('click', ev => {
       initAudio();
       const isBtn = ev.target.closest('.act');
@@ -3694,6 +3771,7 @@ function renderShop() {
       if (isBtn) {
         if (eq) {}
         else if (owned) { SAVE.equip[shopTab] = it.id; persist(); toast(it.shout ? `${it.name}: ${it.shout}` : `Equipped ${it.brand ? it.brand + ' ' : ''}${it.name}`); if (it.shout) strum(); }
+        else if (it.exclusive === 'krampus') toast(`👹 Beat Krampus ${it.kr} time${it.kr > 1 ? 's' : ''} in the Krampus Showdown to win this`);
         else if (it.exclusive === 'xmas' && !xmasLive()) toast(`🎄 The Christmas Drop arrives ${XMAS_FROM} November!`);
         else if (it.exclusive === 'xmas' && SAVE.dinks < it.price) toast(`Need ${it.price - SAVE.dinks} more dinks`);
         else if (it.exclusive === 'xmas') {
@@ -4731,6 +4809,10 @@ function showChaosLadder() {
 }
 // ================= What's New: shows once after an update. To announce a feature, add an entry at the TOP with the next v =================
 const NEWS = [
+  { v: 7, date: '18 Nov 2026', items: [
+    ['👹', '<b>Krampus Showdown!</b> A Christmas boss event on the home screen until New Year\'s. He\'s fast, he never misses, and he brings a legendary sprite.'],
+    ['🎁', 'Beat him <b>1, 3, 5 and 10 times</b> for event-only rewards: a <b>Lump of Coal</b> ball, the <b>Chain Breaker</b> paddle, the <b>Krampus Lair</b> arena and <b>Krampus</b> himself. They\'ll never be sold.'],
+  ] },
   { v: 6, date: '18 Nov 2026', items: [
     ['🧍', '<b>New body shapes!</b> Characters are now taller and slimmer, with proper arms and legs, capes that hang from the shoulders, and cleaner hair.'],
   ] },
@@ -4770,6 +4852,51 @@ if (!SAVE.seenNews && SAVE.rec.w + SAVE.rec.l === 0) { SAVE.seenNews = NEWS_V; p
   if (phase === 'menu' && !document.querySelector('.modal:not(.hidden)') && $('reveal').classList.contains('hidden')) return setTimeout(() => { if (phase === 'menu' && !document.querySelector('.modal:not(.hidden)')) showNews(false); else newsWatch(tries + 1); }, 900);
   setTimeout(() => newsWatch(tries + 1), 1000);
 })();
+
+// ================= 👹 Krampus Showdown: Christmas boss event (same window as the Christmas Drop). Super-hard first to 7;
+// milestone rewards at 1/3/5/10 wins are event-only (exclusive:'krampus'). Runs as a special arcade boss so it gets rally scoring + a boss sprite.
+const KR_D = { ...DIFFS[2], ue: 0.012, pace: 0.76, speed: 6.6, react: 0.04, err: 0.1, margin: 0.2, judge: 0.99, timeScale: 1.05, net: NET - K - 0.25, marker: false };
+const KR_TO = 7, KR_WIN = 250, KR_LOSS = 20;
+const krRewards = () => ['char', 'paddle', 'ball', 'arena'].flatMap(cat => SHOP[cat].filter(i => i.exclusive === 'krampus').map(item => ({ cat, item }))).sort((a, b) => a.item.kr - b.item.kr);
+function krTick() { $('krBtn').style.display = xmasLive() && phase === 'menu' ? 'block' : 'none'; }
+function showKrampus() {
+  const w = SAVE.krWins || 0, def = findItem('char', 'c_krampus');
+  $('krSub').innerHTML = `The Christmas boss. <b style="color:#ff8f8f">Super fast, never misses, and fires a legendary sprite at you.</b> First to ${KR_TO}, win by 2.<br>Wins so far: <b style="color:#ffd34d">${w}</b> · ${xmasDaysLeft()} day${xmasDaysLeft() === 1 ? '' : 's'} left · +${KR_WIN} dinks per win`;
+  $('krImg').src = thumb('char', def);
+  $('krList').innerHTML = krRewards().map(({ cat, item }) => { const got = SAVE.owned.includes(item.id);
+    return `<div class="krRow${got ? ' got' : ''}"><img src="${thumb(cat, item)}" alt=""><span><b style="margin:0;font-size:14px">${item.name}</b><br><small style="opacity:.8">${{ char: 'Playable character', paddle: 'Paddle 10/9/9', ball: 'Ball', arena: 'Arena' }[cat]}</small></span><b>${got ? '✅ Yours' : `👹 ${Math.min(w, item.kr)}/${item.kr} wins`}</b></div>`; }).join('') +
+    `<div class="fine" style="margin-top:4px">Only from this event. Gone after New Year's.</div>`;
+  $('krM').classList.remove('hidden');
+}
+function startKrampus() {
+  tour = null; arcade = { krampus: true, cycle: 2, step: 3, opps: [null, null, null, findItem('char', 'c_krampus')] };
+  $('krM').classList.add('hidden'); $('menu').classList.add('hidden');
+  newGame('cpu', { arcade: true });
+}
+function krampusOver(win) {
+  const before = SAVE.krWins || 0;
+  if (win) SAVE.krWins = before + 1;
+  const n = SAVE.krWins || 0;
+  const bonus = win ? KR_WIN : KR_LOSS, rally = earnedThisGame; SAVE.dinks += bonus; earnedThisGame += bonus;
+  const newly = krRewards().filter(r => n >= r.item.kr && !SAVE.owned.includes(r.item.id));
+  newly.forEach(r => SAVE.owned.push(r.item.id));
+  persist(); refreshBalance(); coinSound();
+  $('overTitle').textContent = win ? 'KRAMPUS DEFEATED!' : 'KRAMPUS WINS'; $('overTitle').classList.toggle('lose', !win);
+  $('bigScore').textContent = `${score.p} – ${score.a}`;
+  let rw = `<div class="rw"><span class="ic"><span class="coin" style="font-size:24px"></span></span>Rallies won<b>+${rally}</b></div>
+    <div class="rw"><span class="ic">👹</span>${win ? `Krampus beaten (${n} win${n === 1 ? '' : 's'})` : 'Brave try'}<b>+${bonus}</b></div>`;
+  newly.forEach(r => { rw += `<div class="rw" style="background:rgba(255,60,60,.25)"><span class="ic"><img src="${thumb(r.cat, r.item)}" style="width:40px;height:40px;object-fit:contain"></span>Event exclusive: ${r.item.name}<b style="color:#ffb3b3;font-size:14px">NEW</b></div>`; });
+  const next = krRewards().find(r => n < r.item.kr);
+  rw += `<div class="fine">${next ? `${next.item.kr - n} more win${next.item.kr - n === 1 ? '' : 's'} for ${next.item.name}` : 'All Krampus rewards unlocked! 👹'}</div>`;
+  $('earned').innerHTML = rw;
+  overNext = 'krAgain'; $('again').textContent = 'FIGHT AGAIN';
+  // reveal the new rewards one after another
+  const chain = i => { if (i >= newly.length) return; showArcadePrize({ cat: newly[i].cat, item: newly[i].item }); rv.res.rar = 'krampus'; $('reveal').style.setProperty('--rc', RARITY.krampus[1]); $('rvTap').textContent = '👹 KRAMPUS LOOT! TAP TO OPEN'; rv.then = () => setTimeout(() => chain(i + 1), 300); };
+  if (newly.length) setTimeout(() => chain(0), 1000);
+  if (win) { buzz([30, 60, 30]); cheerT = 3; }
+}
+$('krBtn').addEventListener('click', () => { initAudio(); beep(330, 0.12, 0.1, 'sawtooth'); showKrampus(); });
+$('krGo').addEventListener('click', () => { initAudio(); startKrampus(); });
 // ================= Survival Arcade: one life. Every point you win counts; lose one and the run is over =================
 const SURV_SWAP = 5;   // a new, tougher opponent every 5 points
 const SURV_BOX = [[35, 'mythic'], [20, 'premium'], [10, 'basic']];   // best box earned by the streak
@@ -4818,6 +4945,7 @@ function survOver() {
 }
 function arcadeStage() { return arcade ? (arcade.surv ? score.p + 1 : arcade.inf || arcade.chaos ? arcade.lvl + 1 : arcade.cycle * 4 + arcade.step + 1) : 0; }
 function arcadeD() {
+  if (arcade.krampus) return KR_D;
   // Infinite ramps slower so level 25 feels like a late classic loop, then keeps creeping up
   const lv = arcade.surv ? Math.min(22, score.p * 0.5) : arcade.inf || arcade.chaos ? Math.min(22, arcade.lvl * 0.55) : arcade.cycle * 4 + arcade.step, boss = !arcade.inf && arcade.step === 3;
   return { ...DIFFS[1], ue: Math.max(0.02, 0.09 - lv * 0.007) * (boss ? 0.7 : 1), speed: Math.min(6.2, 4.2 + lv * 0.13 + (boss ? 0.35 : 0)),
@@ -5015,7 +5143,7 @@ function moveToward(o, tx, ty, sp, dt) {
   o.spd = dt > 0 ? Math.hypot(o.x - px, o.y - py) / dt : 0;
 }
 function update(dtReal) {
-  serveOptsTick(); proPadTick(); chaosTick();
+  serveOptsTick(); proPadTick(); chaosTick(); krTick();
   if (msgT > 0 && msgT < 50) msgT -= dtReal;
   if (hintT > 0) hintT -= dtReal;
   if (kitchenFlash > 0) kitchenFlash -= dtReal;
