@@ -2481,20 +2481,23 @@ function makeTall(def, paddle, custom, c, M, mk, g, matOpts, limb, hand) {
   const headC = c.head || c.body, human = !!c.head && /^#(f|e|d|c|a|9|8|7|6)/i.test(headC) && headC !== c.body;
   const pantsC = c.legs || (human ? '#2f4f7f' : shade(c.body, 0.72));
   const bareLegs = c.legs && c.legs === c.head;
-  const HIP = 0.76, LEG = 0.74, ARM_HAND = -0.58;
+  const HIP = 0.76, LEG = 0.74, ARM_HAND = -0.58, KNEE = 0.37, ELBOW = 0.3;
+  const knees = [], elbows = [];
   // legs: long trousers (or bare legs) and chunky shoes
   const legs = [], legA = [];
   const shoeCol = c.foot || '#2f3a5c', sole = M('#f4f4f4', { roughness: 0.6, clearcoat: 0 });
   for (const s of [-1, 1]) {
     const leg = new THREE.Group(); leg.position.set(s * 0.105, HIP, 0); g.add(leg);
-    const lr = bareLegs ? 0.058 : 0.076;
-    mk(new THREE.CapsuleGeometry(lr, LEG - 0.17, 2, 8), M(bareLegs ? c.legs : pantsC, matOpts), 0, -(LEG - 0.08) / 2, 0, leg);
-    // thigh that widens into the hips, so the legs don't look stuck on
-    const th = mk(new THREE.CapsuleGeometry(lr * 1.3, 0.16, 2, 8), M(bareLegs ? c.legs : pantsC, matOpts), 0, -0.1, 0, leg); th.scale.z = 0.95;
-    const up = mk(new THREE.CapsuleGeometry(0.068, 0.11, 2, 8), M(shoeCol, { roughness: 0.6 }), 0, -LEG + 0.07, -0.04, leg); up.rotation.x = Math.PI / 2; up.scale.set(1.05, 1, 0.85);
-    const so = mk(new THREE.CapsuleGeometry(0.074, 0.12, 2, 8), sole, 0, -LEG + 0.028, -0.045, leg); so.rotation.x = Math.PI / 2; so.scale.set(1.1, 1, 0.4);
+    const lr = bareLegs ? 0.058 : 0.076, legM = M(bareLegs ? c.legs : pantsC, matOpts);
+    // thigh (widens into the hips) on the hip pivot; shin + shoe hang from a knee so the leg can bend
+    const th = mk(new THREE.CapsuleGeometry(lr * 1.18, KNEE - 0.1, 2, 8), legM, 0, -KNEE / 2 + 0.02, 0, leg); th.scale.z = 0.95;
+    const knee = new THREE.Group(); knee.position.y = -KNEE; leg.add(knee);
+    mk(sph(lr * 1.02, 8, 6), legM, 0, 0, 0, knee);
+    mk(new THREE.CapsuleGeometry(lr, LEG - KNEE - 0.12, 2, 8), legM, 0, -(LEG - KNEE) / 2 + 0.03, 0, knee);
+    const up = mk(new THREE.CapsuleGeometry(0.068, 0.11, 2, 8), M(shoeCol, { roughness: 0.6 }), 0, -(LEG - KNEE) + 0.07, -0.04, knee); up.rotation.x = Math.PI / 2; up.scale.set(1.05, 1, 0.85);
+    const so = mk(new THREE.CapsuleGeometry(0.074, 0.12, 2, 8), sole, 0, -(LEG - KNEE) + 0.028, -0.045, knee); so.rotation.x = Math.PI / 2; so.scale.set(1.1, 1, 0.4);
     const a = new THREE.Group(); leg.add(a); legA.push(a);
-    legs.push(leg);
+    legs.push(leg); knees.push(knee);
   }
   const upper = new THREE.Group(); g.add(upper);
   if (!bareLegs) { const hips = mk(new THREE.CapsuleGeometry(0.21, 0.06, 2, 9), M(pantsC, matOpts), 0, HIP + 0.03, 0, upper); hips.scale.set(1.02, 0.62, 0.82); }
@@ -2519,27 +2522,34 @@ function makeTall(def, paddle, custom, c, M, mk, g, matOpts, limb, hand) {
     // rounded shoulder joint in the shirt colour so the arm grows out of the torso
     const sh = mk(sph(0.088, 9, 7), c.sleeve ? M(c.sleeve, matOpts) : def.bodyMat ? def.bodyMat() : M(c.body, matOpts), s * 0.235, 1.37, 0, upper); sh.scale.set(1, 0.9, 0.85);
     mk(new THREE.CapsuleGeometry(0.07, 0.12, 2, 8), c.sleeve ? M(c.sleeve, matOpts) : def.bodyMat ? def.bodyMat() : M(c.body, matOpts), 0, -0.09, 0, arm);
-    mk(new THREE.CapsuleGeometry(0.052, 0.34, 2, 7), M(limb, matOpts), 0, -0.33, 0, arm);
-    const hd = mk(sph(0.066, 9, 7), M(hand, matOpts), 0, ARM_HAND, -0.005, arm); hd.scale.set(0.95, 1.12, 0.8);
-    mk(sph(0.027, 7, 6), M(hand, matOpts), -s * 0.05, ARM_HAND + 0.03, -0.03, arm);
+    mk(new THREE.CapsuleGeometry(0.052, ELBOW - 0.16, 2, 7), M(limb, matOpts), 0, -ELBOW / 2 - 0.04, 0, arm);
+    const elbow = new THREE.Group(); elbow.position.y = -ELBOW; arm.add(elbow);
+    mk(sph(0.05, 8, 6), M(limb, matOpts), 0, 0, 0, elbow);
+    mk(new THREE.CapsuleGeometry(0.047, -ARM_HAND - ELBOW - 0.12, 2, 7), M(limb, matOpts), 0, (ARM_HAND + ELBOW) / 2, 0, elbow);
+    const hd = mk(sph(0.066, 9, 7), M(hand, matOpts), 0, ARM_HAND + ELBOW, -0.005, elbow); hd.scale.set(0.95, 1.12, 0.8);
+    mk(sph(0.027, 7, 6), M(hand, matOpts), -s * 0.05, ARM_HAND + ELBOW + 0.03, -0.03, elbow);
     const a = new THREE.Group(); arm.add(a); armA.push(a);
-    arms.push(arm);
+    arms.push(arm); elbows.push(elbow);
   }
-  const pad = makePaddle(paddle, custom); pad.position.y = ARM_HAND - 0.02; pad.scale.setScalar(0.9); arms[1].add(pad);
+  const pad = makePaddle(paddle, custom); pad.position.y = ARM_HAND + ELBOW - 0.02; pad.scale.setScalar(0.9); elbows[1].add(pad);
   // torso decos: map chibi torso space (y 0.48..1.12, r 0.3) onto the slim torso (y 0.75..1.49, r 0.2)
   const upA = new THREE.Group(); upA.position.y = 1.08 - 0.8 * 1.1; upA.scale.set(0.76, 1.1, 0.68); upper.add(upA);
   const k = { g, upper: upA, tall: upper, head, headMesh, torso, mk, M, c, arms: armA, legs: legA, matOpts, tail: null, wings: null, snakes: null, cape: null, wheels: null };
   if (!def.noEyes) eyes(k);
   if (def.deco) def.deco(k);
   // arm/leg decos keep their size; stretch their positions down the longer limbs
-  const remap = (anchors, fy) => anchors.forEach(a => [...a.children].forEach(ch => { ch.position.y *= fy; a.parent.add(ch); }));
-  remap(armA, ARM_HAND / -0.41); remap(legA, LEG / 0.44);
+  const remap = (anchors, fy, joints, jy) => anchors.forEach((a, i) => [...a.children].forEach(ch => {
+    ch.position.y *= fy;
+    if (ch.position.y < -jy + 0.04) { ch.position.y += jy; joints[i].add(ch); } else a.parent.add(ch);
+  }));
+  remap(armA, ARM_HAND / -0.41, elbows, ELBOW); remap(legA, LEG / 0.44, knees, KNEE);
   if (k.tail) k.tail.position.y += HIP - 0.5;
   if (def.scale) g.scale.setScalar(def.scale);
   const blob = new THREE.Mesh(new THREE.PlaneGeometry(1.0, 1.0), new THREE.MeshBasicMaterial({ map: BLOB, transparent: true, depthWrite: false, opacity: 0.7 }));
   blob.rotation.x = -Math.PI / 2; blob.position.y = 0.012; g.add(blob);
   const root = new THREE.Group(); root.add(g); root.scale.setScalar(1.0);
-  root.userData = { legs, arms, upper, torso, run: 0, pad, wheels: k.wheels, seated: k.seated, tail: k.tail, wings: k.wings, snakes: k.snakes, cape: k.cape, def, eyes: k.eyes || [], blink: 1 + Math.random() * 3 };
+  root.userData = { legs, arms, upper, torso, run: 0, pad, wheels: k.wheels, seated: k.seated, tail: k.tail, wings: k.wings, snakes: k.snakes, cape: k.cape, def, eyes: k.eyes || [], blink: 1 + Math.random() * 3,
+    tall: true, knees, elbows, body: g, KNEE, LEG };
   return root;
 }
 function shade(hex, f) { return '#' + new THREE.Color(hex).multiplyScalar(f).getHexString(); }
@@ -2717,9 +2727,110 @@ function pickCpu(forced) {
   $('cpuName').textContent = cpuDef.name.toUpperCase();
 }
 
+
+// ================= Tall-rig animation: athletic ready stance, smooth run cycle with knees + elbows, side shuffle,
+// split-step, and real stroke shapes (backswing as the ball arrives, contact, follow-through) for drives, dinks, volleys,
+// smashes and the underhand serve. Joint angles ease toward target poses so nothing snaps.
+//  arms: +x = swing forward, +z = out to the side (right arm; mirrored for the left), elbow +x = bend
+//  torso yaw tY: negative turns the paddle (right) side back; tX negative = lean forward; cr = knee crouch 0..1
+const POSE = {
+  ready:  { tY: 0, tX: -0.14, rx: 0.9, rz: 0.1, ry: -0.35, re: 1.3, lx: 0.7, lz: 0.1, le: 1.3, cr: 0.5 },
+  fh:  [{ tY: -0.85, tX: -0.16, rx: -0.4, rz: 0.55, ry: 0.25, re: 0.55, lx: 0.75, lz: 0.3, le: 0.6, cr: 0.6 },
+        { tY: 0.05, tX: -0.12, rx: 0.5, rz: 0.45, ry: -0.2, re: 0.3, lx: 0.3, lz: 0.25, le: 0.9, cr: 0.55 },
+        { tY: 0.8, tX: -0.06, rx: 1.55, rz: -0.25, ry: -0.6, re: 1.35, lx: 0.15, lz: 0.5, le: 1.2, cr: 0.4 }],
+  bh:  [{ tY: 0.85, tX: -0.16, rx: 0.45, rz: -0.65, ry: 0.6, re: 1.3, lx: 0.65, lz: -0.05, le: 1.35, cr: 0.6 },
+        { tY: 0.08, tX: -0.12, rx: 0.55, rz: -0.05, ry: 0.1, re: 0.3, lx: 0.3, lz: 0.3, le: 0.9, cr: 0.55 },
+        { tY: -0.6, tX: -0.06, rx: 1.15, rz: 0.4, ry: -0.2, re: 0.3, lx: 0.1, lz: 0.5, le: 0.6, cr: 0.4 }],
+  dink: [{ tY: -0.2, tX: -0.32, rx: 0.15, rz: 0.3, ry: 0, re: 0.6, lx: 0.5, lz: 0.35, le: 1.0, cr: 1.0 },
+        { tY: 0, tX: -0.3, rx: 0.75, rz: 0.25, ry: -0.1, re: 0.45, lx: 0.45, lz: 0.35, le: 1.0, cr: 1.0 },
+        { tY: 0.12, tX: -0.24, rx: 1.0, rz: 0.2, ry: -0.15, re: 0.4, lx: 0.45, lz: 0.35, le: 1.0, cr: 0.9 }],
+  volley: [{ tY: -0.3, tX: -0.18, rx: 0.75, rz: 0.4, ry: 0.1, re: 1.6, lx: 0.55, lz: 0.3, le: 1.1, cr: 0.6 },
+        { tY: 0.05, tX: -0.16, rx: 0.95, rz: 0.3, ry: -0.1, re: 0.55, lx: 0.5, lz: 0.3, le: 1.1, cr: 0.6 },
+        { tY: 0.15, tX: -0.14, rx: 1.05, rz: 0.25, ry: -0.15, re: 0.45, lx: 0.5, lz: 0.3, le: 1.1, cr: 0.55 }],
+  smash: [{ tY: -0.55, tX: 0.12, rx: 2.7, rz: 0.35, ry: 0.3, re: 1.7, lx: 2.3, lz: 0.2, le: 0.2, cr: 0.35 },
+        { tY: 0.05, tX: -0.1, rx: 2.4, rz: 0.2, ry: 0, re: 0.15, lx: 1.2, lz: 0.4, le: 0.6, cr: 0.4 },
+        { tY: 0.55, tX: -0.4, rx: 0.4, rz: -0.2, ry: -0.4, re: 0.6, lx: 0.2, lz: 0.5, le: 1.0, cr: 0.7 }],
+  serve: [{ tY: -0.45, tX: -0.1, rx: -0.95, rz: 0.25, ry: 0.1, re: 0.2, lx: 0.95, lz: 0.15, le: 0.55, cr: 0.35 },
+        { tY: 0, tX: -0.12, rx: 0.35, rz: 0.2, ry: -0.1, re: 0.1, lx: 0.5, lz: 0.3, le: 0.8, cr: 0.4 },
+        { tY: 0.45, tX: -0.06, rx: 1.75, rz: 0.05, ry: -0.3, re: 0.5, lx: 0.2, lz: 0.45, le: 1.0, cr: 0.3 }],
+};
+const PKEYS = Object.keys(POSE.ready);
+const ease = x => x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2;
+const mixPose = (a, b, f) => { const o = {}; for (const k of PKEYS) o[k] = a[k] + (b[k] - a[k]) * f; return o; };
+function swingKind(o) {
+  if (isServe && lastHitter === o.side) return 'serve';
+  if (ball.z > 1.45) return 'smash';
+  const nearNet = Math.abs(o.y - NET) < K + 0.9;
+  if (nearNet && ball.z < 0.75) return 'dink';
+  if (nearNet) return 'volley';
+  const fh = (ball.x - o.x) * (o.side === 'a' ? -1 : 1) >= -0.05;
+  return fh ? 'fh' : 'bh';
+}
+function animTall(m, o, dt, t) {
+  const u = m.userData, ag = u.anim || (u.anim = { cur: { ...POSE.ready }, sw: 1, kind: 'fh', last: 0, prev: m.position.clone(), vx: 0, vz: 0, ph: 0, hop: 0, lastHit: null, spd: 0, legs: [{ h: 0, k: 0, z: 0 }, { h: 0, k: 0, z: 0 }] });
+  const live = o.x !== undefined && dt > 0;
+  // ---- movement: velocity in the model's own frame (forward = -z)
+  if (live) {
+    const vx = (m.position.x - ag.prev.x) / dt, vz = (m.position.z - ag.prev.z) / dt; ag.prev.copy(m.position);
+    const f = 1 - Math.exp(-dt * 10);
+    if (Math.hypot(vx, vz) < 20) { ag.vx += (vx - ag.vx) * f; ag.vz += (vz - ag.vz) * f; }   // ignore teleports between points
+  }
+  const ry = m.rotation.y, c = Math.cos(ry), s_ = Math.sin(ry);
+  const lx = ag.vx * c - ag.vz * s_, lz = ag.vx * s_ + ag.vz * c;   // local sideways / forward-back speed
+  const spd = Math.hypot(lx, lz), sp = Math.min(1, spd / 4.2);
+  ag.spd += (sp - ag.spd) * (live ? 1 - Math.exp(-dt * 8) : 1);
+  const side = spd > 0.05 ? Math.abs(lx) / (Math.abs(lx) + Math.abs(lz)) : 0;   // 1 = pure sideways shuffle
+  ag.ph += dt * (7 + 7 * ag.spd) * (side > 0.6 ? 1.15 : 1);
+  // ---- split step when the opponent strikes
+  if (live && phase === 'rally' && lastHitter !== ag.lastHit) { if (o.side && lastHitter !== o.side) ag.hop = 0.22; ag.lastHit = lastHitter; }
+  ag.hop = Math.max(0, ag.hop - dt);
+  // ---- strokes: start a swing when the game sets o.swing; prepare the backswing as the ball arrives
+  if ((o.swing || 0) > ag.last + 0.05 && (live || o.x === undefined)) { ag.sw = 0; ag.kind = o.x === undefined ? 'fh' : swingKind(o); }
+  ag.last = o.swing || 0;
+  if (ag.sw < 1) ag.sw = Math.min(1, ag.sw + dt / 0.5);
+  let target = POSE.ready;
+  if (ag.sw < 1) {
+    const [b, h, f] = POSE[ag.kind], p = ag.sw;
+    target = p < 0.12 ? mixPose(b, h, ease(p / 0.12)) : p < 0.42 ? mixPose(h, f, ease((p - 0.12) / 0.3)) : mixPose(f, POSE.ready, ease((p - 0.42) / 0.58));
+  } else if (live && o.side && phase === 'rally' && ball.live && lastHitter !== o.side) {
+    const d = Math.hypot(ball.x - o.x, ball.y - o.y), prep = clamp((2.8 - d) / 1.7, 0, 1);
+    if (prep > 0) { const k = swingKind(o), kk = k === 'serve' ? 'fh' : k; target = mixPose(POSE.ready, POSE[kk][0], ease(prep)); }
+  } else if (live && o.side && phase === 'serve' && server === o.side && o === currentServer()) target = mixPose(POSE.ready, POSE.serve[0], 0.35);
+  // running arms: pump with bent elbows (less while a stroke is happening)
+  const runB = ag.spd * (ag.sw < 1 ? 0.15 : 0.75) * (1 - side * 0.6);
+  const pump = Math.sin(ag.ph);
+  const goal = { ...target };
+  goal.rx += pump * 0.35 * runB; goal.lx += -pump * 0.7 * runB; goal.le += 0.25 * runB; goal.tX -= 0.12 * ag.spd;
+  // ease every joint toward its goal (faster during a stroke)
+  const kf = dt > 0 ? 1 - Math.exp(-dt * (ag.sw < 0.45 ? 32 : 14)) : 1, cur = ag.cur;
+  for (const key of PKEYS) cur[key] += (goal[key] - cur[key]) * kf;
+  // ---- apply upper body
+  u.upper.rotation.set(cur.tX, cur.tY, 0); u.upper.scale.set(1, 1, 1);
+  const [L, R] = u.arms, [eL, eR] = u.elbows;
+  R.rotation.set(cur.rx, cur.ry, cur.rz); eR.rotation.set(cur.re, 0, 0);
+  L.rotation.set(cur.lx, 0, -cur.lz); eL.rotation.set(cur.le, 0, 0);
+  // ---- legs: crouched stance + run cycle (or side shuffle) with real knee bend
+  const cr = cur.cr, run = ag.spd * (1 - side), shuf = ag.spd * side;
+  const hopK = ag.hop > 0 ? Math.sin((1 - ag.hop / 0.22) * Math.PI) : 0;
+  let ext = 0;
+  for (let i = 0; i < 2; i++) {
+    const ph = ag.ph + (i ? Math.PI : 0), sgn = i ? 1 : -1;   // leg 0 = left (-x)
+    const hip = 0.28 * cr + Math.sin(ph) * 0.75 * run * (lz > 0 ? -0.7 : 1);
+    const kn = -(0.55 * cr) - run * (0.25 + 1.0 * Math.max(0, Math.sin(ph + 1.1))) - shuf * 0.35 - hopK * 0.3;
+    const ab = sgn * (0.06 + shuf * (0.14 + 0.12 * Math.sin(ph)));
+    const lg = ag.legs[i], kk = dt > 0 ? 1 - Math.exp(-dt * 18) : 1;
+    lg.h += (hip - lg.h) * kk; lg.k += (kn - lg.k) * kk; lg.z += (ab - lg.z) * kk;
+    u.legs[i].rotation.set(lg.h, 0, lg.z); u.knees[i].rotation.set(lg.k, 0, 0);
+    const reach = u.KNEE * Math.cos(lg.h) * Math.cos(lg.z) + (u.LEG - u.KNEE) * Math.cos(lg.h + lg.k) * Math.cos(lg.z);
+    ext = Math.max(ext, reach);
+  }
+  // keep the planted foot on the ground; small lift on the split step and mid-stride
+  u.body.position.y = -(u.LEG - ext) + hopK * 0.07 + run * Math.max(0, Math.sin(ag.ph * 2)) * 0.03;
+}
 function animateChar(m, o, dt, t) {
   const u = m.userData;
   const sp = Math.min(1, (o.spd || 0) / 3);
+  if (u.tall) animTall(m, o, dt, t); else {
   u.run += dt * (6 + sp * 8);
   u.legs[0].rotation.x = Math.sin(u.run) * 0.75 * sp;
   u.legs[1].rotation.x = -Math.sin(u.run) * 0.75 * sp;
@@ -2733,6 +2844,7 @@ function animateChar(m, o, dt, t) {
   if (u.wheels) u.wheels.forEach(w => w.rotation.x = -u.run * 0.55);
   const sq = sp > 0.1 ? Math.sin(u.run * 2) * 0.04 : Math.sin(t * 3) * 0.015;
   u.upper.scale.set(1 - sq * 0.5, 1 + sq, 1 - sq * 0.5);
+  }
   if (u.eyes && u.eyes.length) {
     u.blink -= dt;
     const closed = u.blink < 0.12 && u.blink > 0;
@@ -4809,6 +4921,10 @@ function showChaosLadder() {
 }
 // ================= What's New: shows once after an update. To announce a feature, add an entry at the TOP with the next v =================
 const NEWS = [
+  { v: 8, date: '18 Nov 2026', items: [
+    ['🏃', '<b>Smoother, more realistic animations.</b> Players now bend their knees and elbows, run with a proper stride, side-shuffle, split-step when the opponent hits, and wait in a real ready position with the paddle up.'],
+    ['🏓', '<b>Real strokes:</b> backswing, contact and follow-through for forehands, backhands, dinks, volleys, smashes and the underhand serve.'],
+  ] },
   { v: 7, date: '18 Nov 2026', items: [
     ['👹', '<b>Krampus Showdown!</b> A Christmas boss event on the home screen until New Year\'s. He\'s fast, he never misses, and he brings a legendary sprite.'],
     ['🎁', 'Beat him <b>1, 3, 5 and 10 times</b> for event-only rewards: a <b>Lump of Coal</b> ball, the <b>Chain Breaker</b> paddle, the <b>Krampus Lair</b> arena and <b>Krampus</b> himself. They\'ll never be sold.'],
