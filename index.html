@@ -2754,6 +2754,7 @@ const POSE = {
         { tY: 0, tX: -0.12, rx: 0.35, rz: 0.2, ry: -0.1, re: 0.1, lx: 0.5, lz: 0.3, le: 0.8, cr: 0.4 },
         { tY: 0.45, tX: -0.06, rx: 1.75, rz: 0.05, ry: -0.3, re: 0.5, lx: 0.2, lz: 0.45, le: 1.0, cr: 0.3 }],
 };
+POSE.jug = { tY: 0.1, tX: -0.08, rx: 0.2, rz: 0.02, ry: -0.05, re: 1.2, lx: 0.35, lz: 0.12, le: 0.9, cr: 0.35 };
 const PKEYS = Object.keys(POSE.ready);
 const ease = x => x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2;
 const mixPose = (a, b, f) => { const o = {}; for (const k of PKEYS) o[k] = a[k] + (b[k] - a[k]) * f; return o; };
@@ -2789,7 +2790,10 @@ function animTall(m, o, dt, t) {
   ag.last = o.swing || 0;
   if (ag.sw < 1) ag.sw = Math.min(1, ag.sw + dt / 0.5);
   let target = POSE.ready;
-  if (ag.sw < 1) {
+  if (o.juggle !== undefined) {   // home screen keepy-uppy: paddle flat in front, small wrist tap as the ball lands
+    const tap = Math.exp(-Math.pow((o.juggle - 0.02) / 0.07, 2)) + Math.exp(-Math.pow((o.juggle - 1.02) / 0.07, 2));
+    target = { ...POSE.jug, rx: POSE.jug.rx + tap * 0.18, re: POSE.jug.re - tap * 0.12, cr: POSE.jug.cr + tap * 0.12 };
+  } else if (ag.sw < 1) {
     const [b, h, f] = POSE[ag.kind], p = ag.sw;
     target = p < 0.12 ? mixPose(b, h, ease(p / 0.12)) : p < 0.42 ? mixPose(h, f, ease((p - 0.12) / 0.3)) : mixPose(f, POSE.ready, ease((p - 0.42) / 0.58));
   } else if (live && o.side && phase === 'rally' && ball.live && lastHitter !== o.side) {
@@ -2836,10 +2840,15 @@ function animateChar(m, o, dt, t) {
   u.legs[1].rotation.x = -Math.sin(u.run) * 0.75 * sp;
   u.arms[0].rotation.x = -Math.sin(u.run) * 0.6 * sp; u.arms[0].rotation.z = -0.18;
   const sw = o.swing > 0 ? Math.sin((1 - o.swing / 0.25) * Math.PI) : 0;
+  if (o.juggle !== undefined) {   // home screen: arm out front, paddle face up, little tap on contact
+    const tap = Math.exp(-Math.pow((o.juggle - 0.02) / 0.07, 2)) + Math.exp(-Math.pow((o.juggle - 1.02) / 0.07, 2));
+    u.arms[1].rotation.set(1.45 + tap * 0.15, 0, 0.3); u.upper.rotation.y = 0.1;
+  } else {
   u.arms[1].rotation.z = 0.5 - sw * 0.2;
   u.arms[1].rotation.x = 0.45 + sw * 1.4;
   u.arms[1].rotation.y = -sw * 0.6;
   u.upper.rotation.y = -sw * 0.45;
+  }
   u.upper.position.y = u.seated ? Math.sin(t * 3) * 0.006 : sp > 0.1 ? Math.abs(Math.sin(u.run)) * 0.05 : Math.sin(t * 3) * 0.01;
   if (u.wheels) u.wheels.forEach(w => w.rotation.x = -u.run * 0.55);
   const sq = sp > 0.1 ? Math.sin(u.run * 2) * 0.04 : Math.sin(t * 3) * 0.015;
@@ -5387,6 +5396,14 @@ function gameCamera() {
   const fov = clamp(2 * Math.atan(tanH / aspect) * 180 / Math.PI, 42, 82);
   return { pos, look, fov, offset: ch * 0.13 };   // pan the court up so the buttons sit below the near baseline
 }
+const JUG_T = 0.68, JUG_H = 0.45, _pf = new THREE.Vector3();
+function padFace(m) {   // world position of the middle of the paddle face
+  const pad = m.userData.pad, head = pad.children[0];
+  m.updateMatrixWorld(true);
+  if (!head.geometry.boundingBox) head.geometry.computeBoundingBox();
+  head.geometry.boundingBox.getCenter(_pf); _pf.y += (head.geometry.boundingBox.max.y - _pf.y) * 0.15;
+  return head.localToWorld(_pf);
+}
 function homeCamera() {
   const base = T3(player.x, player.y, 0);
   return RIG_TALL ? { pos: new THREE.Vector3(base.x, 1.85, base.z + 8.6), look: new THREE.Vector3(base.x, 1.05, base.z), fov: 40, offset: ch * 0.06 }
@@ -5408,8 +5425,9 @@ function visuals(dt) {
   aiModel.position.copy(T3(ai.x, ai.y));
   if (mode === 'local') hintEl.style.transform = hintSide === 'a' ? 'translate(-50%,0) rotate(180deg)' : ''; else hintEl.style.transform = '';
   if (phase === 'shop') playerModel.rotation.y += dt * 0.7;
-  else if (phase === 'menu') playerModel.rotation.y = Math.PI + Math.sin(t * 0.6) * 0.35;
+  else if (phase === 'menu') playerModel.rotation.y = Math.PI + Math.sin(t * 0.5) * 0.22;
   else playerModel.rotation.y = clamp(-(ball.x - player.x) * 0.12, -0.4, 0.4);
+  player.juggle = phase === 'menu' ? (t / JUG_T) % 1 : undefined;
   animateChar(playerModel, player, dt, t); animateChar(aiModel, ai, dt, t);
   const showD = doubles && !['menu', 'shop'].includes(phase);
   for (const [mdl, o] of [[partnerModel, partner], [ai2Model, ai2]]) {
@@ -5422,8 +5440,9 @@ function visuals(dt) {
   if (phase === 'shop') {
     ball.x = player.x + 0.75; ball.y = player.y + 0.5; ball.z = 1.0 + Math.abs(Math.sin(t * 2.4)) * 0.45;
   } else if (phase === 'menu') {
-    const ph = (t * 1.6) % 1; ball.x = player.x - 0.45; ball.y = player.y + 0.45; ball.z = 0.95 + Math.sin(ph * Math.PI) * 1.1;
-    if (ph < 0.04 && player.swing <= 0) player.swing = 0.25;
+    // keepy-uppy: the ball rises and falls straight off the real paddle face (wherever the arm puts it this frame)
+    const f = padFace(playerModel), ph = player.juggle, h = 4 * JUG_H * ph * (1 - ph);
+    ball.x = f.x + W / 2; ball.y = f.z + NET; ball.z = f.y + BALL_R * 0.2 + h;
   } else if (phase === 'over') {
     ball.x = W / 2 + Math.sin(t * 0.9) * 1.6; ball.y = NET + Math.sin(t * 0.6) * 3; ball.z = 1.2 + Math.abs(Math.sin(t * 2.2)) * 0.9;
   } else if (ball.held && phase === 'serve') {
