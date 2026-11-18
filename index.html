@@ -2403,7 +2403,7 @@ const BODY_R = 0.32, BODY_L = 0.45, BODY_Y = 0.97;
 // ================= Tall rig: skinnier, taller bodies with long realistic arms and legs (like the low-poly reels).
 // Decos were written for the chibi rig, so they're mapped across: torso decos go into a scaled anchor that squeezes the old
 // torso space onto the slimmer torso; arm/leg decos keep their size but have their positions stretched down the longer limbs.
-const RIG_TALL = false;
+const RIG_TALL = true;
 function makeTall(def, paddle, custom, c, M, mk, g, matOpts, limb, hand) {
   const headC = c.head || c.body, human = !!c.head && /^#(f|e|d|c|a|9|8|7|6)/i.test(headC) && headC !== c.body;
   const pantsC = c.legs || (human ? '#2f4f7f' : shade(c.body, 0.72));
@@ -4731,6 +4731,9 @@ function showChaosLadder() {
 }
 // ================= What's New: shows once after an update. To announce a feature, add an entry at the TOP with the next v =================
 const NEWS = [
+  { v: 6, date: '18 Nov 2026', items: [
+    ['🧍', '<b>New body shapes!</b> Characters are now taller and slimmer, with proper arms and legs, capes that hang from the shoulders, and cleaner hair.'],
+  ] },
   { v: 5, date: '18 Nov 2026', items: [
     ['🎨', '<b>New art style!</b> Every character now has a chunky low-poly look with matte colours and new faces, and the trees went low-poly too.'],
   ] },
@@ -5142,13 +5145,14 @@ function gameCamera() {
 }
 function homeCamera() {
   const base = T3(player.x, player.y, 0);
-  return { pos: new THREE.Vector3(base.x, 1.75, base.z + 7.4), look: new THREE.Vector3(base.x, 0.95, base.z), fov: 40, offset: ch * 0.1 };
+  return RIG_TALL ? { pos: new THREE.Vector3(base.x, 1.85, base.z + 8.6), look: new THREE.Vector3(base.x, 1.05, base.z), fov: 40, offset: ch * 0.06 }
+    : { pos: new THREE.Vector3(base.x, 1.75, base.z + 7.4), look: new THREE.Vector3(base.x, 0.95, base.z), fov: 40, offset: ch * 0.1 };
 }
 function shopCamera() {
   const base = T3(player.x, player.y, 0);
   if (shopTab === 'arena') return { pos: new THREE.Vector3(2.2, 9, base.z + 10.5), look: new THREE.Vector3(0, 0, -1), fov: 55, offset: ch * 0.26 };
   const near = shopTab === 'paddle' || shopTab === 'ball';
-  const d = near ? 6.0 : 7.2, ly = near ? 1.1 : 0.95;
+  const d = near ? 6.0 : RIG_TALL ? 8.4 : 7.2, ly = near ? 1.1 : RIG_TALL ? 1.1 : 0.95;
   return { pos: new THREE.Vector3(base.x + (near ? 0.5 : 0), ly + 0.9, base.z + d), look: new THREE.Vector3(base.x + (near ? 0.4 : 0), ly, base.z), fov: 40, offset: ch * 0.28 };
 }
 
