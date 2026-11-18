@@ -687,6 +687,17 @@ function stripeMat(base, stripe) {
 function eyes(k, o = {}) {
   const { sep = 0.085, y = 0.03, z = -0.215, r = 0.038, color = '#111', glow = null } = o;
   if (glow) { for (const s of [-1, 1]) k.mk(sph(r), k.M(color, { emissive: glow, emissiveIntensity: 1 }), s * sep, y, z, k.head); return; }
+  if (LOWPOLY) {   // low-poly face: solid matte black ovals with thin eyebrows above. They blink.
+    const ink = k.M(color === '#111' || color === '#ffffff' ? '#141414' : color, { roughness: 0.9 });
+    k.eyes = k.eyes || [];
+    for (const s of [-1, 1]) {
+      const e = new THREE.Group(); e.position.set(s * sep * 1.08, y + 0.005, z - 0.004); k.head.add(e);
+      const d = k.mk(sph(r * 0.92, 10, 8), ink, 0, 0, 0, e); d.scale.set(0.85, 1.28, 0.45); d.castShadow = false;
+      k.eyes.push(e);
+      const br = k.mk(box(r * 1.9, r * 0.32, r * 0.3), ink, s * sep * 1.08 + s * 0.004, y + r * 2.15, z + 0.012, k.head); br.rotation.z = s * -0.16; br.castShadow = false;
+    }
+    return;
+  }
   // cartoon eyes: glossy white, big dark pupil looking slightly inward, two catch-lights. They blink.
   const pupil = color === '#111' || color === '#ffffff' ? '#1b1d2e' : color, hi = new THREE.MeshBasicMaterial({ color: '#ffffff' });
   k.eyes = k.eyes || [];
@@ -2024,7 +2035,7 @@ function tree(x, z, s) {
   const n = 5 + Math.floor(Math.random() * 3);
   for (let i = 0; i < n; i++) {
     const r = (0.62 + Math.random() * 0.4) * s;
-    const f = new THREE.Mesh(new THREE.SphereGeometry(r, 18, 14), new THREE.MeshStandardMaterial({ color: leafCols[i % 4], roughness: 0.85 }));
+    const f = new THREE.Mesh(LOWPOLY ? new THREE.IcosahedronGeometry(r, 1) : new THREE.SphereGeometry(r, 18, 14), new THREE.MeshStandardMaterial({ color: leafCols[i % 4], roughness: 0.85, flatShading: LOWPOLY }));
     const a = i / n * Math.PI * 2;
     f.position.set(Math.cos(a) * 0.55 * s * (i ? 1 : 0), (2.1 + (i ? Math.random() * 0.7 : 0.9)) * s, Math.sin(a) * 0.55 * s * (i ? 1 : 0));
     f.castShadow = true; g.add(f);
@@ -2036,7 +2047,7 @@ function tree(x, z, s) {
 function bush(x, z, s, col = '#3f9b4a') {
   const g = new THREE.Group();
   for (let i = 0; i < 4; i++) {
-    const f = new THREE.Mesh(new THREE.SphereGeometry((0.35 + Math.random() * 0.25) * s, 14, 10), new THREE.MeshStandardMaterial({ color: i % 2 ? col : shade(col, 1.15), roughness: 0.85 }));
+    const f = new THREE.Mesh(LOWPOLY ? new THREE.IcosahedronGeometry((0.35 + Math.random() * 0.25) * s, 1) : new THREE.SphereGeometry((0.35 + Math.random() * 0.25) * s, 14, 10), new THREE.MeshStandardMaterial({ color: i % 2 ? col : shade(col, 1.15), roughness: 0.85, flatShading: LOWPOLY }));
     f.position.set((Math.random() - 0.5) * 0.8 * s, 0.3 * s, (Math.random() - 0.5) * 0.5 * s); f.castShadow = true; g.add(f);
   }
   g.position.set(x, 0, z); return g;
@@ -2387,14 +2398,32 @@ function makePaddle(p, custom) {
 
 const BODY_R = 0.32, BODY_L = 0.45, BODY_Y = 0.97;
 function shade(hex, f) { return '#' + new THREE.Color(hex).multiplyScalar(f).getHexString(); }
+// ================= Art style: faceted low-poly, flat matte colours (like the animated low-poly reels Manny liked). Set LOWPOLY = false to go back to the glossy look.
+const LOWPOLY = true;
+function lpMat(color, o = {}) {   // matte, flat-shaded; metals keep a bit of shine, nothing gets clearcoat gloss
+  const metal = (o.metalness || 0) > 0.5;
+  return new THREE.MeshPhysicalMaterial({ color, envMapIntensity: metal ? 1.1 : 0.45, ...o, flatShading: true, clearcoat: 0, roughness: metal ? (o.roughness ?? 0.3) : Math.max(0.72, o.roughness ?? 0.85) });
+}
+function lpGeo(geo) {   // rebuild round geometry with fewer segments so the facets show
+  const P = geo.parameters || {}, t = geo.type;
+  try {
+    if (t === 'SphereGeometry') { if (P.widthSegments <= 9) return geo; geo.dispose(); return new THREE.SphereGeometry(P.radius, Math.min(P.widthSegments, 9), Math.min(P.heightSegments, 7), P.phiStart, P.phiLength, P.thetaStart, P.thetaLength); }
+    if (t === 'CapsuleGeometry') { if (P.radialSegments <= 9) return geo; geo.dispose(); return new THREE.CapsuleGeometry(P.radius, P.length, 2, Math.min(P.radialSegments, 8)); }
+    if (t === 'CylinderGeometry') { if (P.radialSegments <= 10) return geo; geo.dispose(); return new THREE.CylinderGeometry(P.radiusTop, P.radiusBottom, P.height, 10, P.heightSegments, P.openEnded, P.thetaStart, P.thetaLength); }
+    if (t === 'ConeGeometry') { if (P.radialSegments <= 8) return geo; geo.dispose(); return new THREE.ConeGeometry(P.radius, P.height, 8, P.heightSegments, P.openEnded, P.thetaStart, P.thetaLength); }
+    if (t === 'TorusGeometry') { if (P.tubularSegments <= 14) return geo; geo.dispose(); return new THREE.TorusGeometry(P.radius, P.tube, Math.min(P.radialSegments, 5), Math.min(P.tubularSegments, 14), P.arc); }
+  } catch (e) {}
+  return geo;
+}
 // original one-piece bean body, kept for object-style characters (def.bean)
 function makeBean(def, paddle, custom) {
   const c = { body: '#f6f6f6', ...def.c, ...(def.look ? def.look() : {}) };
   const limb = c.limb || shade(c.body, 0.72), foot = c.foot || limb, hand = c.hand || limb, legC = c.legs || limb;
   const matOpts = def.lowPoly ? { ...(def.matOpts || {}), flatShading: true } : (def.matOpts || {});
-  const M = (color, o = {}) => new THREE.MeshPhysicalMaterial({ color, roughness: 0.42, clearcoat: 0.5, clearcoatRoughness: 0.28, envMapIntensity: 0.75, ...o });
+  const M = LOWPOLY ? lpMat : (color, o = {}) => new THREE.MeshPhysicalMaterial({ color, roughness: 0.42, clearcoat: 0.5, clearcoatRoughness: 0.28, envMapIntensity: 0.75, ...o });
   const g = new THREE.Group();
   const mk = (geo, mat, x = 0, y = 0, z = 0, parent = g) => {
+    if (LOWPOLY) { geo = lpGeo(geo); if (mat && mat.isMeshPhysicalMaterial || mat && mat.isMeshStandardMaterial) { mat.flatShading = true; mat.clearcoat = 0; mat.needsUpdate = true; } }
     const m = new THREE.Mesh(geo, typeof mat === 'string' ? M(mat) : mat); m.position.set(x, y, z); m.castShadow = true; parent.add(m); return m;
   };
   const bottom = BODY_Y - BODY_L / 2 - BODY_R + 0.04;
@@ -2411,7 +2440,7 @@ function makeBean(def, paddle, custom) {
   }
   const upper = new THREE.Group(); g.add(upper);
   // one bean-shaped body that is also the head
-  const bodyGeo = def.lowPoly ? new THREE.CapsuleGeometry(BODY_R, BODY_L, 2, 7) : new THREE.CapsuleGeometry(BODY_R, BODY_L, 14, 32);
+  const bodyGeo = def.lowPoly || LOWPOLY ? new THREE.CapsuleGeometry(BODY_R, BODY_L, 2, 9) : new THREE.CapsuleGeometry(BODY_R, BODY_L, 14, 32);
   { // bean shape: a touch wider at the bottom
     const pa = bodyGeo.attributes.position, H = BODY_L + 2 * BODY_R;
     for (let i = 0; i < pa.count; i++) { const tt = (pa.getY(i) + H / 2) / H, f = 1.08 - 0.08 * tt; pa.setX(i, pa.getX(i) * f); pa.setZ(i, pa.getZ(i) * f); }
@@ -2449,9 +2478,10 @@ function makeCharacter(def, paddle, custom) {
   const c = { body: '#f6f6f6', ...def.c, ...(def.look ? def.look() : {}) };
   const limb = c.limb || shade(c.body, 0.72), foot = c.foot || limb, hand = c.hand || limb, legC = c.legs || limb;
   const matOpts = def.lowPoly ? { ...(def.matOpts || {}), flatShading: true } : (def.matOpts || {});
-  const M = (color, o = {}) => new THREE.MeshPhysicalMaterial({ color, roughness: 0.42, clearcoat: 0.5, clearcoatRoughness: 0.28, envMapIntensity: 0.75, ...o });
+  const M = LOWPOLY ? lpMat : (color, o = {}) => new THREE.MeshPhysicalMaterial({ color, roughness: 0.42, clearcoat: 0.5, clearcoatRoughness: 0.28, envMapIntensity: 0.75, ...o });
   const g = new THREE.Group();
   const mk = (geo, mat, x = 0, y = 0, z = 0, parent = g) => {
+    if (LOWPOLY) { geo = lpGeo(geo); if (mat && mat.isMeshPhysicalMaterial || mat && mat.isMeshStandardMaterial) { mat.flatShading = true; mat.clearcoat = 0; mat.needsUpdate = true; } }
     const m = new THREE.Mesh(geo, typeof mat === 'string' ? M(mat) : mat); m.position.set(x, y, z); m.castShadow = true; parent.add(m); return m;
   };
   if (def.bean) return makeBean(def, paddle, custom);
@@ -2476,7 +2506,7 @@ function makeCharacter(def, paddle, custom) {
   // trousers / hips
   if (!bareLegs) { const hips = mk(new THREE.CapsuleGeometry(0.27, 0.04, 8, 24), M(pantsC, matOpts), 0, hipY, 0, upper); hips.scale.set(1.02, 0.6, 0.86); }
   // torso (the shirt): a chunky rounded block
-  const tGeo = def.lowPoly ? new THREE.CapsuleGeometry(0.3, 0.16, 2, 7) : new THREE.CapsuleGeometry(0.3, 0.16, 12, 30);
+  const tGeo = def.lowPoly || LOWPOLY ? new THREE.CapsuleGeometry(0.3, 0.16, 3, 9) : new THREE.CapsuleGeometry(0.3, 0.16, 12, 30);
   { const pa = tGeo.attributes.position; for (let i = 0; i < pa.count; i++) { const y = pa.getY(i), f = 1.06 - 0.12 * clamp((y + 0.38) / 0.76, 0, 1); pa.setX(i, pa.getX(i) * f); pa.setZ(i, pa.getZ(i) * f); } tGeo.computeVertexNormals(); }
   const torso = mk(tGeo, def.bodyMat ? def.bodyMat() : M(c.body, matOpts), 0, 0.8, 0, upper);
   torso.scale.set(1, 1, 0.9);
@@ -2488,7 +2518,7 @@ function makeCharacter(def, paddle, custom) {
   mk(cyl(0.1, 0.12, 0.12, 16), M(headC, matOpts), 0, 1.15, 0, upper);
   // big head
   const head = new THREE.Group(); head.position.set(0, 1.36, 0); head.scale.setScalar(1.36); upper.add(head);
-  const hGeo = def.lowPoly ? new THREE.IcosahedronGeometry(0.235, 1) : new THREE.SphereGeometry(0.235, 32, 24);
+  const hGeo = def.lowPoly ? new THREE.IcosahedronGeometry(0.235, 1) : LOWPOLY ? new THREE.IcosahedronGeometry(0.235, 2) : new THREE.SphereGeometry(0.235, 32, 24);
   const headMesh = mk(hGeo, def.headMat ? def.headMat() : M(headC, matOpts), 0, 0, 0, head); headMesh.scale.set(1.06, 0.98, 1);
   if (human) {
     for (const s of [-1, 1]) { const e = mk(sph(0.05, 14, 10), M(headC, matOpts), s * 0.245, -0.01, 0.01, head); e.scale.set(0.6, 1, 0.8); mk(sph(0.025, 10, 8), M(shade(headC, 0.82)), s * 0.262, -0.01, 0.0, head).scale.set(0.5, 1, 0.8); }
@@ -4627,6 +4657,9 @@ function showChaosLadder() {
 }
 // ================= What's New: shows once after an update. To announce a feature, add an entry at the TOP with the next v =================
 const NEWS = [
+  { v: 5, date: '18 Nov 2026', items: [
+    ['🎨', '<b>New art style!</b> Every character now has a chunky low-poly look with matte colours and new faces, and the trees went low-poly too.'],
+  ] },
   { v: 4, date: '18 Nov 2026', items: [
     ['🎄', '<b>The Christmas Drop is here!</b> 16 festive items in the Locker: <b>Santa</b>, <b>Blitzen</b> the reindeer, <b>Snowy</b> the snowman and <b>Jingles</b> the elf, plus Christmas paddles, balls and 4 new arenas (Winter Wonderland, North Pole, Gingerbread Town, Festive Lights).'],
     ['⏳', '<b>Only on sale until New Year\'s.</b> 1,500 dinks each, and anything you buy is yours forever.'],
