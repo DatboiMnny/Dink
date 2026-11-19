@@ -351,9 +351,9 @@
   .wtPanel{background:#efe2c4 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .25 0 0 0 0 .12 0 0 0 .18 0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");color:#3b2410;border:3px solid #8a6436;box-shadow:inset 0 0 0 6px #efe2c4,inset 0 0 0 8px #b8925c,0 24px 60px rgba(0,0,0,.6);font-family:Georgia,'Times New Roman',serif}
   .wtPanel .x{background:#8a6436;color:#f6ead0}
   .wtHead{font-size:12px;letter-spacing:.22em;font-weight:900;color:#8a5a2a;margin-top:2px}
-  .wtCity{font-size:30px;font-weight:700;line-height:1.05;margin-top:4px;font-style:italic}
+  .wtCity{font-size:27px;font-weight:700;line-height:1.05;margin-top:4px;font-style:italic}
   .wtPlace{font-size:13px;opacity:.8;margin-top:2px;letter-spacing:.06em}
-  .wtStory{font-size:13px;line-height:1.45;margin:8px 2px 10px;text-align:left;background:rgba(138,100,54,.1);border-left:3px solid #b8925c;padding:7px 10px;border-radius:4px}
+  .wtStory{font-size:12.5px;line-height:1.42;margin:6px 2px 8px;text-align:left;background:rgba(138,100,54,.1);border-left:3px solid #b8925c;padding:7px 10px;border-radius:4px}
   .wtTrail{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}
   .wtB{position:relative;border-radius:10px;padding:3px 1px 4px;background:rgba(138,100,54,.13);border:2px solid rgba(138,100,54,.3);font-size:9px;font-weight:900;line-height:1.1;color:#3b2410}
   .wtB img{width:100%;aspect-ratio:1;object-fit:contain;filter:sepia(.85) contrast(1.05)}
@@ -364,6 +364,17 @@
   .wtRew{display:flex;gap:5px;overflow-x:auto;margin:10px 0 4px;padding-bottom:2px}
   .wtR{flex:none;width:58px;border-radius:10px;padding:3px;background:rgba(255,255,255,.35);border:1.5px dashed #b8925c;font-size:9px;font-weight:900;line-height:1.15}
   .wtR img{width:44px;height:44px;object-fit:contain} .wtR.got{border-style:solid;border-color:#2f7a3e;background:rgba(47,122,62,.15)}
+  .wtChap{font-size:15px;font-weight:700;font-style:italic;color:#8e2318;margin-top:1px}
+  .wtTabs{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin:8px 0 4px}
+  .wtTab{position:relative;border:1.5px solid #b8925c;border-radius:9px;background:rgba(255,255,255,.35);color:#3b2410;font-family:Georgia,serif;font-size:10px;font-weight:700;line-height:1.15;padding:4px 2px 13px}
+  .wtTab small{display:block;font-size:8px;letter-spacing:.12em;opacity:.65;font-family:Nunito,sans-serif;font-weight:900}
+  .wtTab i{position:absolute;bottom:2px;left:0;right:0;font-style:normal;font-size:9px;opacity:.75}
+  .wtTab.sel{background:#8a6436;color:#f6ead0;border-color:#5a3d1e} .wtTab.lock{opacity:.55} .wtTab.done::after{content:'✓';position:absolute;top:-6px;right:-5px;width:16px;height:16px;border-radius:50%;background:#2f7a3e;color:#fff;font-size:10px;display:flex;align-items:center;justify-content:center}
+  .wtBonus{display:flex;gap:9px;align-items:center;text-align:left;font-size:11.5px;line-height:1.3;margin:6px 0 2px;padding:7px 9px;border-radius:12px;background:linear-gradient(90deg,rgba(192,57,43,.14),rgba(217,168,54,.2));border:1.5px solid #c99a4a}
+  .wtBonus img{width:58px;height:58px;border-radius:9px;object-fit:cover;flex:none;filter:sepia(.35);box-shadow:0 2px 6px rgba(0,0,0,.3)}
+  .wtBonus b{font-size:12px;color:#8e2318}
+  .wtBar{position:relative;height:14px;border-radius:999px;background:rgba(0,0,0,.15);margin-top:4px;overflow:hidden}
+  .wtBar i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,#c0392b,#d9a836)} .wtBar span{position:relative;display:block;text-align:center;font-size:9.5px;font-weight:900;line-height:14px;color:#3b2410}
   .wtFine{font-size:11.5px;opacity:.75;margin:6px 0 10px}
   .wtGo{background:linear-gradient(#c0392b,#8e2318);color:#f6ead0;box-shadow:0 5px 0 #5a140c;font-family:Georgia,serif;font-style:italic;letter-spacing:.02em}
   #vintFx{position:fixed;inset:0;pointer-events:none;z-index:1;display:none;background:radial-gradient(ellipse at center,transparent 55%,rgba(40,22,6,.55) 100%)}
@@ -552,7 +563,7 @@
         <div><i>🎮</i><span><b>Controls</b> (pause menu, tap to switch): <b>AUTO</b> is the default: you move with the joystick and your shot angle comes from where you catch the ball, with some randomness. <b>MANUAL</b> adds a pink radar that shows where your shot will land as the ball comes to you: move left or right of the ball to change it, and the faint circle is how far it can wobble. <b>PRO</b> has no joystick: a mini court sits bottom-left. Put your thumb on it and slide: wherever your thumb is on the mini court, your player runs to that spot on the real court (the pink dot is you; lift off and they stop). Tap anywhere on their side with your other thumb to choose where each return goes (tap the kitchen for a dink or drop, deep for a drive). Tap again or drag to change it before you hit. No tap means a normal auto shot. High CTL paddles land closer, and aiming right on the lines can go out. LOB, POWER and SPIN still work in every mode.</span></div>
         <div><i>⚡</i><span><b>LOB</b> lofts your next shot. <b>POWER</b> rips a hard drive (riskier). <b>SPIN</b> curves and dips it, and kicks off the bounce. Paddles with a high SPN stat make it nastier; low-spin paddles make it weak and wild.</span></div>
         <div><i>📏</i><span><b>Rules:</b> serve and return must bounce. No volleys from the kitchen, and if your follow-through after a volley carries you into the kitchen, that's a fault too. Only the server scores. Win by 2. Every game goes to 11. Easy is chill, Medium is faster, Hard is blazing fast.</span></div>
-        <div><i>🌍</i><span><b>World Tour</b> takes you through pickleball history, one city per month. Each stop has 10 bosses to beat in order (first to 7, the 10th boss to 11, win by 2) using old-school side-out scoring, all shot on vintage film. Bosses drop stop-exclusive rewards, including the <b>Vintage</b> sprites (they charge only from dinks and lobs; their Silent Film power makes the CPU move in choppy half-speed frames). Stop 1: Bainbridge Island, 1965, where it all began.</span></div>
+        <div><i>🌍</i><span><b>World Tour</b> takes you through pickleball history. Every month is a new chapter of 4 cities, and a new city opens every week (on the 1st, 8th, 15th and 22nd). Opened cities stay playable until the month ends. Each city has 10 bosses to beat in order (first to 7, the 10th boss to 11, win by 2) with old-school side-out scoring, all on vintage film. Bosses drop city rewards (boxes, vintage paddles and balls, and in Bainbridge 1965 the <b>Vintage</b> sprites and Pickles). <b>🏆 Beat all 40 bosses of the month</b> to win that month's bonus arena. It's only available that month!</span></div>
         <div><i>✨</i><span><b>Sprites</b> float beside you in CPU matches. Each gives a passive boost and a power. Light powers (Ember, Tide, Zephyr, Stone) charge as you hit. The strong ones need a feat: <b>Volt</b> charges only from volleys, <b>Lumen</b> only from dinks, <b>Frost</b> from winning 6+ shot rallies, <b>Pixel</b> from winning rallies where you volleyed, <b>Bloom</b> from winning rallies while behind, and <b>Nova</b> from a win streak (losing resets it). Strong powers can only be used a few times per match (Bloom and Nova once). Tap the sprite button when its ring is full. Sprites <b>level up (to 5) only by playing with them equipped</b>: win rallies, use their power and finish matches to earn XP. Duplicate drops turn into dinks. New sprites only drop when you win: harder modes and tournaments drop rarer ones.</span></div>
         <div><i>🕹️</i><span><b>Arcade</b> is an endless ladder: beat 3 players to 3 points, then a boss to 5 (rally scoring, win by 2), and keep going as it gets harder. Bosses drop Arcade-exclusive characters, paddles, a ball and an arena that you can't get anywhere else.</span></div>
         <div><i>🐒</i><span><b>Orlando</b> has a special <b>SPIN</b> serve: heavy sidespin that bends and kicks off the bounce, so it's much harder to return (small risk of curling wide).</span></div>
@@ -629,12 +640,15 @@
   <div class="modal hidden" id="wtM">
     <div class="panel wtPanel">
       <button class="x" data-close="wtM">✕</button>
-      <div class="wtHead">🌍 WORLD TOUR · <span id="wtStop">STOP 1</span></div>
+      <div class="wtHead">🌍 WORLD TOUR · <span id="wtStop"></span></div>
+      <div class="wtChap" id="wtChap"></div>
+      <div class="wtTabs" id="wtTabs"></div>
       <div class="wtCity" id="wtCity">Bainbridge Island</div>
       <div class="wtPlace" id="wtPlace"></div>
       <p class="wtStory" id="wtStory"></p>
       <div class="wtTrail" id="wtTrail"></div>
       <div class="wtRew" id="wtRew"></div>
+      <div class="wtBonus" id="wtBonus"></div>
       <div class="wtFine" id="wtFine"></div>
       <button class="bigbtn wtGo" id="wtGo">FIGHT</button>
     </div>
@@ -1745,6 +1759,12 @@ const SHOP = {
     { id:'p_inf1', brand:'Void', name:'Loop Pro',      price:0, exclusive:'inf', rarity:'rare',      type:'hybrid',   shape:'hex', style:'void', a:'#060d1c', b:'#3fa9ff', mark:'VOID', pw:7, ct:7, sp:8 },
     { id:'p_inf2', brand:'Void', name:'Event Horizon', price:0, exclusive:'inf', rarity:'epic',      type:'spin',     shape:'hex', style:'void', a:'#0e0618', b:'#c27bff', mark:'VOID', pw:8, ct:8, sp:9 },
     { id:'p_inf3', brand:'Void', name:'Infinity Edge', price:0, exclusive:'inf', rarity:'legendary', type:'hybrid',   shape:'hex', style:'void', a:'#140d00', b:'#ffc93c', mark:'VOID', metal:true, pw:9, ct:10, sp:9 },
+    { id:'p_kit72', brand:'Pickle Ball Inc.', name:'Kit Paddle \'72', price:0, exclusive:'wt', rarity:'vintage', type:'allround', shape:'std', style:'wood', a:'#d6a46b', b:'#7a4a24', pw:7, ct:8, sp:7 },
+    { id:'p_comp84', brand:'Composite', name:'First Composite \'84', price:0, exclusive:'wt', rarity:'vintage', type:'hybrid', shape:'std', style:'solid', a:'#5c6b73', b:'#c9b37e', mark:'1984', pw:8, ct:8, sp:8 },
+    { id:'p_rock03', brand:'St. George', name:'Red Rock \'03', price:0, exclusive:'wt', rarity:'vintage', type:'control', shape:'tear', style:'stripes', a:'#b5532f', b:'#f0c27a', pw:8, ct:9, sp:7 },
+    { id:'p_cg15', brand:'Casa Grande', name:'Desert Courts \'15', price:0, exclusive:'wt', rarity:'vintage', type:'power', shape:'hybrid', style:'stripes', a:'#2a6f97', b:'#f4d35e', pw:9, ct:8, sp:8 },
+    { id:'p_iw18', brand:'Indian Wells', name:'Desert Garden \'18', price:0, exclusive:'wt', rarity:'vintage', type:'power', shape:'long', style:'solid', a:'#e9c46a', b:'#2a9d8f', mark:'2018', pw:9, ct:8, sp:9 },
+    { id:'p_state22', brand:'Washington', name:'State Sport \'22', price:0, exclusive:'wt', rarity:'vintage', type:'allround', shape:'std', style:'gold', a:'#ffe08a', b:'#b8860b', mark:'WA', ink:'#5a3d00', metal:true, pw:9, ct:9, sp:9 },
     { id:'p_ply65', brand:'Bainbridge', name:'Plywood \'65', price:0, exclusive:'wt', rarity:'vintage', type:'control', shape:'square', style:'wood', a:'#c9955a', b:'#6e4220', pw:7, ct:9, sp:7 },
     { id:'p_krampus', brand:'Krampus', name:'Chain Breaker', price:0, exclusive:'krampus', kr:3, rarity:'krampus', type:'power', shape:'blade', style:'flames', a:'#120606', b:'#ff2a2a', mark:'KRAMPUS', pw:10, ct:9, sp:9 },
     // ---- 🎄 Christmas Drop paddles
@@ -1767,6 +1787,11 @@ const SHOP = {
     { id:'b_fire',    name:'Fireball',  price:300, color:'#ffb030', emissive:'#ff5a00', glow:true, trail:'fire' },
     { id:'b_pixel',   name:'Pixel Ball', price:0, exclusive:'arcade', color:'#ff4fd8', emissive:'#ff4fd8', glow:true, trail:'#00f0ff' },
     { id:'b_coal', name:'Lump of Coal', price:0, exclusive:'krampus', kr:1, rarity:'krampus', color:'#1c1c1c', emissive:'#ff3b00', glow:true, trail:'fire' },
+    { id:'b_court67', name:'First Court \'67', price:0, exclusive:'wt', rarity:'vintage', color:'#e9dcb5', trail:'#8fbf7a' },
+    { id:'b_champ76', name:'Champion \'76', price:0, exclusive:'wt', rarity:'vintage', color:'#f2b134', emissive:'#f2b134', glow:true, trail:'#fff3c4' },
+    { id:'b_sun01', name:'Senior Games \'01', price:0, exclusive:'wt', rarity:'vintage', color:'#ff9f43', trail:'#ffd29a' },
+    { id:'b_nats09', name:'Nationals \'09', price:0, exclusive:'wt', rarity:'vintage', color:'#ffe14d', trail:'#ffd23f' },
+    { id:'b_gulf16', name:'Gulf Coast \'16', price:0, exclusive:'wt', rarity:'vintage', color:'#c7f464', trail:'#3fd0c9' },
     { id:'b_wiffle', name:'Wiffle \'65', price:0, exclusive:'wt', rarity:'vintage', color:'#f4ead0', trail:'#d9b98a' },
     { id:'b_bauble',   name:'Bauble',      price:1500, exclusive:'xmas', rarity:'festive', color:'#d61f3c', emissive:'#ff2d55', glow:true, trail:'#ffd23f' },
     { id:'b_snowball', name:'Snowball',    price:1500, exclusive:'xmas', rarity:'festive', color:'#f4fbff', emissive:'#cfeaff', glow:true, trail:'#bfe6ff' },
@@ -1793,6 +1818,16 @@ const SHOP = {
     { id:'a_lair', name:'Krampus Lair', price:0, exclusive:'krampus', kr:5, rarity:'krampus', deco:'xlair', night:true, glow:true,
       sky:['#0d0106','#3b0b14'], fog:'#1a0508', ground:'#e6ecf5', apron:'#1a0d0d', court:'#2a0a0a', kitchen:'#4a0f14', lines:'#ff3b3b',
       hemi:['#ff9a8a','#100508',0.75], sun:['#ff7a5a',1.2,[4,12,6]] },
+    // ---- 🌍 World Tour monthly bonus arenas (beat every boss in a month's chapter)
+    { id:'a_champ76', name:"Championship '76", price:0, exclusive:'wt', rarity:'vintage', deco:'champ76', bonus:true,
+      sky:['#e9935a','#fbe3b8'], fog:'#f1d1a6', ground:'#6b8a46', apron:'#9a4632', court:'#2f6b4f', kitchen:'#3e7f5d', lines:'#f6ecd2',
+      hemi:['#fff0d8','#6a5a40',1.6], sun:['#ffd59a',2.7,[-6,9,7]] },
+    { id:'a_desert09', name:"Desert Nationals '09", price:0, exclusive:'wt', rarity:'vintage', deco:'desert09', bonus:true,
+      sky:['#5b2a86','#ff9a5a'], fog:'#e9a27a', ground:'#d6a873', apron:'#b0603a', court:'#2a6f97', kitchen:'#3a87b0', lines:'#fff6e6',
+      hemi:['#ffd9c0','#8a5a3a',1.5], sun:['#ffb27a',2.5,[-8,7,-4]] },
+    { id:'a_gulf16', name:"Gulf Coast Open '16", price:0, exclusive:'wt', rarity:'vintage', deco:'gulf16', bonus:true,
+      sky:['#3fb5e8','#e9f8ff'], fog:'#d9f1fb', ground:'#efdcb0', apron:'#e98fa8', court:'#1f6fb2', kitchen:'#3e95d6', lines:'#ffffff',
+      hemi:['#ffffff','#9a8a60',1.7], sun:['#fff6e0',2.8,[5,12,7]] },
     { id:'a_bain', name:"Bainbridge '65", price:0, exclusive:'wt', rarity:'vintage', deco:'bain',
       sky:['#7fa8c9','#e6ecee'], fog:'#d3dcdf', ground:'#4f7a3e', apron:'#45484c', court:'#53565b', kitchen:'#5d6066', lines:'#f2efe6',
       hemi:['#e8eef0','#46603a',1.5], sun:['#fff1d8',2.4,[6,12,6]] },
@@ -2170,6 +2205,7 @@ function buildArena(a) {
   }
   if (D[0] === 'x') buildXmasArena(D);
   if (D === 'bain') buildBainArena();
+  if (D === 'champ76' || D === 'desert09' || D === 'gulf16') buildBonusArena(D);
   if (D === 'stadium') { clouds(arenaGroup, '#ffffff', 6);
     const standMat = std('#5a5f6e'), rows = 5;
     const dummy = new THREE.Object3D(), spots = [];
@@ -2410,6 +2446,130 @@ function buildXmasArena(D) {
     for (let i = 0; i < 8; i++) { const [x, z] = outsideSpot(W / 2 + 1.8, W / 2 + 2.6, -NET - 2, NET + 2); arenaGroup.add(giftBox(x, z, rnd(0.6, 0.9), BAUBLES[i % 4])); }
     for (const [c, x] of [['#ff2d55', -6], ['#22c55e', 6]]) { const pl = new THREE.PointLight(c, 25, 20, 2); pl.position.set(x, 5, 0); arenaGroup.add(pl); }
     xmasSnow(400);
+  }
+}
+// ---- World Tour bonus arenas: retro tournament venues with wooden bleachers + crowd, banners, bunting, lamps
+function signTex(lines, bg, fg, w = 1024, h = 160, font = 'Georgia, serif', border = null) {
+  const c = document.createElement('canvas'); c.width = w; c.height = h; const x = c.getContext('2d');
+  x.fillStyle = bg; x.fillRect(0, 0, w, h);
+  if (border) { x.strokeStyle = border; x.lineWidth = h * 0.06; x.strokeRect(h * 0.05, h * 0.05, w - h * 0.1, h - h * 0.1); }
+  x.fillStyle = fg; x.textAlign = 'center'; x.textBaseline = 'middle';
+  lines.forEach((l, i) => { const sz = l[1] || h * 0.42; x.font = `${l[2] || 'bold'} ${sz}px ${font}`; x.fillText(l[0], w / 2, h * (lines.length === 1 ? 0.53 : (i + 0.6) / lines.length)); });
+  const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t;
+}
+function stripeTex(a, b, n = 8) { const c = document.createElement('canvas'); c.width = 128; c.height = 16; const x = c.getContext('2d'); for (let i = 0; i < n; i++) { x.fillStyle = i % 2 ? b : a; x.fillRect(i * 128 / n, 0, 128 / n, 16); } const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; return t; }
+function vintStands(G, wood, palette, rows = 4) {   // wooden bleachers along both sidelines, filled with a cheering crowd
+  const dummy = new THREE.Object3D(), spots = [], mat = std(wood, { roughness: 0.85 });
+  for (const s of [-1, 1]) for (let r = 0; r < rows; r++) {
+    const st = new THREE.Mesh(box(1.0, 0.5, L + 6), mat); st.position.set(s * (W / 2 + 3.2 + r * 1.0), r * 0.5 + 0.25, 0); st.receiveShadow = true; st.castShadow = true; G.add(st);
+    const lip = new THREE.Mesh(box(0.06, 0.08, L + 6), std('#3a2414')); lip.position.set(s * (W / 2 + 2.7 + r * 1.0), r * 0.5 + 0.5, 0); G.add(lip);
+    for (let z = -(L + 5) / 2; z < (L + 5) / 2; z += 0.55) if (Math.random() < 0.8) spots.push([s * (W / 2 + 3.2 + r * 1.0), r * 0.5 + 0.5 + 0.3, z + rnd(-0.08, 0.08)]);
+  }
+  crowd = new THREE.InstancedMesh(new THREE.CapsuleGeometry(0.17, 0.3, 3, 8), std('#ffffff'), spots.length);
+  const c = new THREE.Color();
+  spots.forEach((p, i) => { dummy.position.set(...p); dummy.updateMatrix(); crowd.setMatrixAt(i, dummy.matrix); crowd.setColorAt(i, c.set(palette[i % palette.length])); });
+  crowd.userData = { spots, phase: spots.map(() => Math.random() * 6.28), dummy }; G.add(crowd);
+}
+function bunting(G, a, b, cols) {   // a string of triangle flags between two points
+  const n = 22, line = new THREE.Mesh(cyl(0.008, 0.008, a.distanceTo(b), 4), std('#eee'));
+  line.position.copy(a).lerp(b, 0.5); line.lookAt(b); line.rotateX(Math.PI / 2); G.add(line);
+  const geo = new THREE.ConeGeometry(0.13, 0.3, 3); geo.rotateX(Math.PI);
+  for (let i = 1; i < n; i++) {
+    const p = a.clone().lerp(b, i / n); p.y -= Math.sin(i / n * Math.PI) * 0.35 + 0.15;
+    const f = new THREE.Mesh(geo, std(cols[i % cols.length], { side: THREE.DoubleSide })); f.position.copy(p); f.scale.z = 0.15; f.lookAt(p.x + (b.z - a.z), p.y, p.z - (b.x - a.x)); G.add(f);
+    arenaAnim.push(t => { f.rotation.z = Math.sin(t * 2.5 + i) * 0.12; });
+  }
+}
+function lampPost(G, x, z, col = '#ffe7a8') {
+  const pole = new THREE.Mesh(cyl(0.06, 0.09, 3.2, 8), std('#2b2b2b', { metalness: 0.6, roughness: 0.4 })); pole.position.set(x, 1.6, z); G.add(pole);
+  const arm = new THREE.Mesh(box(0.5, 0.05, 0.05), std('#2b2b2b')); arm.position.set(x, 3.15, z); G.add(arm);
+  for (const dx of [-0.25, 0.25]) { const b = new THREE.Mesh(sph(0.16, 14, 10), new THREE.MeshStandardMaterial({ color: col, emissive: col, emissiveIntensity: 1.3 })); b.position.set(x + dx, 3.05, z); G.add(b); }
+}
+function retroCar(G, x, z, ry, col) {
+  const g = new THREE.Group(); g.position.set(x, 0, z); g.rotation.y = ry; G.add(g);
+  const body = new THREE.Mesh(box(1.8, 0.5, 4.2), std(col, { roughness: 0.35, metalness: 0.3 })); body.position.y = 0.55; body.castShadow = true; g.add(body);
+  const cab = new THREE.Mesh(box(1.6, 0.5, 2.4), std(col, { roughness: 0.35, metalness: 0.3 })); cab.position.set(0, 1.0, -0.3); g.add(cab);
+  const glass = new THREE.Mesh(box(1.62, 0.36, 2.2), std('#9ec9d9', { roughness: 0.1, metalness: 0.5 })); glass.position.set(0, 1.02, -0.3); g.add(glass);
+  const wood = new THREE.Mesh(box(1.82, 0.2, 3.6), std('#8a5a30')); wood.position.set(0, 0.62, -0.1); g.add(wood);
+  for (const sx of [-0.9, 0.9]) for (const sz of [-1.3, 1.3]) { const w = new THREE.Mesh(cyl(0.3, 0.3, 0.22, 14), std('#1a1a1a')); w.rotation.z = Math.PI / 2; w.position.set(sx, 0.3, sz); g.add(w); const hub = new THREE.Mesh(cyl(0.16, 0.16, 0.24, 10), std('#e8e8e8', { metalness: 0.8 })); hub.rotation.z = Math.PI / 2; hub.position.set(sx, 0.3, sz); g.add(hub); }
+  for (const sx of [-0.6, 0.6]) { const hl = new THREE.Mesh(sph(0.1), new THREE.MeshStandardMaterial({ color: '#fff7d0', emissive: '#fff2b0', emissiveIntensity: 0.8 })); hl.position.set(sx, 0.6, 2.1); g.add(hl); }
+}
+function buildBonusArena(D) {
+  const G = arenaGroup, farZ = -(NET + 5.5);
+  const sign = (tex, w, h, x, y, z, ry = 0) => { const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshStandardMaterial({ map: tex, roughness: 0.8 })); m.position.set(x, y, z); m.rotation.y = ry; G.add(m); return m; };
+  const posts = (x, y, z, n = 2, w = 8) => { for (let i = 0; i < n; i++) { const p = new THREE.Mesh(box(0.18, y, 0.18), std('#4a2f1c')); p.position.set(x - w / 2 + i * w / (n - 1), y / 2, z - 0.05); G.add(p); } };
+  if (D === 'champ76') {   // 🏆 the 1976 championship club: bleachers, clubhouse with striped awning, bunting, lamps, a scoreboard and a woody wagon
+    clouds(G, '#ffe8cf', 7);
+    const sunD = new THREE.Mesh(new THREE.CircleGeometry(10, 40), new THREE.MeshBasicMaterial({ color: '#ffd28a', fog: false })); sunD.position.set(-30, 9, -160); G.add(sunD);
+    for (let i = 0; i < 22; i++) { const x = rnd(-30, 30), z = rnd(-60, -28); G.add(tree(x, z, rnd(1.2, 2.0))); }
+    vintStands(G, '#8a5a35', ['#e07a2e', '#d9a836', '#7f9c3c', '#8a4b2a', '#f3e3c3', '#3f8f8a', '#b8413b', '#5a7fb0']);
+    const club = new THREE.Group(); club.position.set(0, 0, farZ - 6.5); G.add(club);
+    const wall = new THREE.Mesh(box(20, 4.4, 4), std('#efe0c0')); wall.position.y = 2.2; wall.castShadow = true; club.add(wall);
+    const trim = new THREE.Mesh(box(20.3, 0.5, 4.3), std('#6b3f22')); trim.position.y = 4.55; club.add(trim);
+    const awn = new THREE.Mesh(box(20.4, 0.08, 2.2), new THREE.MeshStandardMaterial({ map: (() => { const t = stripeTex('#e8742f', '#f6ecd2', 24); return t; })(), roughness: 0.7 })); awn.position.set(0, 3.0, 2.9); awn.rotation.x = 0.32; club.add(awn);
+    for (let i = 0; i < 6; i++) { const w = new THREE.Mesh(box(1.8, 1.2, 0.08), std('#ffe7a8', { emissive: '#ffd27a', emissiveIntensity: 0.45 })); w.position.set(-8 + i * 3.2, 1.7, 2.02); club.add(w); }
+    const roofSign = new THREE.Mesh(new THREE.PlaneGeometry(9, 1.3), new THREE.MeshStandardMaterial({ map: signTex([['ATHLETIC CLUB · EST. 1976']], '#2f6b4f', '#f6ecd2', 1024, 150, 'Georgia, serif', '#d9a836'), emissive: '#ffffff', emissiveIntensity: 0.12 })); roofSign.position.set(0, 5.5, 0.5); club.add(roofSign);
+    const banner = sign(signTex([['WORLD\'S FIRST PICKLEBALL CHAMPIONSHIP', 62], ['· 1976 ·', 54]], '#f6ecd2', '#8a2a1e', 1024, 200, 'Georgia, serif', '#8a2a1e'), 8.6, 1.5, 0, 1.15, farZ + 1.6);
+    posts(0, 1.95, farZ + 1.55, 2, 8.7); void banner;
+    // scoreboard
+    const sb = new THREE.Group(); sb.position.set(W / 2 + 4.5, 0, farZ - 1.5); sb.rotation.y = -0.35; G.add(sb);
+    for (const x of [-1.6, 1.6]) { const p = new THREE.Mesh(box(0.25, 4.2, 0.25), std('#4a2f1c')); p.position.set(x, 2.1, 0); sb.add(p); }
+    const face = new THREE.Mesh(new THREE.PlaneGeometry(3.8, 2.2), new THREE.MeshStandardMaterial({ map: signTex([['HOME   11', 70], ['GUEST   9', 70], ['1976', 46]], '#1d2a22', '#ffd46a', 512, 300, 'Courier New, monospace', '#8a5a35'), emissive: '#ffffff', emissiveIntensity: 0.15 }));
+    face.position.set(0, 4.4, 0.14); sb.add(face); const back = new THREE.Mesh(box(4, 2.4, 0.25), std('#5a3a22')); back.position.set(0, 4.4, 0); sb.add(back);
+    // bunting + lamps
+    const bc = ['#e8742f', '#f6ecd2', '#2f6b4f', '#d9a836', '#b8413b'];
+    for (const s of [-1, 1]) { bunting(G, new THREE.Vector3(s * (W / 2 + 1.4), 3.6, -(NET + 1.2)), new THREE.Vector3(s * (W / 2 + 1.4), 3.6, NET + 1.2), bc); lampPost(G, s * (W / 2 + 1.4), -(NET + 1.2)); lampPost(G, s * (W / 2 + 1.4), NET + 1.2); }
+    bunting(G, new THREE.Vector3(-(W / 2 + 1.4), 3.6, -(NET + 1.2)), new THREE.Vector3(W / 2 + 1.4, 3.6, -(NET + 1.2)), bc);
+    for (const s of [-1, 1]) { const pl = new THREE.PointLight('#ffd9a0', 14, 18, 2); pl.position.set(s * (W / 2 + 1.4), 3.2, 0); G.add(pl); }
+    retroCar(G, -(W / 2 + 9.5), farZ + 1, 0.5, '#d9702c'); retroCar(G, W / 2 + 9.8, 4, -0.2, '#7f9c3c');
+    for (let i = 0; i < 10; i++) G.add(bush(rnd(-9, 9), farZ - 3.7 + rnd(-0.3, 0.3), rnd(0.7, 1.0), '#5e8a3a'));
+  }
+  if (D === 'desert09') {   // 🌵 sunset desert nationals: mesas, saguaros, RVs, string lights, banner
+    const sunD = new THREE.Mesh(new THREE.CircleGeometry(14, 40), new THREE.MeshBasicMaterial({ color: '#ffcf7a', fog: false })); sunD.position.set(-18, 6, -170); G.add(sunD);
+    for (let i = 0; i < 9; i++) { const m = new THREE.Group(), w = rnd(10, 22), h = rnd(6, 14);
+      const a = new THREE.Mesh(box(w, h, w * 0.6), std(['#a5492f', '#b8603a', '#8f3f2c'][i % 3], { flatShading: true })); a.position.y = h / 2; m.add(a);
+      const cap = new THREE.Mesh(box(w * 0.8, h * 0.22, w * 0.5), std('#c97a4a', { flatShading: true })); cap.position.y = h + h * 0.11; m.add(cap);
+      m.position.set(rnd(-90, 90), 0, rnd(-140, -70)); m.rotation.y = rnd(0, 1); G.add(m); }
+    const sag = (x, z, s) => { const g = new THREE.Group(), mat = std('#3f7d4a'); const t = new THREE.Mesh(new THREE.CapsuleGeometry(0.28 * s, 3 * s, 4, 10), mat); t.position.y = 1.8 * s; g.add(t);
+      for (const d of [-1, 1]) { const h1 = new THREE.Mesh(new THREE.CapsuleGeometry(0.18 * s, 0.5 * s, 4, 8), mat); h1.rotation.z = Math.PI / 2; h1.position.set(d * 0.45 * s, 1.6 * s + d * 0.3 * s, 0); g.add(h1);
+        const up = new THREE.Mesh(new THREE.CapsuleGeometry(0.17 * s, 0.9 * s, 4, 8), mat); up.position.set(d * 0.75 * s, 2.1 * s + d * 0.3 * s, 0); g.add(up); }
+      g.position.set(x, 0, z); g.rotation.y = rnd(0, 6); G.add(g); };
+    for (let i = 0; i < 18; i++) { const [x, z] = outsideSpot(W / 2 + 8, W / 2 + 24, -40, 14); sag(x, z, rnd(0.8, 1.4)); }
+    for (let i = 0; i < 6; i++) sag(rnd(-20, 20), rnd(-40, -22), rnd(1, 1.6));
+    vintStands(G, '#9a6a3e', ['#e9a23b', '#f6e7c8', '#2a6f97', '#c2532e', '#6fa86a', '#f2c14e', '#7b4b94']);
+    const rv = (x, z, ry) => { const g = new THREE.Group(); g.position.set(x, 0, z); g.rotation.y = ry; G.add(g); const b = new THREE.Mesh(box(2.4, 2.4, 7), std('#f1ece0')); b.position.y = 1.5; g.add(b);
+      const st = new THREE.Mesh(box(2.42, 0.3, 7.02), std('#c2532e')); st.position.y = 1.3; g.add(st); const st2 = new THREE.Mesh(box(2.42, 0.15, 7.02), std('#e9a23b')); st2.position.y = 1.65; g.add(st2);
+      for (const sz of [-2.4, 2.2]) { const w = new THREE.Mesh(cyl(0.4, 0.4, 2.5, 12), std('#1a1a1a')); w.rotation.z = Math.PI / 2; w.position.set(0, 0.4, sz); g.add(w); } };
+    rv(-(W / 2 + 11), -6, 0.3); rv(W / 2 + 11.5, -9, -0.25); rv(-(W / 2 + 13), 6, 0.1);
+    const banner = sign(signTex([['FIRST NATIONAL CHAMPIONSHIPS', 66], ['· 2009 ·', 54]], '#2a6f97', '#fff6e6', 1024, 200, 'Georgia, serif', '#f2c14e'), 8.6, 1.5, 0, 1.15, farZ + 1.6); void banner; posts(0, 1.95, farZ + 1.55, 2, 8.7);
+    const bulbs = [];
+    for (const s of [-1, 1]) { lampPost(G, s * (W / 2 + 1.4), -(NET + 1.2), '#ffd38a'); lampPost(G, s * (W / 2 + 1.4), NET + 1.2, '#ffd38a'); }
+    const runs = [[[-(W / 2 + 1.4), -(NET + 1.2)], [W / 2 + 1.4, -(NET + 1.2)]], [[-(W / 2 + 1.4), -(NET + 1.2)], [-(W / 2 + 1.4), NET + 1.2]], [[W / 2 + 1.4, -(NET + 1.2)], [W / 2 + 1.4, NET + 1.2]]];
+    for (const [[x1, z1], [x2, z2]] of runs) { const a = new THREE.Vector3(x1, 3.4, z1), b = new THREE.Vector3(x2, 3.4, z2);
+      for (let i = 1; i < 12; i++) { const p = a.clone().lerp(b, i / 12); p.y -= Math.sin(i / 12 * Math.PI) * 0.5; const bl = new THREE.Mesh(sph(0.07, 8, 6), new THREE.MeshStandardMaterial({ color: '#ffe9a8', emissive: '#ffd27a', emissiveIntensity: 1.6 })); bl.position.copy(p); G.add(bl); bulbs.push(bl); } }
+    arenaAnim.push(t => bulbs.forEach((b, i) => { b.material.emissiveIntensity = 1.1 + Math.sin(t * 3 + i * 0.7) * 0.5; }));
+    for (const s of [-1, 1]) { const pl = new THREE.PointLight('#ffc48a', 12, 18, 2); pl.position.set(s * 2, 3.2, 0); G.add(pl); }
+  }
+  if (D === 'gulf16') {   // 🌴 gulf coast open: turquoise sea, palms, pastel art-deco clubhouse, striped umbrellas
+    clouds(G, '#ffffff', 8);
+    const sea = new THREE.Mesh(new THREE.PlaneGeometry(400, 140), std('#2bb3c0', { roughness: 0.2, metalness: 0.3, emissive: '#0a5a66', emissiveIntensity: 0.3 })); sea.rotation.x = -Math.PI / 2; sea.position.set(0, 0.03, -110); G.add(sea);
+    arenaAnim.push(t => { sea.position.y = 0.03 + Math.sin(t * 0.8) * 0.04; });
+    for (let i = 0; i < 16; i++) { const [x, z] = outsideSpot(W / 2 + 7, W / 2 + 18, -30, 14); G.add(palm(x, z)); }
+    for (let i = 0; i < 6; i++) G.add(palm(rnd(-22, 22), rnd(-34, -24)));
+    vintStands(G, '#f3e6cf', ['#ff8fab', '#7bdff2', '#f7d794', '#ffffff', '#ff6f59', '#43c6ac', '#b28dff']);
+    const club = new THREE.Group(); club.position.set(0, 0, farZ - 7); G.add(club);
+    const wall = new THREE.Mesh(box(18, 4.6, 4), std('#f7c6d0')); wall.position.y = 2.3; club.add(wall);
+    const tower = new THREE.Mesh(cyl(2.2, 2.2, 6.4, 24), std('#bff0e6')); tower.position.set(0, 3.2, 0.6); club.add(tower);
+    for (let i = 0; i < 3; i++) { const band = new THREE.Mesh(cyl(2.25, 2.25, 0.18, 24), std('#ff8fab')); band.position.set(0, 4.6 + i * 0.5, 0.6); club.add(band); }
+    for (const x of [-6.5, -3.5, 3.5, 6.5]) { const w = new THREE.Mesh(new THREE.CircleGeometry(0.7, 20), std('#fff6d8', { emissive: '#ffe9b0', emissiveIntensity: 0.4 })); w.position.set(x, 2.4, 2.02); club.add(w); }
+    const cs = new THREE.Mesh(new THREE.PlaneGeometry(7, 1.2), new THREE.MeshStandardMaterial({ map: signTex([['BEACH CLUB']], '#2a9d8f', '#ffffff', 1024, 170, 'Georgia, serif', '#f7d794') })); cs.position.set(0, 5.2, 2.05); club.add(cs);
+    const banner = sign(signTex([['GULF COAST OPEN', 74], ['· 2016 ·', 54]], '#ffffff', '#1f6fb2', 1024, 200, 'Georgia, serif', '#ff8fab'), 8.6, 1.5, 0, 1.15, farZ + 1.6); void banner; posts(0, 1.95, farZ + 1.55, 2, 8.7);
+    const umb = (x, z, a, b) => { const g = new THREE.Group(); g.position.set(x, 0, z); G.add(g); const p = new THREE.Mesh(cyl(0.04, 0.04, 2.3, 6), std('#eee')); p.position.y = 1.15; g.add(p);
+      const top = new THREE.Mesh(new THREE.ConeGeometry(1.3, 0.6, 12, 1, true), new THREE.MeshStandardMaterial({ map: stripeTex(a, b, 12), side: THREE.DoubleSide })); top.position.y = 2.4; g.add(top); };
+    [[-(W / 2 + 9), -4], [W / 2 + 9.5, -1], [-(W / 2 + 10), 5], [W / 2 + 10, 7], [-5, farZ - 3.5], [5, farZ - 3.5]].forEach(([x, z], i) => umb(x, z, ['#ff8fab', '#7bdff2', '#f7d794'][i % 3], '#ffffff'));
+    const bc = ['#ff8fab', '#7bdff2', '#f7d794', '#ffffff', '#43c6ac'];
+    for (const s of [-1, 1]) bunting(G, new THREE.Vector3(s * (W / 2 + 1.4), 3.6, -(NET + 1.2)), new THREE.Vector3(s * (W / 2 + 1.4), 3.6, NET + 1.2), bc);
+    for (const s of [-1, 1]) for (const z of [-1, 1]) { const p = new THREE.Mesh(cyl(0.05, 0.05, 3.7, 6), std('#ffffff')); p.position.set(s * (W / 2 + 1.4), 1.85, z * (NET + 1.2)); G.add(p); }
   }
 }
 function buildBainArena() {   // 1965 backyard on Bainbridge Island: cedars, Puget Sound behind, a ranch house, Pickles' doghouse
@@ -3897,8 +4057,8 @@ $('again').addEventListener('click', () => {
   if (mode === 'online') { if (role === 'host') startOnlineMatch(); return; }
   if (overNext === 'arcade') { $('over').classList.add('hidden'); arcadeAdvance(); return; }
   if (overNext === 'arcadeNew') { $('over').classList.add('hidden'); startArcade(); return; }
-  if (overNext === 'wtNext') { $('over').classList.add('hidden'); toMenu(); showWT(); return; }
-  if (overNext === 'wtRetry') { $('over').classList.add('hidden'); startWt(arcade.wi); return; }
+  if (overNext === 'wtNext') { $('over').classList.add('hidden'); toMenu(); showWT(true); return; }
+  if (overNext === 'wtRetry') { $('over').classList.add('hidden'); startWt(WT_CITIES.find(x => x.id === arcade.se), arcade.wi); return; }
   if (overNext === 'infNext') { $('over').classList.add('hidden'); infAdvance(); return; }
   if (overNext === 'infNew') { $('over').classList.add('hidden'); startInfinite(); return; }
   if (overNext === 'chaosNext') { $('over').classList.add('hidden'); chaosAdvance(); return; }
@@ -4032,7 +4192,7 @@ function renderShop() {
     else if (it.exclusive === 'tour3') act = `<button class="act no">🏆 ${Math.min(3, SAVE.tourWins || 0)}/3 Tours</button>`;
     else if (it.exclusive === 'boss2') act = `<button class="act no">👑 Boss 2</button>`;
     else if (it.exclusive === 'secret') act = `<button class="act no">🤫 Secret</button>`;
-    else if (it.exclusive === 'wt') act = `<button class="act no">🌍 ${wtItemBoss(it.id) ? 'Boss ' + wtItemBoss(it.id) : 'World Tour'}</button>`;
+    else if (it.exclusive === 'wt') { const wb = wtItemBoss(it.id); act = `<button class="act no">${wb && wb.bonus ? '🏆 Month bonus' : `🌍 ${wb ? wb.c.short.split('<br>')[0] + ' · ' + wb.n : 'World Tour'}`}</button>`; }
     else if (it.exclusive) act = `<button class="act no">🕹️ Arcade</button>`;
     else act = `<button class="act ${SAVE.dinks >= it.price ? 'buy' : 'no'}"><span class="coin"></span> ${it.price}</button>`;
     const rr = itemRarity(shopTab, it);
@@ -4064,7 +4224,7 @@ function renderShop() {
           burst(T3(player.x, player.y, 1.4), '#4ade80', 24, 3, 0.22);
         }
         else if (it.exclusive === 'logo') toast('🤫 This one is hiding somewhere on the home screen…');
-        else if (it.exclusive === 'wt') toast(`🌍 Win this on the World Tour${wtItemBoss(it.id) ? ` by beating boss ${wtItemBoss(it.id)} in ${wtSeason().city}` : ''}`);
+        else if (it.exclusive === 'wt') { const wb = wtItemBoss(it.id); toast(wb && wb.bonus ? `🏆 Beat all 40 World Tour bosses in ${wb.bonus.title.split('· ')[1]} (that month only) to win this` : `🌍 Win this on the World Tour${wb ? `: beat boss ${wb.n} in ${wb.c.city} (${wb.c.place.split('· ')[1]})` : ''}`); }
         else if (it.exclusive === 'spin') toast('Win this on the Daily Spin. Good luck!');
         else if (it.exclusive === 'inf') toast('Extract in Infinite Arcade and pick a paddle to win this');
         else if (it.exclusive === 'tour3') toast(`Win 3 tournaments to unlock this (${Math.min(3, SAVE.tourWins || 0)}/3)`);
@@ -5158,6 +5318,11 @@ function showChaosLadder() {
 }
 // ================= What's New: shows once after an update. To announce a feature, add an entry at the TOP with the next v =================
 const NEWS = [
+  { v: 11, date: '19 Nov 2026', items: [
+    ['🗓️', '<b>World Tour now changes every week!</b> November is Chapter 1, Birth of a Sport: Bainbridge Island 1965, the First Court 1967, Puget Sound 1972 and the first-ever tournament in Tukwila 1976. A new city unlocks every week, with 10 bosses each.'],
+    ['🏆', '<b>Monthly bonus reward:</b> beat all 40 bosses before the month ends to win a vintage arena. November\'s prize: <b>Championship \'76</b>, a retro tournament club with wooden bleachers, bunting, a clubhouse and an old scoreboard.'],
+    ['📜', 'Coming up: Chapter 2, Going National (December) and Chapter 3, The Big Boom (January), each with its own bonus arena.'],
+  ] },
   { v: 10, date: '19 Nov 2026', items: [
     ['🌍', '<b>NEW MODE: World Tour!</b> Travel through pickleball history: a new city every month, 10 bosses each, all on vintage film. Stop 1 is where it all began: <b>Bainbridge Island, 1965</b>. Beat all 10 to meet Pickles 🐶.'],
     ['🎞️', '<b>Vintage sprites</b> (Tintype, Sepia, Gramophone, Heirloom) can only be won on the World Tour. Their Silent Film power makes the CPU move in choppy half-speed frames.'],
@@ -5263,81 +5428,150 @@ function krampusOver(win) {
 }
 $('krBtn').addEventListener('click', () => { initAudio(); beep(330, 0.12, 0.1, 'sawtooth'); showKrampus(); });
 $('krGo').addEventListener('click', () => { initAudio(); startKrampus(); });
-// ================= 🌍 WORLD TOUR: a new city every month, 10 bosses each, told through pickleball history (vintage film look) =================
-// To add a city: push a season with `from` = the 1st of its month. The latest season whose `from` has passed is the live one.
-const WT_SEASONS = [
-  { id: 'bain65', from: [2026, 10, 1], stop: 1, city: 'Bainbridge Island', place: 'Washington, USA 🇺🇸 · Summer 1965', short: 'Bainbridge Is.<br>1965', arena: 'a_bain',
-    story: 'Summer 1965. Joel Pritchard, Bill Bell and Barney McCallum came home to bored kids and an old badminton court, but no shuttlecock. They grabbed ping-pong paddles and a plastic ball full of holes, dropped the net, and invented <b>pickleball</b>. Was it named after the family dog, Pickles? Or a rowing "pickle boat"? Depends who you ask…',
-    bosses: [['c_frog', 'Puddle Pete', 'It never stops raining here'], ['c_fox', 'Foxy Flo', 'Sneaky little drop shots'], ['c_penguin', 'Ferry Fran', 'Rides the Seattle ferry daily'],
-      ['c_tiger', 'Tiger Ted', 'Backyard badminton champ'], ['c_pirate', 'Captain Sound', 'Rules the waters of Puget Sound'], ['c_viking', 'Nordic Ned', 'Pure island grit'],
-      ['c_wizard', 'Wizard of Winslow', 'Magic touch at the net'], ['c_knight', 'Sir Shuttlecock', 'Lost his shuttlecock, kept his pride'], ['c_hiker', 'Island Bigfoot', 'Lives deep in the cedars'],
-      ['c_pickles', 'Pickles', 'The dog it was named after… maybe']],
-    rewards: { 2: ['spr', 'relic_0'], 3: ['ball', 'b_wiffle'], 5: ['spr', 'relic_1'], 6: ['paddle', 'p_ply65'], 8: ['spr', 'relic_2'], 9: ['arena', 'a_bain'], 10: [['char', 'c_pickles'], ['spr', 'relic_3']] } },
+// ================= 🌍 WORLD TOUR: pickleball history, one chapter per month, a new city every week, 10 bosses per city (vintage film look) =================
+// Each month = a chapter of 4 cities. City n opens on day 1 / 8 / 15 / 22 and stays playable until the month ends.
+// Beat all 40 bosses in the month = the chapter's bonus arena. To add a month: push a chapter with y + m (0-based month).
+const B_ = (c, n, t) => [c, n, t];
+const WT_CHAPTERS = [
+  { id: '2026-11', y: 2026, m: 10, title: 'Chapter 1 · Birth of a Sport', bonus: 'a_champ76', cities: [
+    { id: 'bain65', city: 'Bainbridge Island', place: 'Washington, USA 🇺🇸 · Summer 1965', short: 'Bainbridge Is.<br>1965', arena: 'a_bain',
+      story: 'Summer 1965. Joel Pritchard, Bill Bell and Barney McCallum came home to bored kids and an old badminton court, but no shuttlecock. They grabbed ping-pong paddles and a plastic ball full of holes, lowered the net, and invented <b>pickleball</b>. The name? Most say it came from a rowing "pickle boat". The family dog Pickles arrived a couple of years later… but he still claims it.',
+      bosses: [B_('c_frog', 'Puddle Pete', 'It never stops raining here'), B_('c_fox', 'Foxy Flo', 'Sneaky little drop shots'), B_('c_penguin', 'Ferry Fran', 'Rides the Seattle ferry daily'), B_('c_tiger', 'Tiger Ted', 'Backyard badminton champ'), B_('c_pirate', 'Captain Sound', 'Rules the waters of Puget Sound'), B_('c_viking', 'Nordic Ned', 'Pure island grit'), B_('c_wizard', 'Wizard of Winslow', 'Magic touch at the net'), B_('c_knight', 'Sir Shuttlecock', 'Lost his shuttlecock, kept his pride'), B_('c_hiker', 'Island Bigfoot', 'Lives deep in the cedars'), B_('c_pickles', 'Pickles', 'Showed up later, still claims the name')],
+      rewards: { 2: ['spr', 'relic_0'], 3: ['ball', 'b_wiffle'], 5: ['spr', 'relic_1'], 6: ['paddle', 'p_ply65'], 8: ['spr', 'relic_2'], 9: ['arena', 'a_bain'], 10: [['char', 'c_pickles'], ['spr', 'relic_3']] } },
+    { id: 'bain67', city: 'The First Court', place: 'Bainbridge Island, Washington 🇺🇸 · 1967', short: 'First Court<br>1967', arena: 'a_bain',
+      story: '1967. Joel Pritchard\'s neighbour Bob O\'Brian built the <b>first permanent pickleball court</b>, right in his backyard. No more borrowing the badminton court: the game finally had a home of its own.',
+      bosses: [B_('c_panda', 'Concrete Connie', 'Poured the slab herself'), B_('c_frog', 'Net Post Norm', 'Hasn\'t moved since 1967'), B_('c_penguin', 'Backyard Barb', 'Hosts every Sunday game'), B_('c_fox', 'Hedge Hopper', 'Fetches every ball from the bushes'), B_('c_tiger', 'Lawnmower Larry', 'Always on the move'), B_('c_pirate', 'Salty Sal', 'Sailed in for the opening'), B_('c_samurai', 'Sensei Sato', 'Perfect form, every shot'), B_('c_viking', 'Big Olaf', 'Biggest neighbour on the block'), B_('c_wizard', 'Old Man Cedar', 'Older than the trees'), B_('c_minotaur', 'The Bulldozer', 'Flattened the ground for the court')],
+      rewards: { 5: ['box', 'premium'], 10: ['ball', 'b_court67'] } },
+    { id: 'sea72', city: 'Puget Sound', place: 'Washington, USA 🇺🇸 · 1972–1976', short: 'Puget Sound<br>1972', arena: 'a_park',
+      story: '1972. Pritchard, Bell and McCallum formed <b>Pickle Ball, Inc.</b> to protect their new sport, and wooden paddle kits spread around the Sound. A national newspaper wrote about the game in 1975, and in 1976 <i>Tennis</i> magazine called it "America\'s newest racquet sport".',
+      bosses: [B_('c_fox', 'Paperboy Pete', 'Delivers the big story'), B_('c_frog', 'Drizzle Ray', 'Rain is his home court'), B_('c_penguin', 'Coffee Carla', 'Three espressos deep'), B_('c_panda', 'Kit Builder Kim', 'Assembles paddles by hand'), B_('c_tiger', 'Typewriter Ted', 'Writes up every rally'), B_('c_samurai', 'Needle Nina', 'Plays from the top of the city'), B_('c_pirate', 'Pier Pat', 'Ferry dock hustler'), B_('c_knight', 'The Lawyer', 'Protects the game\'s name'), B_('c_wizard', 'The Editor', 'Decides what makes the magazine'), B_('c_cyclops', 'The Corporation', 'One eye on the paddle kits')],
+      rewards: { 5: ['box', 'premium'], 10: ['paddle', 'p_kit72'] } },
+    { id: 'tuk76', city: 'Tukwila', place: 'Washington, USA 🇺🇸 · Spring 1976', short: 'Tukwila<br>1976', arena: 'a_champ76',
+      story: 'Spring 1976. At South Center Athletic Club in Tukwila, the <b>first known pickleball tournament</b> in the world was held, billed as "The World\'s First Pickleball Championship". Lots of the players were college tennis players still learning the rules.',
+      bosses: [B_('c_tiger', 'Tennis Tom', 'College tennis star, pickle rookie'), B_('c_fox', 'Disco Dana', 'It\'s 1976, baby'), B_('c_panda', 'Headband Hank', 'Sweatband on, no fear'), B_('c_frog', 'Lineswoman Lou', 'Calls it like she sees it'), B_('c_penguin', 'Ref Ronnie', 'Strict on the kitchen'), B_('c_viking', 'Bellbottom Bjorn', 'Flares flap on every lunge'), B_('c_samurai', 'Stopwatch Stu', 'Times every single point'), B_('c_knight', 'Sir Top Seed', 'Number one in the draw'), B_('c_wizard', 'The Organiser', 'Drew up the whole bracket'), B_('c_phoenix', 'The First Champion', 'About to win the world\'s first title')],
+      rewards: { 5: ['box', 'premium'], 10: ['ball', 'b_champ76'] } },
+  ] },
+  { id: '2026-12', y: 2026, m: 11, title: 'Chapter 2 · Going National', bonus: 'a_desert09', cities: [
+    { id: 'wa84', city: 'Washington State', place: 'USA 🇺🇸 · 1984', short: 'Rulebook<br>1984', arena: 'a_stadium',
+      story: '1984. The <b>USA Pickleball Association</b> was formed to grow the game across the country, and the <b>first official rulebook</b> came out that March. The same year Arlen Paranto, an industrial engineer at Boeing, built the <b>first composite paddle</b>.',
+      bosses: [B_('c_frog', 'Rulebook Rita', 'Knows every page by heart'), B_('c_fox', 'Footfault Fred', 'Watch that line'), B_('c_penguin', 'Kitchen Kay', 'Never steps in'), B_('c_panda', 'Clipboard Cal', 'Keeps score in pencil'), B_('c_tiger', 'Two-Bounce Tina', 'Always lets it bounce twice'), B_('c_samurai', 'Engineer Ed', 'Measures everything twice'), B_('c_grey', 'Composite Carl', 'Lighter paddle, faster hands'), B_('c_knight', 'Commissioner Kurt', 'Enforces the brand-new rules'), B_('c_wizard', 'Grand Umpire', 'Final word on every call'), B_('c_crystal', 'The Composite', 'Space-age paddle, space-age game')],
+      rewards: { 5: ['box', 'premium'], 10: ['paddle', 'p_comp84'] } },
+    { id: 'surp01', city: 'Surprise', place: 'Arizona, USA 🇺🇸 · 2001', short: 'Surprise, AZ<br>2001', arena: 'a_desert09',
+      story: '2001. Thanks to Earl Hill, pickleball joined the <b>Arizona Senior Olympics</b> for the first time. 100 players met at Happy Trails RV Resort in Surprise: the biggest pickleball event ever played up to then. Snowbirds had carried the game south.',
+      bosses: [B_('c_penguin', 'Snowbird Sue', 'Flew south for the winter'), B_('c_frog', 'RV Ralph', 'Parked right next to the court'), B_('c_panda', 'Grandma Gloria', 'Will dink you to tears'), B_('c_fox', 'Shuffleboard Sheila', 'Switched sports this year'), B_('c_tiger', 'Sunhat Stan', 'Never without his hat'), B_('c_viking', 'Golf Cart Gus', 'Drives between points'), B_('c_samurai', 'Early Bird Ernie', 'On court at 6am sharp'), B_('c_pirate', 'Captain Cactus', 'Prickly at the net'), B_('c_anubis', 'Desert Dan', 'The heat doesn\'t bother him'), B_('c_dragon', 'The Gold Medalist', 'Takes every gold going')],
+      rewards: { 5: ['box', 'premium'], 10: ['ball', 'b_sun01'] } },
+    { id: 'stg03', city: 'St. George', place: 'Utah, USA 🇺🇸 · October 2003', short: 'St. George<br>2003', arena: 'a_desert09',
+      story: '2003. Pickleball was played for the first time at the <b>Huntsman World Senior Games</b> in St. George, Utah, held among the red rocks every October. Back then there were only 39 known places to play in all of North America.',
+      bosses: [B_('c_fox', 'Red Rock Rhonda', 'Climbs before breakfast'), B_('c_frog', 'Canyon Carl', 'Echoes every shot'), B_('c_penguin', 'Trailhead Zoe', 'Hikes before every match'), B_('c_panda', 'Medal Mel', 'Collects them all'), B_('c_tiger', 'Silver Stella', 'Second place? Never again'), B_('c_viking', 'Big Mesa Mike', 'Flat-topped and steady'), B_('c_samurai', 'Sunrise Saul', 'Plays in the golden hour'), B_('c_knight', 'Sir Senior', 'Older, wiser, sneakier'), B_('c_cyclops', 'Arch Rival', 'Lives under the stone arches'), B_('c_medusa', 'The Stone Gaze', 'One look and you freeze')],
+      rewards: { 5: ['box', 'premium'], 10: ['paddle', 'p_rock03'] } },
+    { id: 'buck09', city: 'Buckeye', place: 'Arizona, USA 🇺🇸 · November 2009', short: 'Buckeye<br>2009', arena: 'a_desert09',
+      story: 'November 2009. The <b>first USA Pickleball National Championships</b> for all ages came to Buckeye, Arizona. Almost 400 players arrived from 26 states and several Canadian provinces.',
+      bosses: [B_('c_frog', 'Rookie Rick', 'First tournament ever'), B_('c_penguin', 'Maple Leaf Mo', 'Drove all the way from Canada'), B_('c_fox', 'State Champ Sally', 'Best in her state'), B_('c_panda', 'Bracket Betty', 'Knows who you play next'), B_('c_tiger', 'Pool Play Pete', 'Unbeaten in the group'), B_('c_viking', 'Twenty-Six Tim', 'Has played in 26 states'), B_('c_samurai', 'Seed One Sean', 'Top of the rankings'), B_('c_pirate', 'Desert Dash', 'Fastest feet in Arizona'), B_('c_zorp', 'The Out-of-Towner', 'Came from very far away'), B_('c_minotaur', 'The National Champ', 'First crowned at Nationals')],
+      rewards: { 5: ['box', 'premium'], 10: ['ball', 'b_nats09'] } },
+  ] },
+  { id: '2027-01', y: 2027, m: 0, title: 'Chapter 3 · The Big Boom', bonus: 'a_gulf16', cities: [
+    { id: 'cg15', city: 'Casa Grande', place: 'Arizona, USA 🇺🇸 · 2015', short: 'Casa Grande<br>2015', arena: 'a_stadium',
+      story: '2015. After six years in Buckeye, the National Championships moved to <b>Casa Grande, Arizona</b>, with championship courts and better facilities. In 2017 the event was shown on national TV for the first time.',
+      bosses: [B_('c_frog', 'Moving Van Vic', 'Carried the nets himself'), B_('c_fox', 'Grande Gina', 'Big game, bigger smile'), B_('c_penguin', 'Tumbleweed Tess', 'Rolls in from nowhere'), B_('c_panda', 'Camera Cam', 'Ready for national TV'), B_('c_tiger', 'Smasher Sol', 'Overheads all day'), B_('c_viking', 'Heatwave Hugo', 'Loves 40-degree days'), B_('c_samurai', 'Banger Bo', 'Drives every ball'), B_('c_knight', 'Center Court Cole', 'Lives on the show court'), B_('c_wizard', 'The Veteran', 'Played every Nationals so far'), B_('c_glorb', 'The Crowd Favourite', 'The fans chant his name')],
+      rewards: { 5: ['box', 'premium'], 10: ['paddle', 'p_cg15'] } },
+    { id: 'nap16', city: 'Naples', place: 'Florida, USA 🇺🇸 · April 2016', short: 'Naples<br>2016', arena: 'a_gulf16',
+      story: 'April 2016. The <b>first US Open Pickleball Championships</b> were held at East Naples Community Park in Florida. Around 800 players came from 39 states and 7 countries, and it has been held there every year since.',
+      bosses: [B_('c_penguin', 'Pelican Pam', 'Dives for every ball'), B_('c_frog', 'Gator Gary', 'Snaps up short balls'), B_('c_fox', 'Mangrove Mia', 'Hides in the corners'), B_('c_panda', 'Beach Chair Bea', 'Never seems to move'), B_('c_tiger', 'Seven Countries Sven', 'Flew in from abroad'), B_('c_pirate', 'Gulf Coast Gil', 'Salt air, sharp angles'), B_('c_viking', 'Sunburn Steve', 'Forgot his sunscreen'), B_('c_blaze', 'The Rising Star', 'A teenage phenom'), B_('c_rocket', 'The Banger', 'Hits it harder than anyone'), B_('c_maestro', 'The Open Champion', 'Owns the championship court')],
+      rewards: { 5: ['box', 'premium'], 10: ['ball', 'b_gulf16'] } },
+    { id: 'iw18', city: 'Indian Wells', place: 'California, USA 🇺🇸 · November 2018', short: 'Indian Wells<br>2018', arena: 'a_stadium',
+      story: '2018. The National Championships moved to the world-famous <b>Indian Wells Tennis Garden</b> in California. Its tennis courts were repainted into 45 pickleball courts, and around 2,300 players showed up.',
+      bosses: [B_('c_frog', 'Palm Desert Pia', 'Cool under the palms'), B_('c_fox', 'Valley Val', 'Born in the desert'), B_('c_penguin', 'Pool Party Polly', 'Swims between matches'), B_('c_panda', 'Stadium Sasha', 'Loves a big crowd'), B_('c_tiger', 'Prime Time Tony', 'Plays best at night'), B_('c_samurai', 'The Spin Doctor', 'Every ball curves'), B_('c_viking', 'Windstorm Wes', 'Desert gusts on his side'), B_('c_twister', 'The Twister', 'Serves that bend'), B_('c_rocket', 'Rocket', 'Pure power'), B_('c_blaze', 'The Phenom', 'Too fast for anyone')],
+      rewards: { 5: ['box', 'premium'], 10: ['paddle', 'p_iw18'] } },
+    { id: 'bain22', city: 'Bainbridge Island', place: 'Washington, USA 🇺🇸 · March 2022', short: 'Full Circle<br>2022', arena: 'a_bain',
+      story: 'March 28, 2022. 57 years after it was invented, pickleball became <b>Washington\'s official state sport</b>. The governor signed the bill standing on the <b>original 1965 court</b> on Bainbridge Island. Full circle.',
+      bosses: [B_('c_frog', 'Rain Check Ron', 'Plays through any weather'), B_('c_fox', 'Capitol Cass', 'Drove over for the signing'), B_('c_penguin', 'Ferry Fran Jr.', 'Took over from her mum'), B_('c_panda', 'Bill Signer Bev', 'Brought her own pen'), B_('c_tiger', 'Evergreen Eli', 'Pure Washington pride'), B_('c_viking', 'Lumberjack Lars', 'Chops every ball'), B_('c_wizard', 'The Historian', 'Remembers 1965'), B_('c_knight', 'Governor\'s Guard', 'Protects the original court'), B_('c_hiker', 'Bigfoot Returns', 'Back for the big day'), B_('c_pickles', 'Pickles IV', 'The legend\'s great-grand-pup')],
+      rewards: { 5: ['box', 'premium'], 10: ['paddle', 'p_state22'] } },
+  ] },
 ];
-const wtStart = se => new Date(se.from[0], se.from[1], se.from[2]);
-function wtSeason() { const now = new Date(); let cur = WT_SEASONS[0]; for (const se of WT_SEASONS) if (wtStart(se) <= now) cur = se; return cur; }
-const wtNextSeason = () => WT_SEASONS.find(se => wtStart(se) > new Date());
-const wtDaysLeft = () => { const n = new Date(); return Math.max(1, Math.ceil((new Date(n.getFullYear(), n.getMonth() + 1, 1) - n) / 864e5)); };
-const wtBeaten = se => ((SAVE.wt || {})[se.id] || 0);
-const wtRewardList = se => Object.entries(se.rewards).flatMap(([n, r]) => (Array.isArray(r[0]) ? r : [r]).map(([cat, id]) => ({ n: +n, cat, id })));
-const wtItemBoss = id => { for (const se of WT_SEASONS) { const r = wtRewardList(se).find(x => x.id === id); if (r) return r.n; } return 0; };
-const wtGot = r => r.cat === 'spr' ? !!sprLevel(r.id) : SAVE.owned.includes(r.id);
-const wtThumb = r => r.cat === 'spr' ? spriteThumb(r.id) : thumb(r.cat, findItem(r.cat, r.id));
-const wtName = r => r.cat === 'spr' ? (({ spc, t }) => sprName(spc, t))(sprParse(r.id)) : findItem(r.cat, r.id).name;
-function wtBossDef(se, i) { const [id, name] = se.bosses[i]; return { ...findItem('char', id), name }; }
-function wtD(i) {   // boss 1 is gentle, boss 10 is brutal
-  const lv = 2 + i * 2.1, boss = i === 9;
+WT_CHAPTERS.forEach((ch, ci) => ch.cities.forEach((c, w) => { c.ch = ch; c.w = w; c.n = ci * 4 + w; }));
+const WT_CITIES = WT_CHAPTERS.flatMap(ch => ch.cities);
+const wtStart = ch => new Date(ch.y, ch.m, 1), wtEnd = ch => new Date(ch.y, ch.m + 1, 1);
+function wtChapter() { const now = new Date(); let cur = WT_CHAPTERS[0]; for (const ch of WT_CHAPTERS) if (wtStart(ch) <= now) cur = ch; return cur; }
+const wtLive = ch => { const n = new Date(); return n >= wtStart(ch) && n < wtEnd(ch); };
+const wtWeek = ch => wtLive(ch) ? Math.min(3, Math.floor((new Date().getDate() - 1) / 7)) : new Date() < wtStart(ch) ? -1 : 3;
+const wtOpen = c => c.w <= wtWeek(c.ch);
+const wtOpensOn = c => new Date(c.ch.y, c.ch.m, 1 + 7 * c.w);
+const wtDaysLeft = () => { const ch = wtChapter(); return Math.max(1, Math.ceil((wtEnd(ch) - new Date()) / 864e5)); };
+const wtNextChapter = () => WT_CHAPTERS.find(ch => wtStart(ch) > new Date());
+const wtBeaten = c => Math.min(10, (SAVE.wt || {})[c.id] || 0);
+const wtChapterProg = ch => ch.cities.reduce((a, c) => a + wtBeaten(c), 0);
+const wtRewardList = c => Object.entries(c.rewards).flatMap(([n, r]) => (Array.isArray(r[0]) ? r : [r]).map(([cat, id]) => ({ n: +n, cat, id, c })));
+const wtGot = r => r.cat === 'box' ? wtBeaten(r.c) >= r.n : r.cat === 'spr' ? !!sprLevel(r.id) : SAVE.owned.includes(r.id);
+const wtThumbHTML = r => r.cat === 'box' ? `<span style="display:inline-block;width:44px;height:44px">${boxSVG(r.id)}</span>` : `<img src="${r.cat === 'spr' ? spriteThumb(r.id) : thumb(r.cat, findItem(r.cat, r.id))}" alt="">`;
+const wtName = r => r.cat === 'box' ? BOXES[r.id].name : r.cat === 'spr' ? (({ spc, t }) => sprName(spc, t))(sprParse(r.id)) : findItem(r.cat, r.id).name;
+const wtItemBoss = id => { for (const c of WT_CITIES) { const r = wtRewardList(c).find(x => x.id === id); if (r) return { n: r.n, c }; } const ch = WT_CHAPTERS.find(x => x.bonus === id); return ch ? { bonus: ch } : null; };
+function wtBossDef(c, i) { const [id, name] = c.bosses[i]; return { ...findItem('char', id), name }; }
+function wtD(i, cn = 0) {   // boss 1 is gentle, boss 10 is brutal; later cities start a little tougher
+  const lv = Math.min(24, 2 + i * 2.1 + cn * 0.35), boss = i === 9;
   return { ...DIFFS[1], ue: Math.max(0.015, 0.09 - lv * 0.0068) * (boss ? 0.75 : 1), speed: Math.min(6.4, 4.1 + lv * 0.12 + (boss ? 0.4 : 0)),
     react: Math.max(0.05, 0.24 - lv * 0.011), err: Math.max(0.13, 0.55 - lv * 0.024), pace: Math.max(0.78, 1 - lv * 0.012 - (boss ? 0.04 : 0)),
     judge: Math.min(0.97, 0.55 + lv * 0.024), net: NET - K - 0.5, marker: i < 2, rally: 2, timeScale: Math.min(0.98, 0.8 + lv * 0.009) };
 }
-function wtCard() { const se = wtSeason(); $('wtCardSub').innerHTML = `${se.short}`; }
-function showWT() {
-  const se = wtSeason(), b = wtBeaten(se), next = Math.min(b, 9);
-  $('wtStop').textContent = `STOP ${se.stop}`; $('wtCity').textContent = se.city; $('wtPlace').textContent = se.place; $('wtStory').innerHTML = se.story;
-  $('wtTrail').innerHTML = se.bosses.map(([id, name, tag], i) => {
-    const cls = i < b ? 'done' : i === b ? 'now' : 'lock';
-    return `<div class="wtB ${cls}"><span class="n">${i + 1}</span><img src="${thumb('char', findItem('char', id))}" alt="">${i <= b ? name : '???'}</div>`; }).join('');
-  $('wtRew').innerHTML = wtRewardList(se).map(r => `<div class="wtR${wtGot(r) ? ' got' : ''}"><img src="${wtThumb(r)}" alt="">${wtGot(r) ? '✓ ' : ''}Boss ${r.n}<br>${wtName(r)}</div>`).join('');
-  const [, nm, tag] = se.bosses[next];
-  $('wtFine').innerHTML = `${b >= 10 ? '🏆 You conquered this stop! Rematch Pickles for dinks.' : `Boss ${next + 1}: <b>${nm}</b> · <i>${tag}</i>`}<br>First to ${next === 9 ? 11 : 7}, win by 2 · old-school side-out scoring · ${wtNextSeason() ? `⏳ ${wtDaysLeft()} day${wtDaysLeft() === 1 ? '' : 's'} left at this stop, then the tour moves on` : '✈️ Next city coming soon'}`;
-  $('wtGo').textContent = b >= 10 ? 'REMATCH PICKLES' : `FIGHT BOSS ${next + 1}`;
+let wtSelC = null;
+function wtCard() { const ch = wtChapter(), c = ch.cities[Math.max(0, wtWeek(ch))]; $('wtCardSub').innerHTML = c.short; }
+function showWT(keepSel) {
+  const ch = wtChapter(), wk = Math.max(0, wtWeek(ch));
+  if (!keepSel || !wtSelC || wtSelC.ch !== ch || !wtOpen(wtSelC)) wtSelC = ch.cities.find(c => wtOpen(c) && wtBeaten(c) < 10) || ch.cities[wk];
+  const c = wtSelC, b = wtBeaten(c), next = Math.min(b, 9), prog = wtChapterProg(ch), bonus = findItem('arena', ch.bonus), bonusGot = SAVE.owned.includes(ch.bonus);
+  const MON = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  $('wtStop').textContent = MON[ch.m].toUpperCase(); $('wtChap').textContent = ch.title;
+  $('wtTabs').innerHTML = ch.cities.map(x => { const op = wtOpen(x), d = wtBeaten(x);
+    return `<button class="wtTab${x === c ? ' sel' : ''}${op ? '' : ' lock'}${d >= 10 ? ' done' : ''}" data-c="${x.id}"><small>WEEK ${x.w + 1}</small>${op ? x.short.replace('<br>', ' ') : `🔒 ${wtOpensOn(x).getDate()} ${MON[ch.m].slice(0, 3)}`}<i>${op ? `${d}/10` : ''}</i></button>`; }).join('');
+  $('wtCity').textContent = c.city; $('wtPlace').textContent = c.place; $('wtStory').innerHTML = c.story;
+  $('wtTrail').innerHTML = c.bosses.map(([id, name], i) => `<div class="wtB ${i < b ? 'done' : i === b ? 'now' : 'lock'}"><span class="n">${i + 1}</span><img src="${thumb('char', findItem('char', id))}" alt="">${i <= b ? name : '???'}</div>`).join('');
+  $('wtRew').innerHTML = wtRewardList(c).map(r => `<div class="wtR${wtGot(r) ? ' got' : ''}">${wtThumbHTML(r)}${wtGot(r) ? '✓ ' : ''}Boss ${r.n}<br>${wtName(r)}</div>`).join('');
+  $('wtBonus').innerHTML = `<img src="${thumb('arena', bonus)}" alt=""><div><b>🏆 MONTHLY BONUS: ${bonus.name}</b><br>${bonusGot ? '✅ Unlocked! It\'s in your Locker.' : `Beat all 4 cities (40 bosses) before ${MON[ch.m]} ends`}<div class="wtBar"><i style="width:${prog / 40 * 100}%"></i><span>${prog}/40</span></div></div>`;
+  const [, nm, tag] = c.bosses[next];
+  $('wtFine').innerHTML = `${b >= 10 ? '🏆 City conquered! Rematch the final boss for dinks.' : `Boss ${next + 1}: <b>${nm}</b> · <i>${tag}</i>`}<br>First to ${next === 9 ? 11 : 7}, win by 2 · old-school side-out scoring · ${wtLive(ch) ? `⏳ ${wtDaysLeft()} day${wtDaysLeft() === 1 ? '' : 's'} left this month` : wtNextChapter() ? '' : '✈️ Next chapter coming soon'}`;
+  $('wtGo').textContent = b >= 10 ? `REMATCH ${c.bosses[9][1].toUpperCase()}` : `FIGHT BOSS ${next + 1}`;
+  $('wtTabs').querySelectorAll('.wtTab').forEach(t => t.addEventListener('click', () => { const x = WT_CITIES.find(y => y.id === t.dataset.c);
+    if (!wtOpen(x)) { toast(`🔒 ${x.city} opens on ${wtOpensOn(x).getDate()} ${MON[ch.m]}`); return; } wtSelC = x; beep(700, 0.04, 0.08); showWT(true); }));
   $('wtM').classList.remove('hidden');
 }
-function startWt(i) {
-  const se = wtSeason(); tour = null;
-  arcade = { wt: true, wi: i, se: se.id, step: 0, cycle: 0, opps: [wtBossDef(se, i)] };
+function startWt(c, i) {
+  tour = null;
+  arcade = { wt: true, wi: i, se: c.id, cn: c.n, step: 0, cycle: 0, opps: [wtBossDef(c, i)] };
   $('wtM').classList.add('hidden'); $('menu').classList.add('hidden');
-  forceArena = se.arena; applyLook();
+  forceArena = c.arena; applyLook();
   newGame('cpu', { arcade: true });
 }
 function wtOver(win) {
-  const se = WT_SEASONS.find(x => x.id === arcade.se) || wtSeason(), i = arcade.wi, before = wtBeaten(se);
+  const c = WT_CITIES.find(x => x.id === arcade.se), ch = c.ch, i = arcade.wi, before = wtBeaten(c);
   SAVE.wt = SAVE.wt || {};
   const first = win && i === before && before < 10;
-  if (first) SAVE.wt[se.id] = before + 1;
+  if (first) SAVE.wt[c.id] = before + 1;
   const bonus = win ? (first ? 40 + 20 * i : 25) : 10, rally = earnedThisGame; SAVE.dinks += bonus; earnedThisGame += bonus;
-  const newly = first ? wtRewardList(se).filter(r => r.n === i + 1 && !wtGot(r)) : [];
-  const grants = newly.map(r => r.cat === 'spr' ? { ...r, g: grantSprite(r.id) } : (SAVE.owned.push(r.id), r));
+  const newly = first ? wtRewardList(c).filter(r => r.n === i + 1 && !(r.cat !== 'box' && wtGot(r))) : [];
+  const grants = newly.map(r => r.cat === 'spr' ? { ...r, g: grantSprite(r.id) } : r.cat === 'box' ? (SAVE.boxes[r.id]++, r) : (SAVE.owned.push(r.id), r));
+  // monthly bonus: every boss of every city in this month's chapter, while the month is on (or the latest chapter)
+  const monthDone = wtChapterProg(ch) >= 40 && !SAVE.owned.includes(ch.bonus) && (wtLive(ch) || ch === wtChapter());
+  if (monthDone) { SAVE.owned.push(ch.bonus); grants.push({ cat: 'arena', id: ch.bonus, bonusArena: true }); }
   persist(); refreshBalance(); coinSound();
-  const [, name] = se.bosses[i];
-  $('overTitle').textContent = win ? (i === 9 ? 'STOP CONQUERED!' : 'BOSS BEATEN!') : 'DEFEATED'; $('overTitle').classList.toggle('lose', !win);
+  const [, name] = c.bosses[i];
+  $('overTitle').textContent = monthDone ? 'MONTH COMPLETE!' : win ? (i === 9 ? 'CITY CONQUERED!' : 'BOSS BEATEN!') : 'DEFEATED'; $('overTitle').classList.toggle('lose', !win);
   $('bigScore').textContent = `${score.p} – ${score.a}`;
   let rw = `<div class="rw"><span class="ic"><span class="coin" style="font-size:24px"></span></span>Rallies won<b>+${rally}</b></div>
-    <div class="rw"><span class="ic">🌍</span>${win ? `Beat ${name} (boss ${i + 1}/10)` : `${name} wins this time`}<b>+${bonus}</b></div>`;
-  grants.forEach(r => { rw += `<div class="rw" style="background:rgba(224,179,110,.3)"><span class="ic"><img src="${wtThumb(r)}" style="width:40px;height:40px;object-fit:contain"></span>World Tour reward: ${wtName(r)}<b style="color:#ffe2a8;font-size:14px">NEW</b></div>`; });
-  const nx = wtRewardList(se).find(r => !wtGot(r));
+    <div class="rw"><span class="ic">🌍</span>${win ? `Beat ${name} (${c.city}, boss ${i + 1}/10)` : `${name} wins this time`}<b>+${bonus}</b></div>`;
+  grants.forEach(r => { rw += `<div class="rw" style="background:rgba(224,179,110,${r.bonusArena ? '.5' : '.3'})"><span class="ic">${r.cat === 'box' ? boxSVG(r.id) : `<img src="${r.cat === 'spr' ? spriteThumb(r.id) : thumb(r.cat, findItem(r.cat, r.id))}" style="width:40px;height:40px;object-fit:contain">`}</span>${r.bonusArena ? `🏆 BONUS REWARD for completing the month: ${wtName(r)}` : `World Tour reward: ${wtName(r)}`}<b style="color:#ffe2a8;font-size:14px">${r.cat === 'box' ? '+1' : 'NEW'}</b></div>`; });
+  const nx = wtRewardList(c).find(r => !wtGot(r));
   if (nx) rw += `<div class="fine">Beat boss ${nx.n} for ${wtName(nx)}</div>`;
+  if (!SAVE.owned.includes(ch.bonus)) rw += `<div class="fine">🏆 Month bonus: ${wtChapterProg(ch)}/40 bosses for ${findItem('arena', ch.bonus).name}</div>`;
   $('earned').innerHTML = rw;
-  overNext = win ? 'wtNext' : 'wtRetry'; $('again').textContent = win ? (wtBeaten(se) >= 10 ? 'WORLD TOUR' : 'NEXT BOSS') : 'TRY AGAIN';
-  const chain = k => { if (k >= grants.length) return; const r = grants[k];
+  overNext = win ? 'wtNext' : 'wtRetry'; $('again').textContent = win ? (wtBeaten(c) >= 10 ? 'WORLD TOUR' : 'NEXT BOSS') : 'TRY AGAIN';
+  const shows = grants.filter(r => r.cat !== 'box');
+  const chain = k => { if (k >= shows.length) return; const r = shows[k];
     if (r.cat === 'spr') { showDropReveal(r.id, r.g, 'golden'); $('rvTap').textContent = '🌍 WORLD TOUR LOOT! TAP TO HATCH'; }
-    else { showArcadePrize({ cat: r.cat, item: findItem(r.cat, r.id) }); rv.res.rar = 'vintage'; $('reveal').style.setProperty('--rc', RARITY.vintage[1]); $('rvTap').textContent = '🌍 WORLD TOUR LOOT! TAP TO OPEN'; }
+    else { showArcadePrize({ cat: r.cat, item: findItem(r.cat, r.id) }); rv.res.rar = 'vintage'; $('reveal').style.setProperty('--rc', RARITY.vintage[1]); $('rvTap').textContent = r.bonusArena ? '🏆 MONTH COMPLETE! BONUS REWARD! TAP TO OPEN' : '🌍 WORLD TOUR LOOT! TAP TO OPEN'; }
     rv.then = () => setTimeout(() => chain(k + 1), 300); };
-  if (grants.length) setTimeout(() => chain(0), 1000);
+  if (shows.length) setTimeout(() => chain(0), 1000);
   if (win) { buzz([30, 60, 30]); cheerT = 3; }
 }
-$('wtGo').addEventListener('click', () => { initAudio(); const se = wtSeason(); startWt(Math.min(wtBeaten(se), 9)); });
+$('wtGo').addEventListener('click', () => { initAudio(); const c = wtSelC || wtChapter().cities[0]; startWt(c, Math.min(wtBeaten(c), 9)); });
 wtCard();
 // ================= Survival Arcade: one life. Every point you win counts; lose one and the run is over =================
 const SURV_SWAP = 5;   // a new, tougher opponent every 5 points
@@ -5388,7 +5622,7 @@ function survOver() {
 function arcadeStage() { return arcade ? (arcade.surv ? score.p + 1 : arcade.inf || arcade.chaos ? arcade.lvl + 1 : arcade.cycle * 4 + arcade.step + 1) : 0; }
 function arcadeD() {
   if (arcade.krampus) return KR_D;
-  if (arcade.wt) return wtD(arcade.wi);
+  if (arcade.wt) return wtD(arcade.wi, arcade.cn || 0);
   // Infinite ramps slower so level 25 feels like a late classic loop, then keeps creeping up
   const lv = arcade.surv ? Math.min(22, score.p * 0.5) : arcade.inf || arcade.chaos ? Math.min(22, arcade.lvl * 0.55) : arcade.cycle * 4 + arcade.step, boss = !arcade.inf && arcade.step === 3;
   return { ...DIFFS[1], ue: Math.max(0.02, 0.09 - lv * 0.007) * (boss ? 0.7 : 1), speed: Math.min(6.2, 4.2 + lv * 0.13 + (boss ? 0.35 : 0)),
