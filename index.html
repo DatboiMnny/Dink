@@ -3809,14 +3809,15 @@ function botShot(bot) {
   }
   const vsYou = sd === 'a';
   const spinIn = vsYou ? ball.spinIn || 0 : 0, curveIn = vsYou ? Math.abs(ball.curveIn || 0) : 0;
-  tx += gauss() * Db.err * (1 + spinIn * 1.6); ty += gauss() * Db.err * 0.7 * (1 + spinIn * 1.6);
+  const pr = Db.pressure ?? 1;   // how much spin, pace and power shots rattle this CPU (World Tour bosses are steadier)
+  tx += gauss() * Db.err * (1 + spinIn * 1.6 * pr); ty += gauss() * Db.err * 0.7 * (1 + spinIn * 1.6 * pr);
   if (ball.bounces >= 1) mustBounce[sd] = false;
   if (!smash) T *= Db.pace;
   // pressure: fast balls, spin, being stretched, low volleys and long rallies all cause mistakes
   const inSpeed = Math.hypot(ball.vx, ball.vy), stretch = clamp(Math.hypot(ball.x - bot.x, ball.y - bot.y) / REACH, 0, 1);
-  let errP = Db.ue + Math.max(0, inSpeed - 8) * 0.025 + stretch * stretch * 0.1 + spinIn * 0.45 + curveIn * 0.03
-    + (ball.bounces === 0 && ball.z < 0.55 ? 0.07 : 0) + Math.max(0, rallyHits - 6) * 0.018;
-  errP = Math.min(errP + (vsYou ? ball.errBoost || 0 : 0), 0.8);
+  let errP = Db.ue + pr * (Math.max(0, inSpeed - 8) * 0.025 + stretch * stretch * 0.1 + spinIn * 0.45 + curveIn * 0.03
+    + (ball.bounces === 0 && ball.z < 0.55 ? 0.07 : 0) + Math.max(0, rallyHits - 6) * 0.018);
+  errP = Math.min(errP + (vsYou ? (ball.errBoost || 0) * pr : 0), 0.8);
   let raw = false;
   const pErr = isServe ? (vsYou ? Math.min(0.5, ball.errBoost || 0) : 0) : errP;   // on a serve return only the serve's own effect (deep/short/spin) can cause a miss
   if (Math.random() < pErr) {
@@ -5541,11 +5542,11 @@ const wtThumbHTML = r => r.cat === 'box' ? `<span style="display:inline-block;wi
 const wtName = r => r.cat === 'box' ? BOXES[r.id].name : r.cat === 'spr' ? (({ spc, t }) => sprName(spc, t))(sprParse(r.id)) : findItem(r.cat, r.id).name;
 const wtItemBoss = id => { for (const c of WT_CITIES) { const r = wtRewardList(c).find(x => x.id === id); if (r) return { n: r.n, c }; } const ch = WT_CHAPTERS.find(x => x.bonus === id); return ch ? { bonus: ch } : null; };
 function wtBossDef(c, i) { const [id, name] = c.bosses[i]; return { ...findItem('char', id), name }; }
-function wtD(i, cn = 0) {   // boss 1 is gentle, boss 10 is brutal; later cities start a little tougher
-  const lv = Math.min(24, 2 + i * 2.1 + cn * 0.35), boss = i === 9;
-  return { ...DIFFS[1], ue: Math.max(0.015, 0.09 - lv * 0.0068) * (boss ? 0.75 : 1), speed: Math.min(6.4, 4.1 + lv * 0.12 + (boss ? 0.4 : 0)),
-    react: Math.max(0.05, 0.24 - lv * 0.011), err: Math.max(0.13, 0.55 - lv * 0.024), pace: Math.max(0.78, 1 - lv * 0.012 - (boss ? 0.04 : 0)),
-    judge: Math.min(0.97, 0.55 + lv * 0.024), net: NET - K - 0.5, marker: i < 2, rally: 2, timeScale: Math.min(0.98, 0.8 + lv * 0.009) };
+function wtD(i, cn = 0) {   // boss 1 plays like Hard, boss 10 is beyond Krampus; later cities start tougher. Steadier under pressure than other modes.
+  const t = clamp(i / 9 * 0.8 + cn / 11 * 0.2, 0, 1), boss = i === 9, lp = (a, b) => a + (b - a) * t;
+  return { ...DIFFS[2], ue: lp(0.035, 0.008) * (boss ? 0.7 : 1), err: lp(0.22, 0.08), margin: lp(0.55, 0.3), judge: lp(0.85, 0.99),
+    speed: lp(4.9, 6.5) + (boss ? 0.25 : 0), react: lp(0.15, 0.04), pace: lp(0.93, 0.76), timeScale: lp(0.9, 1.04), pressure: lp(0.75, 0.45),
+    net: NET - K - 0.3, marker: false, rally: 2 };
 }
 let wtSelC = null;
 function wtCard() { const ch = wtChapter(), c = ch.cities[Math.max(0, wtWeek(ch))]; $('wtCardSub').innerHTML = c.short; }
