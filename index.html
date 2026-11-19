@@ -501,7 +501,7 @@
         <div><i>🎮</i><span><b>Controls</b> (pause menu, tap to switch): <b>AUTO</b> is the default: you move with the joystick and your shot angle comes from where you catch the ball, with some randomness. <b>MANUAL</b> adds a pink radar that shows where your shot will land as the ball comes to you: move left or right of the ball to change it, and the faint circle is how far it can wobble. <b>PRO</b> has no joystick: a mini court sits bottom-left. Put your thumb on it and slide: wherever your thumb is on the mini court, your player runs to that spot on the real court (the pink dot is you; lift off and they stop). Tap anywhere on their side with your other thumb to choose where each return goes (tap the kitchen for a dink or drop, deep for a drive). Tap again or drag to change it before you hit. No tap means a normal auto shot. High CTL paddles land closer, and aiming right on the lines can go out. LOB, POWER and SPIN still work in every mode.</span></div>
         <div><i>⚡</i><span><b>LOB</b> lofts your next shot. <b>POWER</b> rips a hard drive (riskier). <b>SPIN</b> curves and dips it, and kicks off the bounce. Paddles with a high SPN stat make it nastier; low-spin paddles make it weak and wild.</span></div>
         <div><i>📏</i><span><b>Rules:</b> serve and return must bounce. No volleys from the kitchen, and if your follow-through after a volley carries you into the kitchen, that's a fault too. Only the server scores. Win by 2. Every game goes to 11. Easy is chill, Medium is faster, Hard is blazing fast.</span></div>
-        <div><i>✨</i><span><b>Sprites</b> float beside you in CPU matches. Each gives a passive boost and has a power that charges as you hit. Tap the sprite button when its ring is full. Level them up to 5. New sprites only drop when you win: harder modes and tournaments drop rarer ones.</span></div>
+        <div><i>✨</i><span><b>Sprites</b> float beside you in CPU matches. Each gives a passive boost and a power. Light powers (Ember, Tide, Zephyr, Stone) charge as you hit. The strong ones need a feat: <b>Volt</b> charges only from volleys, <b>Lumen</b> only from dinks, <b>Frost</b> from winning 6+ shot rallies, <b>Pixel</b> from winning rallies where you volleyed, <b>Bloom</b> from winning rallies while behind, and <b>Nova</b> from a win streak (losing resets it). Strong powers can only be used a few times per match (Bloom and Nova once). Tap the sprite button when its ring is full. Level them up to 5. New sprites only drop when you win: harder modes and tournaments drop rarer ones.</span></div>
         <div><i>🕹️</i><span><b>Arcade</b> is an endless ladder: beat 3 players to 3 points, then a boss to 5 (rally scoring, win by 2), and keep going as it gets harder. Bosses drop Arcade-exclusive characters, paddles, a ball and an arena that you can't get anywhere else.</span></div>
         <div><i>🐒</i><span><b>Orlando</b> has a special <b>SPIN</b> serve: heavy sidespin that bends and kicks off the bounce, so it's much harder to return (small risk of curling wide).</span></div>
         <div><i>🎄</i><span><b>Christmas Drop</b>: from 18 November, 16 festive Locker items (1,500 each) are on sale until New Year's. Buy them and they're yours forever.</span></div>
@@ -3191,6 +3191,7 @@ function endRally(loser, reason) {
     if (cspr.model) burst(cspr.model.position, '#f9a8d4', 24, 3, 0.2);
     return;
   }
+  sprRally(loser);
   pointSnap = { score: { ...score }, server, serverNum, srvObj, rightOf: { ...rightOf } };
   phase = 'point'; pointTimer = 1.6; ball.live = false; landMarker = null;
   let pointTo = null, second = false;
@@ -3420,13 +3421,14 @@ function humanShot(side, me = side === 'p' ? player : ai) {
     if (spr.next === 'gleam') { tx = ai.x < W / 2 ? W - 0.35 : 0.35; ty = rand(0.5, 1.2); T = Math.min(T, 0.8); curve = 0; sprBoost = 0.35 + 0.06 * m; label = 'GLEAM!'; }
     spr.next = null;
   }
+  const sInfo = side === 'p' ? { volley: ball.bounces === 0, dink: ty > NET - K && ty < NET && !['SMASH!', 'POWER!', 'Lob'].includes(label) && !fire, power: label === 'POWER!', spin: /spin/i.test(label) } : null;
   ty = mir(ty);
   if (ball.bounces >= 1) mustBounce[side] = false;
   const big = ['SMASH!', 'POWER!', 'WICKED SPIN!', 'FIREBALL!', 'GUST!', 'GLEAM!', 'PHENOM DRIVE!', 'ROCKET!', 'ERNE!', 'AROUND THE POST!', 'CHAINSAW SPIN!'].includes(label);
   hitFx(big); noteHit(side, big, label);
   makeShot(tx, ty, T, spin, curve);
   ball.errBoost = sprBoost + proBoost; ball.fxFire = fire;
-  if (side === 'p') sprCharge();
+  if (side === 'p') sprCharge(sInfo);
   rallyHits++;
   lastHitter = side; isServe = false;
   me.swing = 0.25;
@@ -4384,7 +4386,25 @@ $('localBtn').addEventListener('click', () => { initAudio(); $('friendsM').class
 // ================= SPRITES: companion creatures with passives + charged powers =================
 const TIER_KEYS = ['common', 'rare', 'epic', 'legendary'];
 const TIER_MULT = [1, 1.35, 1.75, 2.3];
-const TIER_NEED = [8, 7, 6, 5];
+const TIER_NEED = [8, 8, 9, 9];   // CPU sprites (scaled up for the strong ones by SPR_RULE.cpu)
+// How each sprite charges. Light powers charge from normal hits; the strong ones need a specific feat, and most are capped per match.
+const SPR_RULE = {
+  ember:  { ev: 'hit', need: [8, 9, 10, 11], bonus: 'power', lbl: 'HITS', txt: 'Every hit charges it (POWER shots count double)' },
+  tide:   { ev: 'hit', need: [8, 9, 10, 11], lbl: 'HITS', txt: 'Every hit charges it' },
+  zephyr: { ev: 'hit', need: [8, 9, 10, 11], bonus: 'spin', lbl: 'HITS', txt: 'Every hit charges it (SPIN shots count double)' },
+  stone:  { ev: 'hit', need: [9, 10, 11, 12], lbl: 'HITS', txt: 'Every hit charges it' },
+  volt:   { ev: 'volley', need: [4, 5, 6, 7], max: 3, cpu: 1.5, lbl: 'VOLLEYS', txt: 'Only <b>volleys</b> charge it (hit the ball before it bounces)' },
+  lumen:  { ev: 'dink', need: [5, 6, 7, 8], max: 3, cpu: 1.4, lbl: 'DINKS', txt: 'Only <b>dinks</b> charge it (soft shots into their kitchen)' },
+  frost:  { ev: 'long', need: [2, 2, 3, 3], max: 2, cpu: 1.8, lbl: 'LONG WINS', txt: 'Win <b>long rallies</b> (6+ shots) to charge it' },
+  pixel:  { ev: 'net', need: [2, 3, 3, 4], max: 2, cpu: 1.8, lbl: 'NET WINS', txt: 'Win rallies where <b>you hit a volley</b> to charge it' },
+  bloom:  { ev: 'behind', need: [2, 2, 3, 3], max: 1, cpu: 2.2, lbl: 'COMEBACK', txt: 'Only charges when you <b>win a rally while behind</b> on score' },
+  nova:   { ev: 'streak', need: [4, 4, 5, 5], max: 1, cpu: 2.4, lbl: 'STREAK', txt: 'Win rallies <b>in a row</b>. Losing one resets it' },
+};
+function sprChargeTxt(spc, t) {
+  if (spc.k === 'matrix') return 'Ready at the start of every match · once per match';
+  const r = SPR_RULE[spc.k]; if (!r) return '';
+  return `${r.txt} · needs ${r.need[t]}${r.max ? ` · max ${r.max === 1 ? 'once' : r.max + '×'} per match` : ''}`;
+}
 const LVL_COST = [80, 160, 280, 450];
 const TIER_COST = [1, 1.6, 2.4, 3.5];
 const MAX_REFUND = [40, 80, 150, 300];
@@ -4555,7 +4575,7 @@ function spriteThumb(id) {
 
 // ---- equipped sprite: gameplay state
 let pointSnap = null, volleyMom = null;   // volleyMom: who just volleyed, for the kitchen momentum rule   // score state before the last point, for Matrix's Rewind
-const spr = { spc: null, t: 0, lvl: 1, m: 1, need: 8, charge: 0, used: false, next: null, slowT: 0, stunT: 0, freezeT: 0, reachT: 0, shield: false, model: null, emitT: 0 };
+const spr = { spc: null, t: 0, lvl: 1, m: 1, need: 8, charge: 0, uses: 0, rv: false, used: false, next: null, slowT: 0, stunT: 0, freezeT: 0, reachT: 0, shield: false, model: null, emitT: 0 };
 const sprOn = () => mode === 'cpu' && !!spr.spc;
 const sprIs = k => sprOn() && spr.spc.k === k;
 function loadSprite() {
@@ -4563,17 +4583,31 @@ function loadSprite() {
   const id = SAVE.sprites && SAVE.sprites.equip;
   if (!id) { spr.spc = null; updateSprBtn(); return; }
   const { spc, t } = sprParse(id);
-  Object.assign(spr, { spc, t, lvl: sprLevel(id) || 1, need: TIER_NEED[t] });
+  Object.assign(spr, { spc, t, lvl: sprLevel(id) || 1, need: SPR_RULE[spc.k] ? SPR_RULE[spc.k].need[t] : 1 });
   spr.m = sprMult(t, spr.lvl);
   spr.model = makeSprite(spc, t); scene.add(spr.model);
   spr.model.position.copy(T3(player.x, player.y, 1.6));
   updateSprBtn();
 }
-function resetSpriteMatch() { Object.assign(spr, { charge: 0, used: false, next: null, slowT: 0, stunT: 0, freezeT: 0, reachT: 0, shield: false }); pointSnap = null; if (spr.spc && spr.spc.k === 'matrix') spr.charge = spr.need; updateSprBtn(); }
-function sprCharge() {
-  if (!sprOn() || spr.spc.k === 'matrix') return;
-  spr.charge = Math.min(spr.need, spr.charge + (spr.spc.k === 'volt' ? 1 + 0.2 * spr.m : 1));
-  updateSprBtn();
+function resetSpriteMatch() { Object.assign(spr, { charge: 0, uses: 0, rv: false, used: false, next: null, slowT: 0, stunT: 0, freezeT: 0, reachT: 0, shield: false }); pointSnap = null; if (spr.spc && spr.spc.k === 'matrix') spr.charge = spr.need; updateSprBtn(); }
+const sprRule = () => spr.spc && SPR_RULE[spr.spc.k];
+const sprSpent = () => { const r = sprRule(); return !!(r && r.max && spr.uses >= r.max); };
+function sprAdd(n) { if (!sprOn() || sprSpent() || spr.charge >= spr.need) return; spr.charge = Math.min(spr.need, spr.charge + n); updateSprBtn(); }
+function sprCharge(info) {   // called on each of your shots
+  const r = sprRule(); if (!sprOn() || !r || !info) return;
+  if (info.volley) spr.rv = true;
+  if (r.ev === 'hit') sprAdd(r.bonus && info[r.bonus] ? 2 : 1);
+  else if (r.ev === 'volley' && info.volley) sprAdd(1 + 0.1 * spr.m);   // Volt's passive still speeds it up a little
+  else if (r.ev === 'dink' && info.dink) sprAdd(1);
+}
+function sprRally(loser) {   // called when a rally really ends (not a Second Chance replay)
+  const r = sprRule(), rv = spr.rv; spr.rv = false;
+  if (!sprOn() || !r) return;
+  if (loser === 'p') { if (r.ev === 'streak' && spr.charge < spr.need) { spr.charge = 0; updateSprBtn(); } return; }
+  if (r.ev === 'long' && rallyHits >= 6) sprAdd(1);
+  if (r.ev === 'net' && rv) sprAdd(1);
+  if (r.ev === 'behind' && score.p < score.a) sprAdd(1);
+  if (r.ev === 'streak') sprAdd(1);
 }
 const sprBtn = $('sprBtn');
 function updateSprBtn() {
@@ -4584,12 +4618,13 @@ function updateSprBtn() {
   const img = sprBtn.querySelector('img'); if (img.dataset.id !== id) { img.src = spriteThumb(id); img.dataset.id = id; }
   sprBtn.style.setProperty('--p', Math.round(spr.charge / spr.need * 100));
   sprBtn.style.setProperty('--sc', spr.spc.cols[spr.t][0]);
-  const ready = spr.charge >= spr.need;
+  const spent = sprSpent(), ready = spr.charge >= spr.need && !spent, r = sprRule();
+  if (spent) sprBtn.style.setProperty('--p', 0);
   sprBtn.classList.toggle('ready', ready);
-  sprBtn.querySelector('.lbl').textContent = spr.spc.k === 'matrix' ? (ready ? 'REWIND' : 'USED') : ready ? spr.spc.power.toUpperCase() : `${Math.floor(spr.charge)}/${spr.need}`;
+  sprBtn.querySelector('.lbl').textContent = spr.spc.k === 'matrix' ? (ready ? 'REWIND' : 'USED') : spent ? 'USED' : ready ? spr.spc.power.toUpperCase() : `${r && r.ev !== 'hit' ? r.lbl + ' ' : ''}${Math.floor(spr.charge)}/${spr.need}`;
 }
 function activateSprite() {
-  if (!sprOn() || spr.charge < spr.need || !['serve', 'rally', 'point'].includes(phase) || paused) return;
+  if (!sprOn() || spr.charge < spr.need || sprSpent() || !['serve', 'rally', 'point'].includes(phase) || paused) return;
   if (spr.spc.k === 'matrix') {
     if (!pointSnap) { toast('Nothing to rewind yet'); return; }
     spr.charge = 0; spr.used = true;
@@ -4600,7 +4635,7 @@ function activateSprite() {
     if (spr.model) burst(spr.model.position, '#00ff66', 30, 3, 0.2);
     updateHud(); updateSprBtn(); return;
   }
-  spr.charge = 0;
+  spr.charge = 0; spr.uses++;
   const k = spr.spc.k, m = spr.m, col = spr.spc.cols[spr.t][0];
   flash(`${sprName(spr.spc, spr.t)}: ${spr.spc.power}!`, col === '#ffffff' || col === '#fef9c3' ? '#ffe45c' : col, 1.3);
   if (k === 'ember') spr.next = 'fire';
@@ -4650,7 +4685,7 @@ function sprVisuals(dt, t) {
 }
 
 // ================= CPU sprites: Arcade bosses and deep Infinite runs only (never Singles, Doubles or Tour) =================
-const cspr = { spc: null, t: 0, m: 1, need: 10, charge: 0, next: null, shield: false, slowT: 0, stunT: 0, shrinkT: 0, wait: 0, model: null, emitT: 0 };
+const cspr = { spc: null, t: 0, m: 1, need: 10, charge: 0, uses: 0, next: null, shield: false, slowT: 0, stunT: 0, shrinkT: 0, wait: 0, model: null, emitT: 0 };
 const csprOn = () => mode === 'cpu' && !!cspr.spc;
 function csprPlan() {   // [tier, level, extra hits to charge] or null
   if (mode !== 'cpu') return null;
@@ -4664,19 +4699,21 @@ function csprPlan() {   // [tier, level, extra hits to charge] or null
 function clearCpuSprite() { if (cspr.model) { scene.remove(cspr.model); cspr.model = null; } cspr.spc = null; updateCsprB(); }
 function setupCpuSprite() {
   clearCpuSprite();
-  Object.assign(cspr, { charge: 0, next: null, shield: false, slowT: 0, stunT: 0, shrinkT: 0, wait: 0 });
+  Object.assign(cspr, { charge: 0, uses: 0, next: null, shield: false, slowT: 0, stunT: 0, shrinkT: 0, wait: 0 });
   const plan = csprPlan(); if (!plan) return;
   const [t, lvl, extra] = plan;
   const pool = SPECIES.filter(s => !s.excl || (s.excl === 'inf' && arcade && arcade.inf && arcade.lvl + 1 >= 25));
   const spc = pool[Math.floor(Math.random() * pool.length)];
-  Object.assign(cspr, { spc, t, m: sprMult(t, lvl), need: TIER_NEED[t] + extra });
+  const cr = SPR_RULE[spc.k] || {};
+  Object.assign(cspr, { spc, t, m: sprMult(t, lvl), need: Math.round((TIER_NEED[t] + extra) * (cr.cpu || 1)) });
   cspr.model = makeSprite(spc, t); scene.add(cspr.model);
   cspr.model.position.copy(T3(ai.x, ai.y, 1.8));
   updateCsprB();
 }
 function csprCharge() {
   if (!csprOn() || cspr.charge >= cspr.need) return;
-  cspr.charge = Math.min(cspr.need, cspr.charge + (cspr.spc.k === 'volt' ? 1 + 0.15 * cspr.m : 1));
+  const cr = SPR_RULE[cspr.spc.k] || {}; if (cr.max && cspr.uses >= cr.max) return;   // strong CPU powers are capped per match too
+  cspr.charge = Math.min(cspr.need, cspr.charge + (cspr.spc.k === 'volt' ? 1 + 0.1 * cspr.m : 1));
   if (cspr.charge >= cspr.need) cspr.wait = rand(0.4, 1.6);
   updateCsprB();
 }
@@ -4688,7 +4725,7 @@ function csprTick(dt) {
 }
 function csprActivate() {
   const k = cspr.spc.k, m = cspr.m, col = cspr.spc.cols[cspr.t][0];
-  cspr.charge = 0;
+  cspr.charge = 0; cspr.uses++;
   const who = cpuDef ? cpuDef.name : 'CPU';
   flash(`${who}'s ${sprName(cspr.spc, cspr.t)}: ${cspr.spc.power}!`, '#ff8f8f', 1.4);
   const atYou = c => burst(T3(player.x, player.y, 1.1), c, 26, 3.5, 0.22);
@@ -4799,7 +4836,7 @@ function renderDen() {
   let html = `<div class="sprHero"><img src="${spriteThumb(sel)}" alt="" class="${lvl ? '' : 'lockedImg'}"><div style="flex:1;min-width:0">
     <div class="rar" style="color:${tc[1]}">${tc[0]} · ${spc.el}</div><h3>${sprName(spc, t)}</h3><div class="stars">${lvl ? stars : ''}${lvl ? ` <span style="font-size:11px;opacity:.7">Lv ${lvl}</span>` : ''}</div>
     <div class="sprTxt">${spc.passive(m)}</div><div class="sprTxt"><b>${spc.power}:</b> ${spc.pdesc(m)}</div>
-    <div class="sprTxt" style="opacity:.6">Charges in ${TIER_NEED[t]} hits${S.equip === sel ? ' · <b style="color:#3ddc84">Equipped</b>' : ''}</div></div></div>${act}`;
+    <div class="sprTxt" style="opacity:.75">⚡ ${sprChargeTxt(spc, t)}${S.equip === sel ? ' · <b style="color:#3ddc84">Equipped</b>' : ''}</div></div></div>${act}`;
   html += `<div class="dropInfo">✨ <b>Sprites are only found by winning matches.</b><br>
     Easy 15% · Medium 25% · Hard 40% per win · Doubles +5%<br>Tournament: 50% every round won · Champion: <b>guaranteed</b>, rare or better<br>
     <span style="opacity:.7">Harder modes drop rarer sprites. Duplicates level your sprite up.</span><br>
@@ -4930,6 +4967,10 @@ function showChaosLadder() {
 }
 // ================= What's New: shows once after an update. To announce a feature, add an entry at the TOP with the next v =================
 const NEWS = [
+  { v: 9, date: '19 Nov 2026', items: [
+    ['✨', '<b>Sprite rebalance.</b> The strongest sprite powers now have to be earned: <b>Volt</b> charges only from volleys, <b>Lumen</b> only from dinks, <b>Frost</b> from winning long rallies, <b>Pixel</b> from winning rallies at the net, <b>Bloom</b> only when you win while behind, and <b>Nova</b> needs a win streak.'],
+    ['⏳', 'Strong powers are now limited per match (Bloom and Nova once), and the sprite button shows what you need to do. Higher-tier sprites now take a bit longer to charge. CPU sprites follow the same limits.'],
+  ] },
   { v: 8, date: '18 Nov 2026', items: [
     ['🏃', '<b>Smoother, more realistic animations.</b> Players now bend their knees and elbows, run with a proper stride, side-shuffle, split-step when the opponent hits, and wait in a real ready position with the paddle up.'],
     ['🏓', '<b>Real strokes:</b> backswing, contact and follow-through for forehands, backhands, dinks, volleys, smashes and the underhand serve.'],
