@@ -180,10 +180,11 @@
   .item.epic{background:linear-gradient(160deg,#4d2a86,#26337c 60%)}
   .item.mythic{background:linear-gradient(160deg,#7a0f2a,#3b0a5c 55%,#1a1a5a);box-shadow:inset 0 0 0 2px rgba(255,59,92,.55),0 0 18px rgba(255,59,92,.25)}
   .item.festive{background:linear-gradient(160deg,#14532d,#7f1d1d 70%);box-shadow:inset 0 0 0 2px rgba(255,255,255,.35)}
+  .item.vintage{background:linear-gradient(160deg,#6e4a22,#2b2a52 70%);box-shadow:inset 0 0 0 2px rgba(224,179,110,.6)}
   .item.krampus{background:linear-gradient(160deg,#3b0a0a,#120406 70%);box-shadow:inset 0 0 0 2px rgba(255,77,77,.6),0 0 16px rgba(255,40,40,.3)}
-  #krBtn{display:none;align-self:stretch;border:0;border-radius:16px;padding:9px 12px;color:#fff;font-weight:900;font-size:15px;letter-spacing:.03em;
+  #krBtn{display:none;align-self:center;border:0;border-radius:999px;padding:7px 16px;color:#fff;font-weight:900;font-size:13px;letter-spacing:.04em;
     background:linear-gradient(90deg,#7f1d1d,#b91c1c 45%,#14532d);box-shadow:0 4px 16px rgba(185,28,28,.45),inset 0 0 0 2px rgba(255,255,255,.35);animation:krPulse 2.2s ease-in-out infinite}
-  #krBtn small{display:block;font-size:10.5px;font-weight:800;opacity:.9;letter-spacing:0}
+  #krBtn small{font-size:11px;font-weight:800;opacity:.85;letter-spacing:0;margin-left:4px}
   @keyframes krPulse{0%,100%{box-shadow:0 4px 16px rgba(185,28,28,.45),inset 0 0 0 2px rgba(255,255,255,.35)}50%{box-shadow:0 4px 26px rgba(255,60,60,.8),inset 0 0 0 2px rgba(255,255,255,.6)}}
   .krRow{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.07);border-radius:14px;padding:6px 10px;margin:6px 0;text-align:left}
   .krRow img{width:46px;height:46px;object-fit:contain}
@@ -332,6 +333,56 @@
   .stCard h3{margin:0;font-family:'Lilita One',system-ui;font-weight:400;font-size:20px}
   .stCard .el{font-family:'Nunito';font-size:10.5px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;opacity:.7;margin-left:4px}
   #modeSeg button{font-size:12.5px;padding:9px 0}
+  .xpBar{position:relative;height:22px;border-radius:999px;background:rgba(0,0,0,.35);overflow:hidden;border:1.5px solid rgba(255,255,255,.18)}
+  .xpBar i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(90deg,#38d9a9,#7dffb4);border-radius:999px}
+  .xpBar span{position:relative;display:block;text-align:center;font-size:12px;font-weight:900;line-height:19px;text-shadow:0 1px 2px #000}
+  body.filmfx #c,body.vintage #c{filter:sepia(.78) saturate(.65) contrast(1.12) brightness(.94)}
+  .modeRow{display:grid;grid-template-columns:1fr .82fr 1fr;gap:9px}
+  .modeCard{position:relative;border:0;border-radius:20px;padding:12px 6px 11px;color:#fff;display:flex;flex-direction:column;align-items:center;gap:3px;min-height:122px;justify-content:center;transition:transform .08s}
+  .modeCard:active{transform:translateY(4px) scale(.98)}
+  .modeCard .mIco{font-size:34px;line-height:1;filter:drop-shadow(0 3px 4px rgba(0,0,0,.35))}
+  .modeCard b{font-family:'Lilita One',system-ui;font-weight:400;font-size:19px;white-space:nowrap;letter-spacing:.04em;line-height:1;margin-top:3px;text-shadow:0 2px 0 rgba(0,0,0,.3)}
+  .modeCard small{font-size:10px;font-weight:900;opacity:.85;line-height:1.3}
+  .modeCard.og{background:linear-gradient(#ffe45c,#ffb800);color:#4a2c00;box-shadow:0 5px 0 #b77800,0 10px 22px rgba(0,0,0,.35)}
+  .modeCard.og b{text-shadow:0 2px 0 rgba(255,255,255,.45)}
+  .modeCard.arc{background:linear-gradient(#b64cff,#6a1bd1);box-shadow:0 5px 0 #3d0b85,0 0 18px rgba(255,79,216,.35),0 10px 22px rgba(0,0,0,.35)}
+  .modeCard.wtc{background:linear-gradient(#e9d3a8,#b98a4e);color:#3b2410;box-shadow:0 5px 0 #6e4a22,0 10px 22px rgba(0,0,0,.35);font-family:Georgia,serif}
+  .modeCard.wtc b{font-size:15px;text-shadow:0 2px 0 rgba(255,255,255,.4)} .modeCard.wtc .mIco{filter:sepia(.6) drop-shadow(0 3px 4px rgba(0,0,0,.35))}
+  .wtPanel{background:#efe2c4 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .25 0 0 0 0 .12 0 0 0 .18 0'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");color:#3b2410;border:3px solid #8a6436;box-shadow:inset 0 0 0 6px #efe2c4,inset 0 0 0 8px #b8925c,0 24px 60px rgba(0,0,0,.6);font-family:Georgia,'Times New Roman',serif}
+  .wtPanel .x{background:#8a6436;color:#f6ead0}
+  .wtHead{font-size:12px;letter-spacing:.22em;font-weight:900;color:#8a5a2a;margin-top:2px}
+  .wtCity{font-size:30px;font-weight:700;line-height:1.05;margin-top:4px;font-style:italic}
+  .wtPlace{font-size:13px;opacity:.8;margin-top:2px;letter-spacing:.06em}
+  .wtStory{font-size:13px;line-height:1.45;margin:8px 2px 10px;text-align:left;background:rgba(138,100,54,.1);border-left:3px solid #b8925c;padding:7px 10px;border-radius:4px}
+  .wtTrail{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}
+  .wtB{position:relative;border-radius:10px;padding:3px 1px 4px;background:rgba(138,100,54,.13);border:2px solid rgba(138,100,54,.3);font-size:9px;font-weight:900;line-height:1.1;color:#3b2410}
+  .wtB img{width:100%;aspect-ratio:1;object-fit:contain;filter:sepia(.85) contrast(1.05)}
+  .wtB.lock img{filter:brightness(0) opacity(.45)}
+  .wtB.now{border-color:#c0392b;background:rgba(192,57,43,.12);box-shadow:0 0 0 2px rgba(192,57,43,.25)}
+  .wtB.done::after{content:'✓';position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;background:#2f7a3e;color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center;border:2px solid #efe2c4}
+  .wtB .n{position:absolute;top:2px;left:5px;font-size:10px;opacity:.7}
+  .wtRew{display:flex;gap:5px;overflow-x:auto;margin:10px 0 4px;padding-bottom:2px}
+  .wtR{flex:none;width:58px;border-radius:10px;padding:3px;background:rgba(255,255,255,.35);border:1.5px dashed #b8925c;font-size:9px;font-weight:900;line-height:1.15}
+  .wtR img{width:44px;height:44px;object-fit:contain} .wtR.got{border-style:solid;border-color:#2f7a3e;background:rgba(47,122,62,.15)}
+  .wtFine{font-size:11.5px;opacity:.75;margin:6px 0 10px}
+  .wtGo{background:linear-gradient(#c0392b,#8e2318);color:#f6ead0;box-shadow:0 5px 0 #5a140c;font-family:Georgia,serif;font-style:italic;letter-spacing:.02em}
+  #vintFx{position:fixed;inset:0;pointer-events:none;z-index:1;display:none;background:radial-gradient(ellipse at center,transparent 55%,rgba(40,22,6,.55) 100%)}
+  body.vintage #vintFx,body.filmfx #vintFx{display:block}
+  #vintFx::before{content:'';position:absolute;inset:-50%;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='.5'/%3E%3C/svg%3E");opacity:.13;mix-blend-mode:multiply;animation:grain .45s steps(4) infinite}
+  @keyframes grain{0%{transform:translate(0,0)}25%{transform:translate(-7%,4%)}50%{transform:translate(5%,-6%)}75%{transform:translate(-3%,-2%)}100%{transform:translate(6%,5%)}}
+  #vintFx i{position:absolute;top:0;bottom:0;width:1.5px;background:rgba(60,40,20,.35)}
+  #vintFx .sc1{left:23%;animation:scr 2.3s steps(1) infinite} #vintFx .sc2{left:71%;animation:scr 3.1s steps(1) infinite .7s}
+  @keyframes scr{0%,100%{opacity:0}10%{opacity:1;transform:translateX(0)}20%{opacity:.4;transform:translateX(9px)}30%{opacity:0}}
+  body.vintage #c{animation:flick .18s steps(2) infinite}
+  @keyframes flick{0%{opacity:1}50%{opacity:.965}}
+  .modeCard.soon{background:rgba(10,18,45,.72);border:2px dashed rgba(255,255,255,.28);color:#c3cdf5;box-shadow:none}
+  .modeCard.soon .mIco{opacity:.55} .modeCard.soon b{font-size:15px}
+  .arcList{display:flex;flex-direction:column;gap:9px;margin-top:6px}
+  .arcList button{display:flex;align-items:center;gap:12px;border:0;border-radius:16px;padding:11px 12px;text-align:left;color:#fff;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,79,216,.35);transition:transform .08s}
+  .arcList button:active{transform:scale(.97);background:rgba(255,79,216,.2)}
+  .arcList span{font-size:28px;width:36px;text-align:center}
+  .arcList b{font-family:'Lilita One',system-ui;font-weight:400;font-size:20px;letter-spacing:.03em;display:block}
+  .arcList small{font-size:12px;font-weight:800;opacity:.75}
   #diff button{line-height:1.1;padding:6px 0}
   #diff small{display:block;font-size:10px;opacity:.7;font-weight:800}
   .bk{display:flex;align-items:center;gap:10px;background:rgba(0,0,0,.22);border-radius:16px;padding:7px 10px;margin:8px 0;text-align:left;border:2.5px solid transparent}
@@ -425,12 +476,12 @@
     <div class="spacer"></div>
     <div class="homeBottom">
       <div class="charTag glass" id="charTag"></div>
-      <button id="krBtn">👹 KRAMPUS SHOWDOWN<small>Christmas boss event · exclusive rewards · until New Year's</small></button>
-      <div class="seg" id="modeSeg"><button data-m="single" class="sel">Singles</button><button data-m="doubles">Doubles</button><button data-m="tour">🏆 Tour</button><button data-m="arcade">🕹️ Arcade</button></div>
-      <div class="seg hidden" id="arcSeg"><button data-a="classic" class="sel">Classic<small>bosses</small></button><button data-a="inf">♾️ Infinite<small>extract</small></button><button data-a="chaos">🎲 Chaos<small>twists</small></button><button data-a="surv">❤️ Survival<small>1 life</small></button></div>
-      <div class="seg" id="diff"><button data-d="0">Easy<small>to 11 · chill</small></button><button data-d="1" class="sel">Medium<small>to 11 · fast</small></button><button data-d="2">Hard<small>to 11 · blazing</small></button></div>
-      <div class="playRow"><button class="bigbtn" id="play">PLAY</button>
-        <button class="bigbtn blue" id="friendsBtn"><svg viewBox="0 0 40 30"><circle cx="13" cy="9" r="6" fill="#fff"/><path d="M2 28c0-7 5-11 11-11s11 4 11 11z" fill="#fff"/><circle cx="28" cy="10" r="5" fill="#cfe2ff"/><path d="M20 28c1-6 4-9 8-9 5 0 10 3 10 9z" fill="#cfe2ff"/></svg>VS</button></div>
+      <button id="krBtn">👹 KRAMPUS SHOWDOWN <small id="krSub">Christmas boss</small></button>
+      <div class="modeRow">
+        <button class="modeCard og" id="ogCard"><span class="mIco">🥒</span><b>OG PICKLE</b><small>Singles · Doubles<br>Tour · VS</small></button>
+        <button class="modeCard wtc" id="newCard"><span class="mIco">🌍</span><b>WORLD TOUR</b><small id="wtCardSub">Bainbridge Is.<br>1965</small></button>
+        <button class="modeCard arc" id="arcCard"><span class="mIco">🕹️</span><b>ARCADE</b><small>Classic · Infinite<br>Chaos · Survival</small></button>
+      </div>
       <nav class="nav">
         <button id="openShop"><svg viewBox="0 0 32 32"><path d="M7 11h18l-1.6 15.2a2 2 0 0 1-2 1.8H10.6a2 2 0 0 1-2-1.8z" fill="#ffd23f"/><path d="M11 13V9a5 5 0 0 1 10 0v4" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/><path d="M7 11h18l-.4 3.6H7.4z" fill="#ffb000"/></svg>Locker</button>
         <button id="openDen"><svg viewBox="0 0 32 32"><circle cx="16" cy="17" r="10" fill="#38d9a9"/><path d="M10 9l2-6 3 5zM22 9l-2-6-3 5z" fill="#38d9a9"/><circle cx="12.5" cy="16" r="2.2" fill="#123"/><circle cx="19.5" cy="16" r="2.2" fill="#123"/><circle cx="13.2" cy="15.2" r=".8" fill="#fff"/><circle cx="20.2" cy="15.2" r=".8" fill="#fff"/><path d="M13 20.5q3 2.4 6 0" stroke="#123" stroke-width="1.6" fill="none" stroke-linecap="round"/><circle cx="27" cy="7" r="2" fill="#ffe45c"/><circle cx="5" cy="25" r="1.5" fill="#ffe45c"/></svg>Sprites</button>
@@ -501,7 +552,8 @@
         <div><i>🎮</i><span><b>Controls</b> (pause menu, tap to switch): <b>AUTO</b> is the default: you move with the joystick and your shot angle comes from where you catch the ball, with some randomness. <b>MANUAL</b> adds a pink radar that shows where your shot will land as the ball comes to you: move left or right of the ball to change it, and the faint circle is how far it can wobble. <b>PRO</b> has no joystick: a mini court sits bottom-left. Put your thumb on it and slide: wherever your thumb is on the mini court, your player runs to that spot on the real court (the pink dot is you; lift off and they stop). Tap anywhere on their side with your other thumb to choose where each return goes (tap the kitchen for a dink or drop, deep for a drive). Tap again or drag to change it before you hit. No tap means a normal auto shot. High CTL paddles land closer, and aiming right on the lines can go out. LOB, POWER and SPIN still work in every mode.</span></div>
         <div><i>⚡</i><span><b>LOB</b> lofts your next shot. <b>POWER</b> rips a hard drive (riskier). <b>SPIN</b> curves and dips it, and kicks off the bounce. Paddles with a high SPN stat make it nastier; low-spin paddles make it weak and wild.</span></div>
         <div><i>📏</i><span><b>Rules:</b> serve and return must bounce. No volleys from the kitchen, and if your follow-through after a volley carries you into the kitchen, that's a fault too. Only the server scores. Win by 2. Every game goes to 11. Easy is chill, Medium is faster, Hard is blazing fast.</span></div>
-        <div><i>✨</i><span><b>Sprites</b> float beside you in CPU matches. Each gives a passive boost and a power. Light powers (Ember, Tide, Zephyr, Stone) charge as you hit. The strong ones need a feat: <b>Volt</b> charges only from volleys, <b>Lumen</b> only from dinks, <b>Frost</b> from winning 6+ shot rallies, <b>Pixel</b> from winning rallies where you volleyed, <b>Bloom</b> from winning rallies while behind, and <b>Nova</b> from a win streak (losing resets it). Strong powers can only be used a few times per match (Bloom and Nova once). Tap the sprite button when its ring is full. Level them up to 5. New sprites only drop when you win: harder modes and tournaments drop rarer ones.</span></div>
+        <div><i>🌍</i><span><b>World Tour</b> takes you through pickleball history, one city per month. Each stop has 10 bosses to beat in order (first to 7, the 10th boss to 11, win by 2) using old-school side-out scoring, all shot on vintage film. Bosses drop stop-exclusive rewards, including the <b>Vintage</b> sprites (they charge only from dinks and lobs; their Silent Film power makes the CPU move in choppy half-speed frames). Stop 1: Bainbridge Island, 1965, where it all began.</span></div>
+        <div><i>✨</i><span><b>Sprites</b> float beside you in CPU matches. Each gives a passive boost and a power. Light powers (Ember, Tide, Zephyr, Stone) charge as you hit. The strong ones need a feat: <b>Volt</b> charges only from volleys, <b>Lumen</b> only from dinks, <b>Frost</b> from winning 6+ shot rallies, <b>Pixel</b> from winning rallies where you volleyed, <b>Bloom</b> from winning rallies while behind, and <b>Nova</b> from a win streak (losing resets it). Strong powers can only be used a few times per match (Bloom and Nova once). Tap the sprite button when its ring is full. Sprites <b>level up (to 5) only by playing with them equipped</b>: win rallies, use their power and finish matches to earn XP. Duplicate drops turn into dinks. New sprites only drop when you win: harder modes and tournaments drop rarer ones.</span></div>
         <div><i>🕹️</i><span><b>Arcade</b> is an endless ladder: beat 3 players to 3 points, then a boss to 5 (rally scoring, win by 2), and keep going as it gets harder. Bosses drop Arcade-exclusive characters, paddles, a ball and an arena that you can't get anywhere else.</span></div>
         <div><i>🐒</i><span><b>Orlando</b> has a special <b>SPIN</b> serve: heavy sidespin that bends and kicks off the bounce, so it's much harder to return (small risk of curling wide).</span></div>
         <div><i>🎄</i><span><b>Christmas Drop</b>: from 18 November, 16 festive Locker items (1,500 each) are on sale until New Year's. Buy them and they're yours forever.</span></div>
@@ -571,6 +623,48 @@
       <button class="bigbtn green" id="localBtn">START SAME-PHONE MATCH</button>
       <div class="modeHint">Lay the phone flat between you. P1 plays from the bottom, P2 from the top.</div>
 
+    </div>
+  </div>
+  <!-- WORLD TOUR -->
+  <div class="modal hidden" id="wtM">
+    <div class="panel wtPanel">
+      <button class="x" data-close="wtM">✕</button>
+      <div class="wtHead">🌍 WORLD TOUR · <span id="wtStop">STOP 1</span></div>
+      <div class="wtCity" id="wtCity">Bainbridge Island</div>
+      <div class="wtPlace" id="wtPlace"></div>
+      <p class="wtStory" id="wtStory"></p>
+      <div class="wtTrail" id="wtTrail"></div>
+      <div class="wtRew" id="wtRew"></div>
+      <div class="wtFine" id="wtFine"></div>
+      <button class="bigbtn wtGo" id="wtGo">FIGHT</button>
+    </div>
+  </div>
+  <div id="vintFx"><i class="sc1"></i><i class="sc2"></i></div>
+  <!-- OG PICKLE sheet -->
+  <div class="modal hidden" id="ogM">
+    <div class="panel ogPanel">
+      <button class="x" data-close="ogM">✕</button>
+      <h2>🥒 OG Pickle</h2>
+      <p class="sub">Classic pickleball, real rules</p>
+      <div class="seg" id="modeSeg"><button data-m="single" class="sel">Singles</button><button data-m="doubles">Doubles</button><button data-m="tour">🏆 Tour</button><button data-m="vs">👥 VS</button></div>
+      <div class="modeHint" id="ogHint"></div>
+      <div class="seg" id="diff"><button data-d="0">Easy<small>chill</small></button><button data-d="1" class="sel">Medium<small>fast</small></button><button data-d="2">Hard<small>blazing</small></button></div>
+      <div style="height:14px"></div>
+      <button class="bigbtn" id="play">PLAY</button>
+    </div>
+  </div>
+  <!-- ARCADE picker sheet -->
+  <div class="modal hidden" id="arcPickM">
+    <div class="panel arcPanel">
+      <button class="x" data-close="arcPickM">✕</button>
+      <h2>🕹️ Arcade</h2>
+      <p class="sub">Pick your run</p>
+      <div class="arcList" id="arcSeg">
+        <button data-a="classic"><span>👾</span><div><b>Classic</b><small>3 stages + a boss. Bosses drop exclusive gear.</small></div></button>
+        <button data-a="inf"><span>♾️</span><div><b>Infinite</b><small>Endless levels. Extract every 15 for rare loot.</small></div></button>
+        <button data-a="chaos"><span>🎲</span><div><b>Chaos</b><small>A random twist every point.</small></div></button>
+        <button data-a="surv"><span>❤️</span><div><b>Survival</b><small>One life. How long can you last?</small></div></button>
+      </div>
     </div>
   </div>
   <!-- ARCADE -->
@@ -651,8 +745,8 @@ const DIFFS = [
 ];
 
 // ================= character roster =================
-const RARITY = { starter:['Starter','#b9c2cc'], common:['Common','#3ddc84'], rare:['Rare','#3fa9ff'], epic:['Epic','#c27bff'], legendary:['Legendary','#ffc93c'], mythic:['Mythic','#ff3b5c'], festive:['🎄 Christmas','#4ade80'], krampus:['👹 Event','#ff4d4d'], arcade:['Arcade','#ff4fd8'], secret:['Secret','#00ff66'] };
-const GROUPS = [['starter','Starter'], ['animals','Animals'], ['legends','Legends'], ['aliens','Aliens'], ['myth','Mythology'], ['squad','👑 The Squad'], ['pros','🏆 Pro Tour (Mythic)'], ['xmas','🎄 Christmas Drop (limited)'], ['arcade','🕹️ Arcade exclusives'], ['secret','🤫 Secret & special']];
+const RARITY = { starter:['Starter','#b9c2cc'], common:['Common','#3ddc84'], rare:['Rare','#3fa9ff'], epic:['Epic','#c27bff'], legendary:['Legendary','#ffc93c'], mythic:['Mythic','#ff3b5c'], festive:['🎄 Christmas','#4ade80'], krampus:['👹 Event','#ff4d4d'], vintage:['🌍 World Tour','#e0b36e'], arcade:['Arcade','#ff4fd8'], secret:['Secret','#00ff66'] };
+const GROUPS = [['starter','Starter'], ['animals','Animals'], ['legends','Legends'], ['aliens','Aliens'], ['myth','Mythology'], ['squad','👑 The Squad'], ['pros','🏆 Pro Tour (Mythic)'], ['xmas','🎄 Christmas Drop (limited)'], ['arcade','🕹️ Arcade exclusives'], ['wt','🌍 World Tour'], ['secret','🤫 Secret & special']];
 const SKIN = '#f0c9a0';
 const sph = (r, w = 18, h = 14) => new THREE.SphereGeometry(r, w, h);
 const cyl = (rt, rb, h, s = 12) => new THREE.CylinderGeometry(rt, rb, h, s);
@@ -1475,6 +1569,19 @@ const CHARS = [
       k.mk(box(0.14, 0.05, 0.02), new THREE.MeshBasicMaterial({ color: '#ff2d55' }), 0, 0.66, -0.3, k.upper);
       const st = k.mk(new THREE.OctahedronGeometry(0.08), k.M('#ffffff', { emissive: '#fff4b0', emissiveIntensity: 0.8 }), 0, 0.33, 0, k.head); st.scale.set(1, 1.3, 0.4);
     } },
+  // ---- 🌍 World Tour: Bainbridge Island 1965 final boss + reward (the dog the game may be named after)
+  { id:'c_pickles', name:'Pickles', price:0, exclusive:'wt', group:'wt', rarity:'vintage', shout:'Woof woof! 🐶', c:{ body:'#c98a4b', limb:'#7a4a22', foot:'#4a2c14' },
+    deco: k => {
+      belly(k, '#f3dfbf');
+      for (const s of [-1, 1]) { const e = k.mk(sph(0.1), '#6b3f1d', s * 0.215, -0.02, 0.02, k.head); e.scale.set(0.45, 1.5, 0.8); e.rotation.z = s * 0.25; }
+      const sn = k.mk(sph(0.11), '#f3dfbf', 0, -0.08, -0.2, k.head); sn.scale.set(1.05, 0.8, 0.9);
+      k.mk(sph(0.04), '#151010', 0, -0.045, -0.3, k.head);
+      const tg = k.mk(sph(0.035), '#ff7a9a', 0, -0.15, -0.27, k.head); tg.scale.set(1, 0.4, 1.3);
+      k.mk(sph(0.07), '#6b3f1d', 0.09, 0.09, -0.17, k.head).scale.set(1, 1, 0.4);   // eye patch
+      const col = k.mk(new THREE.TorusGeometry(0.19, 0.03, 8, 24), '#c0392b', 0, 1.13, 0, k.upper); col.rotation.x = Math.PI / 2;
+      k.mk(cyl(0.035, 0.035, 0.012, 14), k.M('#ffd34d', { metalness: 0.8, roughness: 0.25 }), 0, 1.06, -0.2, k.upper).rotation.x = Math.PI / 2;
+      tail(k, g => { const t = k.mk(sph(0.06), '#c98a4b', 0, 0.16, 0, g); t.scale.set(1, 2.6, 1); }, 0.6);
+    } },
 ];
 const OLD_OUTFITS = { c_classic:0, c_royal:60, c_lime:90, c_pink:120, c_ninja:250, c_king:450 };
 
@@ -1638,6 +1745,7 @@ const SHOP = {
     { id:'p_inf1', brand:'Void', name:'Loop Pro',      price:0, exclusive:'inf', rarity:'rare',      type:'hybrid',   shape:'hex', style:'void', a:'#060d1c', b:'#3fa9ff', mark:'VOID', pw:7, ct:7, sp:8 },
     { id:'p_inf2', brand:'Void', name:'Event Horizon', price:0, exclusive:'inf', rarity:'epic',      type:'spin',     shape:'hex', style:'void', a:'#0e0618', b:'#c27bff', mark:'VOID', pw:8, ct:8, sp:9 },
     { id:'p_inf3', brand:'Void', name:'Infinity Edge', price:0, exclusive:'inf', rarity:'legendary', type:'hybrid',   shape:'hex', style:'void', a:'#140d00', b:'#ffc93c', mark:'VOID', metal:true, pw:9, ct:10, sp:9 },
+    { id:'p_ply65', brand:'Bainbridge', name:'Plywood \'65', price:0, exclusive:'wt', rarity:'vintage', type:'control', shape:'square', style:'wood', a:'#c9955a', b:'#6e4220', pw:7, ct:9, sp:7 },
     { id:'p_krampus', brand:'Krampus', name:'Chain Breaker', price:0, exclusive:'krampus', kr:3, rarity:'krampus', type:'power', shape:'blade', style:'flames', a:'#120606', b:'#ff2a2a', mark:'KRAMPUS', pw:10, ct:9, sp:9 },
     // ---- 🎄 Christmas Drop paddles
     { id:'p_candy',     brand:'North Pole', name:'Candy Cane',   price:1500, exclusive:'xmas', rarity:'festive', type:'power',   shape:'long',  style:'stripes', a:'#ffffff', b:'#e11d48', mark:'CANDY', ink:'#14532d', pw:9, ct:7, sp:8 },
@@ -1659,6 +1767,7 @@ const SHOP = {
     { id:'b_fire',    name:'Fireball',  price:300, color:'#ffb030', emissive:'#ff5a00', glow:true, trail:'fire' },
     { id:'b_pixel',   name:'Pixel Ball', price:0, exclusive:'arcade', color:'#ff4fd8', emissive:'#ff4fd8', glow:true, trail:'#00f0ff' },
     { id:'b_coal', name:'Lump of Coal', price:0, exclusive:'krampus', kr:1, rarity:'krampus', color:'#1c1c1c', emissive:'#ff3b00', glow:true, trail:'fire' },
+    { id:'b_wiffle', name:'Wiffle \'65', price:0, exclusive:'wt', rarity:'vintage', color:'#f4ead0', trail:'#d9b98a' },
     { id:'b_bauble',   name:'Bauble',      price:1500, exclusive:'xmas', rarity:'festive', color:'#d61f3c', emissive:'#ff2d55', glow:true, trail:'#ffd23f' },
     { id:'b_snowball', name:'Snowball',    price:1500, exclusive:'xmas', rarity:'festive', color:'#f4fbff', emissive:'#cfeaff', glow:true, trail:'#bfe6ff' },
     { id:'b_gingerb',  name:'Gingerbread', price:1500, exclusive:'xmas', rarity:'festive', color:'#b5651d', trail:'#fff1d6' },
@@ -1684,6 +1793,9 @@ const SHOP = {
     { id:'a_lair', name:'Krampus Lair', price:0, exclusive:'krampus', kr:5, rarity:'krampus', deco:'xlair', night:true, glow:true,
       sky:['#0d0106','#3b0b14'], fog:'#1a0508', ground:'#e6ecf5', apron:'#1a0d0d', court:'#2a0a0a', kitchen:'#4a0f14', lines:'#ff3b3b',
       hemi:['#ff9a8a','#100508',0.75], sun:['#ff7a5a',1.2,[4,12,6]] },
+    { id:'a_bain', name:"Bainbridge '65", price:0, exclusive:'wt', rarity:'vintage', deco:'bain',
+      sky:['#7fa8c9','#e6ecee'], fog:'#d3dcdf', ground:'#4f7a3e', apron:'#45484c', court:'#53565b', kitchen:'#5d6066', lines:'#f2efe6',
+      hemi:['#e8eef0','#46603a',1.5], sun:['#fff1d8',2.4,[6,12,6]] },
     // ---- 🎄 Christmas Drop arenas
     { id:'a_wonder', name:'Winter Wonderland', price:1500, exclusive:'xmas', rarity:'festive', deco:'xwonder',
       sky:['#9cc8f0','#f4f9ff'], fog:'#eaf2fb', ground:'#f4f8ff', apron:'#e2ebf6', court:'#c62828', kitchen:'#2e7d32', lines:'#ffffff',
@@ -2057,6 +2169,7 @@ function buildArena(a) {
     }
   }
   if (D[0] === 'x') buildXmasArena(D);
+  if (D === 'bain') buildBainArena();
   if (D === 'stadium') { clouds(arenaGroup, '#ffffff', 6);
     const standMat = std('#5a5f6e'), rows = 5;
     const dummy = new THREE.Object3D(), spots = [];
@@ -2298,6 +2411,35 @@ function buildXmasArena(D) {
     for (const [c, x] of [['#ff2d55', -6], ['#22c55e', 6]]) { const pl = new THREE.PointLight(c, 25, 20, 2); pl.position.set(x, 5, 0); arenaGroup.add(pl); }
     xmasSnow(400);
   }
+}
+function buildBainArena() {   // 1965 backyard on Bainbridge Island: cedars, Puget Sound behind, a ranch house, Pickles' doghouse
+  const G = arenaGroup;
+  clouds(G, '#f1f1ee', 8); hills(G, '#3f6b4a', 7, 20, 34, 0.25);
+  const sea = new THREE.Mesh(new THREE.PlaneGeometry(400, 120), std('#4f7f99', { roughness: 0.25, metalness: 0.25 }));
+  sea.rotation.x = -Math.PI / 2; sea.position.set(0, 0.03, -95); G.add(sea); arenaAnim.push(t => { sea.position.y = 0.03 + Math.sin(t * 0.7) * 0.03; });
+  const mtn = new THREE.Mesh(new THREE.ConeGeometry(16, 13, 7), std('#8796a6', { flatShading: true })); mtn.position.set(30, 6.5, -150); G.add(mtn);
+  const cap = new THREE.Mesh(new THREE.ConeGeometry(6, 5, 7), std('#f4f6f8', { flatShading: true })); cap.position.set(30, 10.6, -150); G.add(cap);
+  for (let i = 0; i < 26; i++) { const [x, z] = outsideSpot(W / 2 + 4, W / 2 + 18, -28, 14); G.add(pine(x, z, rnd(1.1, 1.9))); }
+  for (let i = 0; i < 16; i++) { const x = rnd(-22, 22), z = rnd(-34, -13); if (x < -3 && x > -16 && z > -26) continue; G.add(pine(x, z, rnd(1.3, 2.2))); }
+  // ranch house behind the far baseline
+  const house = new THREE.Group(); house.position.set(-9, 0, -19); house.rotation.y = 0.3; G.add(house);
+  const wall = new THREE.Mesh(box(8, 2.8, 5), std('#e9dcc0')); wall.position.y = 1.4; wall.castShadow = true; house.add(wall);
+  const roof = new THREE.Mesh(new THREE.CylinderGeometry(0.01, 3.4, 1.6, 4, 1), std('#6b3f2a', { flatShading: true })); roof.scale.set(1.75, 1, 1.05); roof.rotation.y = Math.PI / 4; roof.position.y = 3.6; house.add(roof);
+  const door = new THREE.Mesh(box(1, 2, 0.08), std('#3f6e8c')); door.position.set(1.4, 1, 2.52); house.add(door);
+  for (const x of [-2.4, -0.6]) { const w = new THREE.Mesh(box(1.2, 0.9, 0.08), std('#fff3c4', { emissive: '#ffe9a8', emissiveIntensity: 0.25 })); w.position.set(x, 1.6, 2.52); house.add(w); }
+  const ch = new THREE.Mesh(box(0.6, 1.6, 0.6), std('#8a4a32')); ch.position.set(2.6, 3.9, -0.6); house.add(ch);
+  // Pickles' doghouse
+  const dh = new THREE.Group(); dh.position.set(W / 2 + 3.4, 0, -5.5); dh.rotation.y = -0.6; G.add(dh);
+  const db = new THREE.Mesh(box(1.1, 0.8, 1.2), std('#b5562f')); db.position.y = 0.4; dh.add(db);
+  const dr = new THREE.Mesh(new THREE.CylinderGeometry(0.01, 0.95, 0.55, 4, 1), std('#5a3a24', { flatShading: true })); dr.rotation.y = Math.PI / 4; dr.position.y = 1.07; dh.add(dr);
+  const hole = new THREE.Mesh(new THREE.CircleGeometry(0.26, 16), new THREE.MeshBasicMaterial({ color: '#1a120c' })); hole.position.set(0, 0.36, 0.61); dh.add(hole);
+  // clothesline + picnic bench
+  const pole = z => { const m = new THREE.Mesh(cyl(0.05, 0.05, 2.2, 6), std('#8a6a48')); m.position.set(-(W / 2 + 3.2), 1.1, z); G.add(m); };
+  pole(-3); pole(3);
+  const line = new THREE.Mesh(cyl(0.008, 0.008, 6, 4), std('#dddddd')); line.rotation.x = Math.PI / 2; line.position.set(-(W / 2 + 3.2), 2.1, 0); G.add(line);
+  ['#d94a4a', '#f2f2f2', '#4a7fd9', '#e8c547'].forEach((c, i) => { const sh = new THREE.Mesh(box(0.05, 0.6, 0.55), std(c)); sh.position.set(-(W / 2 + 3.2), 1.78, -2 + i * 1.3); G.add(sh); arenaAnim.push(t => { sh.rotation.x = Math.sin(t * 1.8 + i) * 0.12; }); });
+  G.add(bench(W / 2 + 2, 2.2, -Math.PI / 2));
+  for (let i = 0; i < 12; i++) { const [x, z] = outsideSpot(W / 2 + 2.6, W / 2 + 3.4, -NET - 2, NET + 2); G.add(bush(x, z, rnd(0.7, 1.1))); }
 }
 function pine(x, z, s) {
   const g = new THREE.Group();
@@ -3058,13 +3200,13 @@ function proSyn() { const d = playerModel && playerModel.userData.def, p = curPa
 function paddleFactors(side = 'p') {
   const p = side === 'p' ? curPaddle() : (padA || CPU_PADDLE);
   let pw = p.pw, ct = p.ct;
-  if (side === 'p' && sprOn()) { if (spr.spc.k === 'ember') pw = Math.min(10, pw + 0.8 * spr.m); if (spr.spc.k === 'stone') ct = Math.min(10, ct + 0.8 * spr.m); }
+  if (side === 'p' && sprOn()) { if (spr.spc.k === 'ember') pw = Math.min(10, pw + 0.8 * spr.m); if (spr.spc.k === 'stone') ct = Math.min(10, ct + 0.8 * spr.m); if (spr.spc.k === 'relic') ct = Math.min(10, ct + 0.5 * spr.m); }
   return { p, pf: (pw - 5) / 5, cf: (ct - 5) / 5, sf: (p.sp - 5) / 5 };
 }
 function playerReach(side = 'p') {
   const { p, cf } = paddleFactors(side);
   let r = REACH * (1 + 0.05 * cf + (PSHAPE[p.shape] || PSHAPE.std).reach);
-  if (side === 'p' && sprOn()) { if (spr.spc.k === 'tide') r *= 1 + 0.06 * spr.m; if (spr.spc.k === 'pixel') r *= 1 + 0.04 * spr.m; if (spr.reachT > 0) r *= 1.5 + 0.1 * spr.m; }
+  if (side === 'p' && sprOn()) { if (spr.spc.k === 'tide') r *= 1 + 0.06 * spr.m; if (spr.spc.k === 'pixel') r *= 1 + 0.04 * spr.m; if (spr.spc.k === 'relic') r *= 1 + 0.04 * spr.m; if (spr.reachT > 0) r *= 1.5 + 0.1 * spr.m; }
   if (side === 'p' && csprOn() && cspr.shrinkT > 0) r *= 0.72;
   const pro = side === 'p' ? proChar() : null;
   if (pro && pro.k === 'blaze') r *= proSyn() ? 1.09 : 1.06;
@@ -3086,9 +3228,12 @@ function newGame(m = 'cpu', opts = {}) {
   if (!selD) selD = D;
   if (!opts.tour) tour = null;
   if (!opts.arcade) arcade = null;
+  const wtOn = !!(arcade && arcade.wt);
+  document.body.classList.toggle('vintage', wtOn);
+  if (!wtOn && forceArena) { forceArena = null; applyLook(); }
   doubles = m === 'cpu' && !!opts.doubles && !tour;
   D = arcade ? arcadeD() : tour ? TOUR_D[tour.round] : m === 'cpu' ? selD : DIFFS[1];
-  gameTo = arcade ? (arcade.krampus ? KR_TO : arcade.surv ? 999 : arcade.inf || arcade.chaos || arcade.step === 3 ? 5 : 3) : tour ? TOUR_TO[tour.round] : m === 'cpu' ? 11 : 11;   // every difficulty is a game to 11; harder = faster
+  gameTo = arcade ? (arcade.wt ? (arcade.wi === 9 ? 11 : 7) : arcade.krampus ? KR_TO : arcade.surv ? 999 : arcade.inf || arcade.chaos || arcade.step === 3 ? 5 : 3) : tour ? TOUR_TO[tour.round] : m === 'cpu' ? 11 : 11;   // every difficulty is a game to 11; harder = faster
   document.body.classList.toggle('local', m === 'local');
   score = { p: 0, a: 0 }; earnedThisGame = 0; gameOverPending = false; paused = false;
   server = Math.random() < 0.5 ? 'p' : 'a';
@@ -3097,6 +3242,7 @@ function newGame(m = 'cpu', opts = {}) {
   closeShop(true);
   if (m !== 'online') { pickCpu(arcade ? arcade.opps[arcade.surv ? arcade.oi : arcade.inf || arcade.chaos ? arcade.lvl % 5 : arcade.step] : tour ? tour.opps[tour.round] : null); padA = CPU_PADDLE; }
   if (arcade && arcade.step === 3) { aiModel.scale.setScalar(1.55); padA = findItem('paddle', 'p_hyper'); }
+  if (arcade && arcade.wt) { padA = findItem('paddle', 'p_ply65'); if (arcade.wi === 9) aiModel.scale.setScalar(1.3); }
   setupCpuSprite();
   if (doubles) setupDoublesModels();
   serverNum = doubles ? 2 : 1;   // doubles starts "0-0-2": only one server before the first side out
@@ -3108,7 +3254,7 @@ function newGame(m = 'cpu', opts = {}) {
   if (m === 'online' && role === 'guest') { phase = 'serve'; msgT = 0; updateHud(); return; }
   setupServe();
   const who = s => m === 'local' ? (s === 'p' ? 'P1' : 'P2') : s === 'p' ? 'you' : 'they';
-  const vs = arcade ? (arcade.krampus ? `👹 KRAMPUS SHOWDOWN · first to ${KR_TO}` : arcade.surv ? `❤️ Survival · one life · vs ${cpuDef.name}` : arcade.chaos ? `🎲 Chaos level ${arcadeStage()} · vs ${cpuDef.name}` : arcade.inf ? `♾️ Level ${arcadeStage()} · vs ${cpuDef.name}` : arcade.step === 3 ? `👑 BOSS: ${cpuDef.boss ? '' : 'MEGA '}${cpuDef.name.toUpperCase()}` : `Stage ${arcadeStage()} · vs ${cpuDef.name}`) : tour ? `${ROUND_NAMES[tour.round]} · vs ${cpuDef.name}` : doubles ? `Doubles · ${partnerDef.name} & you` : m === 'cpu' ? `vs ${cpuDef.name}` : m === 'local' ? 'P1 vs P2' : 'vs Friend';
+  const vs = arcade ? (arcade.wt ? `🌍 Boss ${arcade.wi + 1}/10 · ${cpuDef.name}` : arcade.krampus ? `👹 KRAMPUS SHOWDOWN · first to ${KR_TO}` : arcade.surv ? `❤️ Survival · one life · vs ${cpuDef.name}` : arcade.chaos ? `🎲 Chaos level ${arcadeStage()} · vs ${cpuDef.name}` : arcade.inf ? `♾️ Level ${arcadeStage()} · vs ${cpuDef.name}` : arcade.step === 3 ? `👑 BOSS: ${cpuDef.boss ? '' : 'MEGA '}${cpuDef.name.toUpperCase()}` : `Stage ${arcadeStage()} · vs ${cpuDef.name}`) : tour ? `${ROUND_NAMES[tour.round]} · vs ${cpuDef.name}` : doubles ? `Doubles · ${partnerDef.name} & you` : m === 'cpu' ? `vs ${cpuDef.name}` : m === 'local' ? 'P1 vs P2' : 'vs Friend';
   if (radarOn() && !SAVE.radarTip) { SAVE.radarTip = 1; persist(); setTimeout(() => flash('📡 New: the pink radar shows where your shot will land. Move to change it', '#ff9ef0', 3.2), 2000); }
   flash(`${vs}${csprOn() ? ` + ${sprName(cspr.spc, cspr.t)}` : ''} · ${who(server)} serve${m === 'local' ? 's' : ''}`, '#e8f542', 1.8);
 }
@@ -3195,7 +3341,7 @@ function endRally(loser, reason) {
   pointSnap = { score: { ...score }, server, serverNum, srvObj, rightOf: { ...rightOf } };
   phase = 'point'; pointTimer = 1.6; ball.live = false; landMarker = null;
   let pointTo = null, second = false;
-  if (arcade) { const w = otherSide(loser); score[w] += cx_('pts', 1); pointTo = w; server = w; if (cx_('pts', 1) > 1) toast('💰 Double points!'); }   // arcade uses quick rally scoring
+  if (arcade && !arcade.wt) { const w = otherSide(loser); score[w] += cx_('pts', 1); pointTo = w; server = w; if (cx_('pts', 1) > 1) toast('💰 Double points!'); }   // arcade uses quick rally scoring
   else if (loser !== server) { score[server]++; pointTo = server; if (doubles) rightOf[server] = mate(rightOf[server]); }   // serving team swaps sides
   else if (doubles && serverNum === 1) { serverNum = 2; second = true; srvObj = mate(srvObj); }
   else { server = otherSide(server); serverNum = 1; if (doubles) srvObj = rightOf[server]; }   // side out: right-court player serves first
@@ -3230,8 +3376,11 @@ function gameOver() {
     $('earned').innerHTML = `<div class="rw"><span class="ic">🤝</span>Friendly match<b>${w}</b></div><div class="fine">Same-phone games don't earn dinks.</div>`;
     buzz([30, 60, 30]); cheerT = 3; return;
   }
+  const sxp = sprMatchXP(arcade && arcade.surv ? score.p >= 5 : score[me] > score[op]);
+  if (sxp) setTimeout(() => $('earned').insertAdjacentHTML('beforeend', sxp), 0);
   if (arcade && arcade.surv) return survOver();
   if (arcade && arcade.krampus) return krampusOver(score[me] > score[op]);
+  if (arcade && arcade.wt) return wtOver(score[me] > score[op]);
   const win = score[me] > score[op];
   win ? SAVE.rec.w++ : SAVE.rec.l++;
   const RD = mode === 'online' ? DIFFS[1] : D;
@@ -3323,8 +3472,8 @@ function updateHud() {
   const me = mySide(), op = otherSide(me);
   $('numP').textContent = score[me]; $('numA').textContent = score[op];
   $('scP').classList.toggle('serving', server === me); $('scA').classList.toggle('serving', server === op);
-  $('cpuName').textContent = arcade && arcade.krampus ? 'KRAMPUS' : arcade && arcade.step === 3 && cpuDef ? (cpuDef.boss ? 'COACH' : `MEGA ${cpuDef.name.toUpperCase()}`) : mode === 'local' ? 'P2' : mode === 'online' ? 'FRIEND' : doubles ? 'THEM' : (cpuDef ? cpuDef.name.toUpperCase() : 'CPU');
-  $('midTxt').textContent = arcade && arcade.krampus ? `👹 TO ${KR_TO} · WIN BY 2` : arcade && arcade.surv ? '❤️ ONE LIFE' : arcade ? `TO ${gameTo} · WIN BY 2` : doubles ? `${score[server]}-${score[otherSide(server)]}-${serverNum}` : `TO ${gameTo}`;
+  $('cpuName').textContent = arcade && arcade.wt && cpuDef ? cpuDef.name.toUpperCase() : arcade && arcade.krampus ? 'KRAMPUS' : arcade && arcade.step === 3 && cpuDef ? (cpuDef.boss ? 'COACH' : `MEGA ${cpuDef.name.toUpperCase()}`) : mode === 'local' ? 'P2' : mode === 'online' ? 'FRIEND' : doubles ? 'THEM' : (cpuDef ? cpuDef.name.toUpperCase() : 'CPU');
+  $('midTxt').textContent = arcade && arcade.wt ? `🌍 TO ${gameTo}` : arcade && arcade.krampus ? `👹 TO ${KR_TO} · WIN BY 2` : arcade && arcade.surv ? '❤️ ONE LIFE' : arcade ? `TO ${gameTo} · WIN BY 2` : doubles ? `${score[server]}-${score[otherSide(server)]}-${serverNum}` : `TO ${gameTo}`;
   $('meName').textContent = mode === 'local' ? 'P1' : 'YOU';
 }
 
@@ -3421,7 +3570,7 @@ function humanShot(side, me = side === 'p' ? player : ai) {
     if (spr.next === 'gleam') { tx = ai.x < W / 2 ? W - 0.35 : 0.35; ty = rand(0.5, 1.2); T = Math.min(T, 0.8); curve = 0; sprBoost = 0.35 + 0.06 * m; label = 'GLEAM!'; }
     spr.next = null;
   }
-  const sInfo = side === 'p' ? { volley: ball.bounces === 0, dink: ty > NET - K && ty < NET && !['SMASH!', 'POWER!', 'Lob'].includes(label) && !fire, power: label === 'POWER!', spin: /spin/i.test(label) } : null;
+  const sInfo = side === 'p' ? { volley: ball.bounces === 0, dink: ty > NET - K && ty < NET && !['SMASH!', 'POWER!', 'Lob'].includes(label) && !fire, power: label === 'POWER!', spin: /spin/i.test(label), lob: label === 'Lob' } : null;
   ty = mir(ty);
   if (ball.bounces >= 1) mustBounce[side] = false;
   const big = ['SMASH!', 'POWER!', 'WICKED SPIN!', 'FIREBALL!', 'GUST!', 'GLEAM!', 'PHENOM DRIVE!', 'ROCKET!', 'ERNE!', 'AROUND THE POST!', 'CHAINSAW SPIN!'].includes(label);
@@ -3722,24 +3871,34 @@ function keyVec() {
 document.querySelectorAll('#diff button').forEach(b => b.addEventListener('click', () => {
   document.querySelectorAll('#diff button').forEach(x => x.classList.remove('sel')); b.classList.add('sel'); D = selD = DIFFS[+b.dataset.d];
 }));
+const OG_HINT = { single: 'You vs the CPU · first to 11, win by 2', doubles: 'You + a CPU partner vs two CPUs', tour: '🏆 Knockout tournament · win 3 rounds to be champion', vs: '👥 Two players, one phone. Lay it flat between you: P1 at the bottom, P2 at the top.' };
+function ogSync() {
+  $('diff').classList.toggle('hidden', selMode === 'tour' || selMode === 'vs');
+  $('ogHint').textContent = OG_HINT[selMode] || '';
+  $('play').textContent = selMode === 'vs' ? 'START VS MATCH' : selMode === 'tour' ? 'START TOURNAMENT' : 'PLAY';
+}
 document.querySelectorAll('#modeSeg button').forEach(b => b.addEventListener('click', () => {
-  document.querySelectorAll('#modeSeg button').forEach(x => x.classList.remove('sel')); b.classList.add('sel'); selMode = b.dataset.m;
-  $('diff').classList.toggle('hidden', selMode === 'tour' || selMode === 'arcade');
-  $('arcSeg').classList.toggle('hidden', selMode !== 'arcade');
+  document.querySelectorAll('#modeSeg button').forEach(x => x.classList.remove('sel')); b.classList.add('sel'); selMode = b.dataset.m; beep(760, 0.04, 0.08); ogSync();
 }));
 let selArc = 'classic';
+$('ogCard').addEventListener('click', () => { initAudio(); beep(660, 0.05, 0.08); ogSync(); $('ogM').classList.remove('hidden'); });
+$('arcCard').addEventListener('click', () => { initAudio(); beep(660, 0.05, 0.08); $('arcPickM').classList.remove('hidden'); });
+$('newCard').addEventListener('click', () => { initAudio(); beep(523, 0.08, 0.08); showWT(); });
 document.querySelectorAll('#arcSeg button').forEach(b => b.addEventListener('click', () => {
-  document.querySelectorAll('#arcSeg button').forEach(x => x.classList.remove('sel')); b.classList.add('sel'); selArc = b.dataset.a; beep(760, 0.04, 0.08);
+  initAudio(); selArc = b.dataset.a; $('arcPickM').classList.add('hidden');
+  selArc === 'inf' ? startInfinite() : selArc === 'chaos' ? startChaos() : selArc === 'surv' ? startSurvival() : startArcade();
 }));
 $('play').addEventListener('click', () => {
-  initAudio();
-  if (selMode === 'tour') startTournament(); else if (selMode === 'arcade') (selArc === 'inf' ? startInfinite() : selArc === 'chaos' ? startChaos() : selArc === 'surv' ? startSurvival() : startArcade()); else newGame('cpu', { doubles: selMode === 'doubles' });
+  initAudio(); $('ogM').classList.add('hidden');
+  if (selMode === 'vs') newGame('local'); else if (selMode === 'tour') startTournament(); else newGame('cpu', { doubles: selMode === 'doubles' });
 });
 $('again').addEventListener('click', () => {
   initAudio();
   if (mode === 'online') { if (role === 'host') startOnlineMatch(); return; }
   if (overNext === 'arcade') { $('over').classList.add('hidden'); arcadeAdvance(); return; }
   if (overNext === 'arcadeNew') { $('over').classList.add('hidden'); startArcade(); return; }
+  if (overNext === 'wtNext') { $('over').classList.add('hidden'); toMenu(); showWT(); return; }
+  if (overNext === 'wtRetry') { $('over').classList.add('hidden'); startWt(arcade.wi); return; }
   if (overNext === 'infNext') { $('over').classList.add('hidden'); infAdvance(); return; }
   if (overNext === 'infNew') { $('over').classList.add('hidden'); startInfinite(); return; }
   if (overNext === 'chaosNext') { $('over').classList.add('hidden'); chaosAdvance(); return; }
@@ -3755,7 +3914,8 @@ document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click
 function toMenu() {
   if (mode === 'online') leaveOnline();
   if (mode !== 'cpu') { curLook.char = null; mode = 'cpu'; role = null; ctrl.a = 'ai'; document.body.classList.remove('local'); applyLook(); pickCpu(); }
-  clearCpuSprite(); doubles = false; tour = null; arcade = null; overNext = null; $('arcM').classList.add('hidden'); $('tourM').classList.add('hidden');
+  clearCpuSprite(); doubles = false; tour = null; arcade = null; overNext = null;
+  document.body.classList.remove('vintage'); if (forceArena) { forceArena = null; applyLook(); } wtCard(); $('arcM').classList.add('hidden'); $('tourM').classList.add('hidden');
   if (partnerModel) partnerModel.visible = false; if (ai2Model) ai2Model.visible = false;
   if (selD) D = selD;
   phase = 'menu'; paused = false; msgT = 0;
@@ -3872,11 +4032,12 @@ function renderShop() {
     else if (it.exclusive === 'tour3') act = `<button class="act no">🏆 ${Math.min(3, SAVE.tourWins || 0)}/3 Tours</button>`;
     else if (it.exclusive === 'boss2') act = `<button class="act no">👑 Boss 2</button>`;
     else if (it.exclusive === 'secret') act = `<button class="act no">🤫 Secret</button>`;
+    else if (it.exclusive === 'wt') act = `<button class="act no">🌍 ${wtItemBoss(it.id) ? 'Boss ' + wtItemBoss(it.id) : 'World Tour'}</button>`;
     else if (it.exclusive) act = `<button class="act no">🕹️ Arcade</button>`;
     else act = `<button class="act ${SAVE.dinks >= it.price ? 'buy' : 'no'}"><span class="coin"></span> ${it.price}</button>`;
     const rr = itemRarity(shopTab, it);
     const rar = `<div class="rar" style="color:${RARITY[rr][1]}">${RARITY[rr][0]}</div>`;
-    if (rr === 'legendary') d.classList.add('legend'); if (rr === 'epic') d.classList.add('epic'); if (rr === 'mythic') d.classList.add('mythic'); if (rr === 'festive') d.classList.add('festive'); if (rr === 'krampus') d.classList.add('krampus');
+    if (rr === 'legendary') d.classList.add('legend'); if (rr === 'epic') d.classList.add('epic'); if (rr === 'mythic') d.classList.add('mythic'); if (rr === 'festive') d.classList.add('festive'); if (rr === 'krampus') d.classList.add('krampus'); if (rr === 'vintage') d.classList.add('vintage');
     let extra = '';
     if (shopTab === 'paddle') {
       const t = PTYPES[it.type];
@@ -3903,6 +4064,7 @@ function renderShop() {
           burst(T3(player.x, player.y, 1.4), '#4ade80', 24, 3, 0.22);
         }
         else if (it.exclusive === 'logo') toast('🤫 This one is hiding somewhere on the home screen…');
+        else if (it.exclusive === 'wt') toast(`🌍 Win this on the World Tour${wtItemBoss(it.id) ? ` by beating boss ${wtItemBoss(it.id)} in ${wtSeason().city}` : ''}`);
         else if (it.exclusive === 'spin') toast('Win this on the Daily Spin. Good luck!');
         else if (it.exclusive === 'inf') toast('Extract in Infinite Arcade and pick a paddle to win this');
         else if (it.exclusive === 'tour3') toast(`Win 3 tournaments to unlock this (${Math.min(3, SAVE.tourWins || 0)}/3)`);
@@ -3966,10 +4128,10 @@ $('openShop').addEventListener('click', () => openShop('menu'));
 $('overShop').addEventListener('click', () => openShop('over'));
 $('closeShop').addEventListener('click', () => closeShop(false));
 
-let curLook = {};
+let curLook = {}, forceArena = null;   // forceArena: World Tour plays in the city's own arena
 function applyLook() {
   const id = c => preview[c] || SAVE.equip[c];
-  const ch_ = id('char'), pd = id('paddle'), bl = id('ball'), ar = id('arena');
+  const ch_ = id('char'), pd = id('paddle'), bl = id('ball'), ar = forceArena || id('arena');
   const cus = JSON.stringify([padCustom(), look()]);
   if (curLook.char !== ch_ || curLook.paddle !== pd || curLook.custom !== cus) setPlayerModel(findItem('char', ch_), findItem('paddle', pd));
   if (curLook.ball !== bl) applyBallSkin(findItem('ball', bl));
@@ -4380,7 +4542,7 @@ function netLost(msg) {
   leaveOnline(); toast(msg);
   if (mode === 'online') toMenu(); else { $('lobbyM').classList.add('hidden'); role = null; }
 }
-$('friendsBtn').addEventListener('click', () => { initAudio(); $('friendsM').classList.remove('hidden'); });
+
 $('localBtn').addEventListener('click', () => { initAudio(); $('friendsM').classList.add('hidden'); newGame('local'); });
 
 // ================= SPRITES: companion creatures with passives + charged powers =================
@@ -4399,13 +4561,17 @@ const SPR_RULE = {
   pixel:  { ev: 'net', need: [2, 3, 3, 4], max: 2, cpu: 1.8, lbl: 'NET WINS', txt: 'Win rallies where <b>you hit a volley</b> to charge it' },
   bloom:  { ev: 'behind', need: [2, 2, 3, 3], max: 1, cpu: 2.2, lbl: 'COMEBACK', txt: 'Only charges when you <b>win a rally while behind</b> on score' },
   nova:   { ev: 'streak', need: [4, 4, 5, 5], max: 1, cpu: 2.4, lbl: 'STREAK', txt: 'Win rallies <b>in a row</b>. Losing one resets it' },
+  relic:  { ev: 'soft', need: [5, 6, 7, 8], max: 2, cpu: 1.6, lbl: 'SOFT SHOTS', txt: 'Only <b>dinks and lobs</b> charge it (the old-school soft game)' },
 };
 function sprChargeTxt(spc, t) {
   if (spc.k === 'matrix') return 'Ready at the start of every match · once per match';
   const r = SPR_RULE[spc.k]; if (!r) return '';
   return `${r.txt} · needs ${r.need[t]}${r.max ? ` · max ${r.max === 1 ? 'once' : r.max + '×'} per match` : ''}`;
 }
-const LVL_COST = [80, 160, 280, 450];
+const LVL_COST = [80, 160, 280, 450];   // (unused since 19 Nov 2026: sprites now level up by playing)
+// Sprites level up only by playing with them equipped: XP from rallies won, powers used, matches played and won
+const SPR_XP = [60, 140, 260, 420], XP_TIER = [1, 1.25, 1.5, 1.8];
+const sprXpNeed = (t, lvl) => Math.round(SPR_XP[Math.min(4, lvl) - 1] * XP_TIER[t]);
 const TIER_COST = [1, 1.6, 2.4, 3.5];
 const MAX_REFUND = [40, 80, 150, 300];
 const SPECIES = [
@@ -4430,7 +4596,10 @@ const SPECIES = [
     passive: m => `+${(3.5 * m).toFixed(0)}% move speed, +${Math.round(4 * m)}% reach`, power:'Lag Spike', pdesc: m => `CPU freezes for ${(0.7 + 0.25 * m).toFixed(1)}s, then gets slowed` },
   { k:'nova', el:'Cosmic', excl:'inf', names:['Stardust','Comet','Nebula','Supernova'], cols:[['#a78bfa','#fef9c3'],['#60a5fa','#ffffff'],['#c026d3','#67e8f9'],['#1e1b4b','#ffd23f']],
     passive: m => `+${Math.round(0.6 * m)} dinks per rally, +${Math.round(8 * m)}% win dinks`, power:'Supernova', pdesc: m => `Next shot is a blazing corner snipe. CPU errors +${Math.round((0.45 + 0.07 * m) * 100)}%` },
-  // ---- secret: comes with Buff; only levels up when you extract in Infinite Arcade
+  // ---- 🌍 World Tour exclusives: won by beating World Tour bosses
+  { k:'relic', el:'Vintage', excl:'wt', names:['Tintype','Sepia','Gramophone','Heirloom'], cols:[['#d9b98a','#fff1d6'],['#b0814f','#f1dcb5'],['#8a5a35','#e7c48f'],['#4a3020','#f5d27a']],
+    passive: m => `+${Math.round(4 * m)}% reach, +${(0.5 * m).toFixed(1)} paddle Control`, power:'Silent Film', pdesc: m => `The CPU moves in choppy silent-movie frames for ${(2.2 + 0.5 * m).toFixed(1)}s (about half speed)` },
+  // ---- secret: comes with Buff
   { k:'matrix', el:'Secret', excl:'secret', names:['Matrix','Matrix','Matrix','Matrix'], cols:[['#e8f542','#00ff66'],['#e8f542','#00ff66'],['#e8f542','#00ff66'],['#e8f542','#00ff66']],
     passive: m => `+${Math.round(3 * m)}% move speed`, power:'Rewind', pdesc: () => `Once per match: erase the last point and replay it` },
 ];
@@ -4533,6 +4702,15 @@ function makeSprite(spc, t) {
     core.material.flatShading = true;
     anim.push(tm => { cubes.forEach((c, i) => { c.rotation.set(tm * 2 + i, tm * 3 + i, 0); c.visible = Math.sin(tm * 9 + i * 1.7) > -0.85; }); body.position.x = Math.sin(tm * 37) > 0.93 ? 0.03 : 0; });
   }
+  if (K === 'relic') {   // a little old-timer: bowler hat, curly moustache, monocle
+    const hat = glow('#2a1c12', 0.05, { roughness: 0.6 });
+    mk(new THREE.CylinderGeometry(0.15, 0.15, 0.014, 20), hat, 0, R * 0.86, 0);
+    const dome = mk(new THREE.SphereGeometry(0.1, 16, 10, 0, Math.PI * 2, 0, Math.PI / 2), hat, 0, R * 0.86, 0); dome.scale.y = 1.05;
+    mk(new THREE.CylinderGeometry(0.101, 0.101, 0.02, 20), glow(c2, 0.3), 0, R * 0.86 + 0.012, 0);
+    for (const s of [-1, 1]) { const mu = mk(new THREE.TorusGeometry(0.03, 0.01, 6, 12, Math.PI * 1.3), glow('#2a1c12', 0.05), s * 0.035, -0.012, R * 0.95); mu.rotation.z = s > 0 ? -0.6 : Math.PI + 0.6; }
+    const mon = mk(new THREE.TorusGeometry(0.036, 0.006, 6, 18), glow('#e7c48f', 0.6, { metalness: 0.8 }), 0.062, 0.03, R * 0.9 + 0.012);
+    anim.push(tm => { body.rotation.z = Math.sin(tm * 2.2) * 0.06; mon.rotation.z = tm; });
+  }
   if (K === 'nova') {
     const ring = mk(new THREE.TorusGeometry(0.25, 0.018, 8, 48), glow(c2, 1.1), 0, 0, 0); ring.rotation.x = Math.PI / 2.4;
     const stars = [];
@@ -4589,7 +4767,7 @@ function loadSprite() {
   spr.model.position.copy(T3(player.x, player.y, 1.6));
   updateSprBtn();
 }
-function resetSpriteMatch() { Object.assign(spr, { charge: 0, uses: 0, rv: false, used: false, next: null, slowT: 0, stunT: 0, freezeT: 0, reachT: 0, shield: false }); pointSnap = null; if (spr.spc && spr.spc.k === 'matrix') spr.charge = spr.need; updateSprBtn(); }
+function resetSpriteMatch() { Object.assign(spr, { charge: 0, uses: 0, rv: false, xpm: 0, used: false, next: null, slowT: 0, stunT: 0, freezeT: 0, reachT: 0, filmT: 0, shield: false }); pointSnap = null; if (spr.spc && spr.spc.k === 'matrix') spr.charge = spr.need; updateSprBtn(); }
 const sprRule = () => spr.spc && SPR_RULE[spr.spc.k];
 const sprSpent = () => { const r = sprRule(); return !!(r && r.max && spr.uses >= r.max); };
 function sprAdd(n) { if (!sprOn() || sprSpent() || spr.charge >= spr.need) return; spr.charge = Math.min(spr.need, spr.charge + n); updateSprBtn(); }
@@ -4599,9 +4777,11 @@ function sprCharge(info) {   // called on each of your shots
   if (r.ev === 'hit') sprAdd(r.bonus && info[r.bonus] ? 2 : 1);
   else if (r.ev === 'volley' && info.volley) sprAdd(1 + 0.1 * spr.m);   // Volt's passive still speeds it up a little
   else if (r.ev === 'dink' && info.dink) sprAdd(1);
+  else if (r.ev === 'soft' && (info.dink || info.lob)) sprAdd(1);
 }
 function sprRally(loser) {   // called when a rally really ends (not a Second Chance replay)
   const r = sprRule(), rv = spr.rv; spr.rv = false;
+  if (sprOn() && loser === 'a') spr.xpm = (spr.xpm || 0) + 3;
   if (!sprOn() || !r) return;
   if (loser === 'p') { if (r.ev === 'streak' && spr.charge < spr.need) { spr.charge = 0; updateSprBtn(); } return; }
   if (r.ev === 'long' && rallyHits >= 6) sprAdd(1);
@@ -4635,7 +4815,7 @@ function activateSprite() {
     if (spr.model) burst(spr.model.position, '#00ff66', 30, 3, 0.2);
     updateHud(); updateSprBtn(); return;
   }
-  spr.charge = 0; spr.uses++;
+  spr.charge = 0; spr.uses++; spr.xpm = (spr.xpm || 0) + 5;
   const k = spr.spc.k, m = spr.m, col = spr.spc.cols[spr.t][0];
   flash(`${sprName(spr.spc, spr.t)}: ${spr.spc.power}!`, col === '#ffffff' || col === '#fef9c3' ? '#ffe45c' : col, 1.3);
   if (k === 'ember') spr.next = 'fire';
@@ -4648,6 +4828,7 @@ function activateSprite() {
   if (k === 'lumen') spr.next = 'gleam';
   if (k === 'pixel') { spr.stunT = 0.7 + 0.25 * m; spr.freezeT = 1.2 + 0.4 * m; burst(T3(ai.x, ai.y, 1.2), '#00f0ff', 28, 4, 0.22); shake = 0.25; }
   if (k === 'nova') spr.next = 'nova';
+  if (k === 'relic') { spr.filmT = 2.2 + 0.5 * m; burst(T3(ai.x, ai.y, 1.1), '#e7c48f', 26, 3, 0.22); }
   if (spr.model) burst(spr.model.position, spr.spc.cols[spr.t][1], 22, 3, 0.2);
   screenFlash(0.25); buzz([20, 30, 40]);
   [660, 880, 1175].forEach((n, i) => setTimeout(() => beep(n, 0.12, 0.12, 'triangle'), i * 70));
@@ -4657,7 +4838,8 @@ sprBtn.addEventListener('pointerdown', e => { e.stopPropagation(); e.preventDefa
 addEventListener('keydown', e => { if (e.key && e.key.toLowerCase() === 'e' && !(e.target && e.target.tagName === 'INPUT')) activateSprite(); });
 
 function sprTick(dtReal) {
-  for (const k of ['slowT', 'stunT', 'freezeT', 'reachT']) if (spr[k] > 0) spr[k] = Math.max(0, spr[k] - dtReal);
+  for (const k of ['slowT', 'stunT', 'freezeT', 'reachT', 'filmT']) if (spr[k] > 0) spr[k] = Math.max(0, spr[k] - dtReal);
+  document.body.classList.toggle('filmfx', spr.filmT > 0);
   const tint = $('fxTint');
   tint.style.opacity = spr.slowT > 0 ? 0.55 : 0;
 }
@@ -4779,8 +4961,19 @@ function ensureSprites() { if (!SAVE.sprites) SAVE.sprites = { owned: {}, equip:
 function grantSprite(id) {
   const S = ensureSprites(), cur = S.owned[id] || 0, { t } = sprParse(id);
   if (!cur) { S.owned[id] = 1; return { isNew: true, lvl: 1 }; }
-  if (cur < 5) { S.owned[id] = cur + 1; return { lvlUp: true, lvl: cur + 1 }; }
-  SAVE.dinks += MAX_REFUND[t]; return { dupe: MAX_REFUND[t], lvl: 5 };
+  SAVE.dinks += MAX_REFUND[t]; return { dupe: MAX_REFUND[t], lvl: cur };   // duplicates turn into dinks: levels only come from playing
+}
+function sprMatchXP(win) {   // end of a CPU match: XP for the equipped sprite, returns an over-screen row
+  if (!sprOn() || mode !== 'cpu') return '';
+  const S = ensureSprites(), id = S.equip; if (!id || !S.owned[id]) return '';
+  const { spc, t } = sprParse(id); S.xp = S.xp || {};
+  const gain = (spr.xpm || 0) + 12 + (win ? 18 : 0); spr.xpm = 0;
+  let lvl = S.owned[id], xp = (S.xp[id] || 0) + gain, up = false;
+  while (lvl < 5 && xp >= sprXpNeed(t, lvl)) { xp -= sprXpNeed(t, lvl); lvl++; up = true; }
+  if (lvl >= 5) xp = 0;
+  S.owned[id] = lvl; S.xp[id] = xp; persist();
+  if (up) { spr.lvl = lvl; spr.m = sprMult(t, lvl); setTimeout(() => { toast(`✨ ${sprName(spc, t)} reached level ${lvl}!`); [659, 880, 1175].forEach((n, i) => setTimeout(() => beep(n, 0.12, 0.12, 'triangle'), i * 90)); }, 900); }
+  return `<div class="rw" style="background:rgba(56,217,169,${up ? '.35' : '.14'})"><span class="ic"><img src="${spriteThumb(id)}" style="width:40px;height:40px;object-fit:contain"></span>${sprName(spc, t)} +${gain} XP${up ? ` · <b style="color:#7dffb4">LEVEL ${lvl}!</b>` : ''}<b style="font-size:13px">${lvl < 5 ? `Lv ${lvl} · ${xp}/${sprXpNeed(t, lvl)}` : 'MAX'}</b></div>`;
 }
 function equipSprite(id) { ensureSprites().equip = id; persist(); loadSprite(); refreshBalance(); }
 
@@ -4828,22 +5021,24 @@ function renderDen() {
   const stars = Array.from({ length: 5 }, (_, i) => i < lvl ? '★' : '<i>★</i>').join('');
   let act = '';
   if (lvl) {
-    if (spc.excl === 'secret') act += `<div class="sprTxt" style="text-align:center;opacity:.85">${lvl < 5 ? '🚁 Levels up each time you extract in Infinite Arcade' : 'Max level'}</div>`;
-    else if (lvl < 5) { const cost = Math.round(LVL_COST[lvl - 1] * TIER_COST[t]); act += `<button class="bigbtn sm" id="lvlBtn" ${SAVE.dinks >= cost ? '' : 'disabled'}>LEVEL UP · <span class="coin"></span> ${cost}</button>`; }
-    else act += `<div class="sprTxt" style="text-align:center;opacity:.8">Max level</div>`;
+    const xp = (S.xp && S.xp[sel]) || 0, need = sprXpNeed(t, lvl);
+    act += lvl < 5 ? `<div class="xpBar"><i style="width:${Math.min(100, Math.round(xp / need * 100))}%"></i><span>Lv ${lvl} · ${xp}/${need} XP</span></div><div class="sprTxt" style="text-align:center;opacity:.75;margin-top:4px">Levels up as you play with it equipped: win rallies, use its power, finish matches</div>`
+      : `<div class="sprTxt" style="text-align:center;opacity:.8">⭐ Max level</div>`;
     if (S.equip !== sel) act = `<button class="bigbtn green sm" id="sprEq">EQUIP</button><div style="height:10px"></div>` + act;
-  } else act = `<div class="sprTxt" style="text-align:center;opacity:.85">${spc.excl ? '🔒 ♾️ Infinite Arcade exclusive: extract at level 15+' : '🔒 Win matches to find this sprite'}</div>`;
+  } else act = `<div class="sprTxt" style="text-align:center;opacity:.85">${spc.excl === 'wt' ? '🔒 🌍 World Tour reward: beat the tour bosses' : spc.excl ? '🔒 ♾️ Infinite Arcade exclusive: extract at level 15+' : '🔒 Win matches to find this sprite'}</div>`;
   let html = `<div class="sprHero"><img src="${spriteThumb(sel)}" alt="" class="${lvl ? '' : 'lockedImg'}"><div style="flex:1;min-width:0">
     <div class="rar" style="color:${tc[1]}">${tc[0]} · ${spc.el}</div><h3>${sprName(spc, t)}</h3><div class="stars">${lvl ? stars : ''}${lvl ? ` <span style="font-size:11px;opacity:.7">Lv ${lvl}</span>` : ''}</div>
     <div class="sprTxt">${spc.passive(m)}</div><div class="sprTxt"><b>${spc.power}:</b> ${spc.pdesc(m)}</div>
     <div class="sprTxt" style="opacity:.75">⚡ ${sprChargeTxt(spc, t)}${S.equip === sel ? ' · <b style="color:#3ddc84">Equipped</b>' : ''}</div></div></div>${act}`;
   html += `<div class="dropInfo">✨ <b>Sprites are only found by winning matches.</b><br>
     Easy 15% · Medium 25% · Hard 40% per win · Doubles +5%<br>Tournament: 50% every round won · Champion: <b>guaranteed</b>, rare or better<br>
-    <span style="opacity:.7">Harder modes drop rarer sprites. Duplicates level your sprite up.</span><br>
-    <span style="color:#ff9cf0">♾️ Glitch & Cosmic sprites only come from extracting in Infinite Arcade.</span></div>`;
+    <span style="opacity:.7">Harder modes drop rarer sprites. Duplicates turn into dinks.</span><br>
+    <b>⭐ Sprites level up by playing with them equipped.</b><br>
+    <span style="color:#ff9cf0">♾️ Glitch & Cosmic sprites only come from extracting in Infinite Arcade.</span><br>
+    <span style="color:#e7c48f">🌍 Vintage sprites only come from World Tour bosses.</span></div>`;
   for (const sp of SPECIES) {
     if (sp.excl === 'secret' && !S.owned[`${sp.k}_3`]) { html += `<div class="spRow"><div class="lab">🤫 ???</div><div class="spTiles"><button class="spTile locked" style="--tc:#00ff66;pointer-events:none"><img src="${spriteThumb(sp.k + '_3')}" alt="" style="filter:brightness(0)"><span>???</span><span class="lv">🔒</span></button></div></div>`; continue; }
-    html += `<div class="spRow"><div class="lab">${sp.excl === 'secret' ? '🤫 ' : sp.excl ? '♾️ ' : ''}${sp.el}</div><div class="spTiles">`;
+    html += `<div class="spRow"><div class="lab">${sp.excl === 'secret' ? '🤫 ' : sp.excl === 'wt' ? '🌍 ' : sp.excl ? '♾️ ' : ''}${sp.el}</div><div class="spTiles">`;
     for (let tt = sp.excl === 'secret' ? 3 : 0; tt < 4; tt++) {
       const id = `${sp.k}_${tt}`, L = S.owned[id] || 0;
       html += `<button class="spTile${L ? '' : ' locked'}${id === sel ? ' sel' : ''}${S.equip === id ? ' eq' : ''}" data-id="${id}" style="--tc:${RARITY[TIER_KEYS[tt]][1]}">
@@ -4856,11 +5051,7 @@ function renderDen() {
   $('denM').querySelector('.panel').scrollTop = keep;
   body.querySelectorAll('.spTile').forEach(b => b.addEventListener('click', () => { denSel = b.dataset.id; beep(760, 0.04, 0.08); renderDen(); $('denM').querySelector('.panel').scrollTop = 0; }));
   const eq = $('sprEq'); if (eq) eq.addEventListener('click', () => { equipSprite(sel); toast(`${sprName(spc, t)} equipped`); beep(880, 0.06, 0.1); renderDen(); });
-  const lb = $('lvlBtn'); if (lb) lb.addEventListener('click', () => {
-    const cost = Math.round(LVL_COST[lvl - 1] * TIER_COST[t]); if (SAVE.dinks < cost) return;
-    SAVE.dinks -= cost; S.owned[sel] = lvl + 1; persist(); refreshBalance(); if (S.equip === sel) loadSprite();
-    toast(`${sprName(spc, t)} reached level ${lvl + 1}!`); coinSound(); buzz(20); renderDen();
-  });
+
 }
 $('openDen').addEventListener('click', () => { initAudio(); denSel = null; refreshBalance(); renderDen(); $('denM').classList.remove('hidden'); $('denM').querySelector('.panel').scrollTop = 0; });
 
@@ -4898,7 +5089,7 @@ function revealEgg() {
   const note = $('rvNote');
   if (isNew) { note.className = 'rvNote new'; note.textContent = 'NEW SPRITE!'; }
   else if (lvlUp) { note.className = 'rvNote new'; note.textContent = `LEVEL UP! LV ${lvl}`; }
-  else { note.className = 'rvNote'; note.innerHTML = `Max level · <span class="coin"></span> +${dupe}`; }
+  else { note.className = 'rvNote'; note.innerHTML = `Already yours · <span class="coin"></span> +${dupe}`; }
   $('rvCard').classList.remove('hidden');
   const notes = [523, 659, 784, 1047, 1319];
   for (let i = 0; i < 2 + t; i++) setTimeout(() => beep(notes[i], 0.18, 0.14, 'triangle'), i * 110);
@@ -4967,6 +5158,12 @@ function showChaosLadder() {
 }
 // ================= What's New: shows once after an update. To announce a feature, add an entry at the TOP with the next v =================
 const NEWS = [
+  { v: 10, date: '19 Nov 2026', items: [
+    ['🌍', '<b>NEW MODE: World Tour!</b> Travel through pickleball history: a new city every month, 10 bosses each, all on vintage film. Stop 1 is where it all began: <b>Bainbridge Island, 1965</b>. Beat all 10 to meet Pickles 🐶.'],
+    ['🎞️', '<b>Vintage sprites</b> (Tintype, Sepia, Gramophone, Heirloom) can only be won on the World Tour. Their Silent Film power makes the CPU move in choppy half-speed frames.'],
+    ['⭐', '<b>Sprites now level up by playing.</b> Win rallies, use powers and finish matches with a sprite equipped to earn XP. No more buying levels; duplicates turn into dinks.'],
+    ['🧹', '<b>Cleaner home screen:</b> three modes: 🥒 OG Pickle (Singles, Doubles, Tour, VS), 🌍 World Tour and 🕹️ Arcade.'],
+  ] },
   { v: 9, date: '19 Nov 2026', items: [
     ['✨', '<b>Sprite rebalance.</b> The strongest sprite powers now have to be earned: <b>Volt</b> charges only from volleys, <b>Lumen</b> only from dinks, <b>Frost</b> from winning long rallies, <b>Pixel</b> from winning rallies at the net, <b>Bloom</b> only when you win while behind, and <b>Nova</b> needs a win streak.'],
     ['⏳', 'Strong powers are now limited per match (Bloom and Nova once), and the sprite button shows what you need to do. Higher-tier sprites now take a bit longer to charge. CPU sprites follow the same limits.'],
@@ -5024,7 +5221,10 @@ if (!SAVE.seenNews && SAVE.rec.w + SAVE.rec.l === 0) { SAVE.seenNews = NEWS_V; p
 const KR_D = { ...DIFFS[2], ue: 0.012, pace: 0.76, speed: 6.6, react: 0.04, err: 0.1, margin: 0.2, judge: 0.99, timeScale: 1.05, net: NET - K - 0.25, marker: false };
 const KR_TO = 7, KR_WIN = 250, KR_LOSS = 20;
 const krRewards = () => ['char', 'paddle', 'ball', 'arena'].flatMap(cat => SHOP[cat].filter(i => i.exclusive === 'krampus').map(item => ({ cat, item }))).sort((a, b) => a.item.kr - b.item.kr);
-function krTick() { $('krBtn').style.display = xmasLive() && phase === 'menu' ? 'block' : 'none'; }
+function krTick() {
+  const on = xmasLive() && phase === 'menu'; $('krBtn').style.display = on ? 'block' : 'none';
+  if (on) { const t = `· ${xmasDaysLeft()}d left`; if ($('krSub').textContent !== t) $('krSub').textContent = t; }
+}
 function showKrampus() {
   const w = SAVE.krWins || 0, def = findItem('char', 'c_krampus');
   $('krSub').innerHTML = `The Christmas boss. <b style="color:#ff8f8f">Super fast, never misses, and fires a legendary sprite at you.</b> First to ${KR_TO}, win by 2.<br>Wins so far: <b style="color:#ffd34d">${w}</b> · ${xmasDaysLeft()} day${xmasDaysLeft() === 1 ? '' : 's'} left · +${KR_WIN} dinks per win`;
@@ -5063,6 +5263,82 @@ function krampusOver(win) {
 }
 $('krBtn').addEventListener('click', () => { initAudio(); beep(330, 0.12, 0.1, 'sawtooth'); showKrampus(); });
 $('krGo').addEventListener('click', () => { initAudio(); startKrampus(); });
+// ================= 🌍 WORLD TOUR: a new city every month, 10 bosses each, told through pickleball history (vintage film look) =================
+// To add a city: push a season with `from` = the 1st of its month. The latest season whose `from` has passed is the live one.
+const WT_SEASONS = [
+  { id: 'bain65', from: [2026, 10, 1], stop: 1, city: 'Bainbridge Island', place: 'Washington, USA 🇺🇸 · Summer 1965', short: 'Bainbridge Is.<br>1965', arena: 'a_bain',
+    story: 'Summer 1965. Joel Pritchard, Bill Bell and Barney McCallum came home to bored kids and an old badminton court, but no shuttlecock. They grabbed ping-pong paddles and a plastic ball full of holes, dropped the net, and invented <b>pickleball</b>. Was it named after the family dog, Pickles? Or a rowing "pickle boat"? Depends who you ask…',
+    bosses: [['c_frog', 'Puddle Pete', 'It never stops raining here'], ['c_fox', 'Foxy Flo', 'Sneaky little drop shots'], ['c_penguin', 'Ferry Fran', 'Rides the Seattle ferry daily'],
+      ['c_tiger', 'Tiger Ted', 'Backyard badminton champ'], ['c_pirate', 'Captain Sound', 'Rules the waters of Puget Sound'], ['c_viking', 'Nordic Ned', 'Pure island grit'],
+      ['c_wizard', 'Wizard of Winslow', 'Magic touch at the net'], ['c_knight', 'Sir Shuttlecock', 'Lost his shuttlecock, kept his pride'], ['c_hiker', 'Island Bigfoot', 'Lives deep in the cedars'],
+      ['c_pickles', 'Pickles', 'The dog it was named after… maybe']],
+    rewards: { 2: ['spr', 'relic_0'], 3: ['ball', 'b_wiffle'], 5: ['spr', 'relic_1'], 6: ['paddle', 'p_ply65'], 8: ['spr', 'relic_2'], 9: ['arena', 'a_bain'], 10: [['char', 'c_pickles'], ['spr', 'relic_3']] } },
+];
+const wtStart = se => new Date(se.from[0], se.from[1], se.from[2]);
+function wtSeason() { const now = new Date(); let cur = WT_SEASONS[0]; for (const se of WT_SEASONS) if (wtStart(se) <= now) cur = se; return cur; }
+const wtNextSeason = () => WT_SEASONS.find(se => wtStart(se) > new Date());
+const wtDaysLeft = () => { const n = new Date(); return Math.max(1, Math.ceil((new Date(n.getFullYear(), n.getMonth() + 1, 1) - n) / 864e5)); };
+const wtBeaten = se => ((SAVE.wt || {})[se.id] || 0);
+const wtRewardList = se => Object.entries(se.rewards).flatMap(([n, r]) => (Array.isArray(r[0]) ? r : [r]).map(([cat, id]) => ({ n: +n, cat, id })));
+const wtItemBoss = id => { for (const se of WT_SEASONS) { const r = wtRewardList(se).find(x => x.id === id); if (r) return r.n; } return 0; };
+const wtGot = r => r.cat === 'spr' ? !!sprLevel(r.id) : SAVE.owned.includes(r.id);
+const wtThumb = r => r.cat === 'spr' ? spriteThumb(r.id) : thumb(r.cat, findItem(r.cat, r.id));
+const wtName = r => r.cat === 'spr' ? (({ spc, t }) => sprName(spc, t))(sprParse(r.id)) : findItem(r.cat, r.id).name;
+function wtBossDef(se, i) { const [id, name] = se.bosses[i]; return { ...findItem('char', id), name }; }
+function wtD(i) {   // boss 1 is gentle, boss 10 is brutal
+  const lv = 2 + i * 2.1, boss = i === 9;
+  return { ...DIFFS[1], ue: Math.max(0.015, 0.09 - lv * 0.0068) * (boss ? 0.75 : 1), speed: Math.min(6.4, 4.1 + lv * 0.12 + (boss ? 0.4 : 0)),
+    react: Math.max(0.05, 0.24 - lv * 0.011), err: Math.max(0.13, 0.55 - lv * 0.024), pace: Math.max(0.78, 1 - lv * 0.012 - (boss ? 0.04 : 0)),
+    judge: Math.min(0.97, 0.55 + lv * 0.024), net: NET - K - 0.5, marker: i < 2, rally: 2, timeScale: Math.min(0.98, 0.8 + lv * 0.009) };
+}
+function wtCard() { const se = wtSeason(); $('wtCardSub').innerHTML = `${se.short}`; }
+function showWT() {
+  const se = wtSeason(), b = wtBeaten(se), next = Math.min(b, 9);
+  $('wtStop').textContent = `STOP ${se.stop}`; $('wtCity').textContent = se.city; $('wtPlace').textContent = se.place; $('wtStory').innerHTML = se.story;
+  $('wtTrail').innerHTML = se.bosses.map(([id, name, tag], i) => {
+    const cls = i < b ? 'done' : i === b ? 'now' : 'lock';
+    return `<div class="wtB ${cls}"><span class="n">${i + 1}</span><img src="${thumb('char', findItem('char', id))}" alt="">${i <= b ? name : '???'}</div>`; }).join('');
+  $('wtRew').innerHTML = wtRewardList(se).map(r => `<div class="wtR${wtGot(r) ? ' got' : ''}"><img src="${wtThumb(r)}" alt="">${wtGot(r) ? '✓ ' : ''}Boss ${r.n}<br>${wtName(r)}</div>`).join('');
+  const [, nm, tag] = se.bosses[next];
+  $('wtFine').innerHTML = `${b >= 10 ? '🏆 You conquered this stop! Rematch Pickles for dinks.' : `Boss ${next + 1}: <b>${nm}</b> · <i>${tag}</i>`}<br>First to ${next === 9 ? 11 : 7}, win by 2 · old-school side-out scoring · ${wtNextSeason() ? `⏳ ${wtDaysLeft()} day${wtDaysLeft() === 1 ? '' : 's'} left at this stop, then the tour moves on` : '✈️ Next city coming soon'}`;
+  $('wtGo').textContent = b >= 10 ? 'REMATCH PICKLES' : `FIGHT BOSS ${next + 1}`;
+  $('wtM').classList.remove('hidden');
+}
+function startWt(i) {
+  const se = wtSeason(); tour = null;
+  arcade = { wt: true, wi: i, se: se.id, step: 0, cycle: 0, opps: [wtBossDef(se, i)] };
+  $('wtM').classList.add('hidden'); $('menu').classList.add('hidden');
+  forceArena = se.arena; applyLook();
+  newGame('cpu', { arcade: true });
+}
+function wtOver(win) {
+  const se = WT_SEASONS.find(x => x.id === arcade.se) || wtSeason(), i = arcade.wi, before = wtBeaten(se);
+  SAVE.wt = SAVE.wt || {};
+  const first = win && i === before && before < 10;
+  if (first) SAVE.wt[se.id] = before + 1;
+  const bonus = win ? (first ? 40 + 20 * i : 25) : 10, rally = earnedThisGame; SAVE.dinks += bonus; earnedThisGame += bonus;
+  const newly = first ? wtRewardList(se).filter(r => r.n === i + 1 && !wtGot(r)) : [];
+  const grants = newly.map(r => r.cat === 'spr' ? { ...r, g: grantSprite(r.id) } : (SAVE.owned.push(r.id), r));
+  persist(); refreshBalance(); coinSound();
+  const [, name] = se.bosses[i];
+  $('overTitle').textContent = win ? (i === 9 ? 'STOP CONQUERED!' : 'BOSS BEATEN!') : 'DEFEATED'; $('overTitle').classList.toggle('lose', !win);
+  $('bigScore').textContent = `${score.p} – ${score.a}`;
+  let rw = `<div class="rw"><span class="ic"><span class="coin" style="font-size:24px"></span></span>Rallies won<b>+${rally}</b></div>
+    <div class="rw"><span class="ic">🌍</span>${win ? `Beat ${name} (boss ${i + 1}/10)` : `${name} wins this time`}<b>+${bonus}</b></div>`;
+  grants.forEach(r => { rw += `<div class="rw" style="background:rgba(224,179,110,.3)"><span class="ic"><img src="${wtThumb(r)}" style="width:40px;height:40px;object-fit:contain"></span>World Tour reward: ${wtName(r)}<b style="color:#ffe2a8;font-size:14px">NEW</b></div>`; });
+  const nx = wtRewardList(se).find(r => !wtGot(r));
+  if (nx) rw += `<div class="fine">Beat boss ${nx.n} for ${wtName(nx)}</div>`;
+  $('earned').innerHTML = rw;
+  overNext = win ? 'wtNext' : 'wtRetry'; $('again').textContent = win ? (wtBeaten(se) >= 10 ? 'WORLD TOUR' : 'NEXT BOSS') : 'TRY AGAIN';
+  const chain = k => { if (k >= grants.length) return; const r = grants[k];
+    if (r.cat === 'spr') { showDropReveal(r.id, r.g, 'golden'); $('rvTap').textContent = '🌍 WORLD TOUR LOOT! TAP TO HATCH'; }
+    else { showArcadePrize({ cat: r.cat, item: findItem(r.cat, r.id) }); rv.res.rar = 'vintage'; $('reveal').style.setProperty('--rc', RARITY.vintage[1]); $('rvTap').textContent = '🌍 WORLD TOUR LOOT! TAP TO OPEN'; }
+    rv.then = () => setTimeout(() => chain(k + 1), 300); };
+  if (grants.length) setTimeout(() => chain(0), 1000);
+  if (win) { buzz([30, 60, 30]); cheerT = 3; }
+}
+$('wtGo').addEventListener('click', () => { initAudio(); const se = wtSeason(); startWt(Math.min(wtBeaten(se), 9)); });
+wtCard();
 // ================= Survival Arcade: one life. Every point you win counts; lose one and the run is over =================
 const SURV_SWAP = 5;   // a new, tougher opponent every 5 points
 const SURV_BOX = [[35, 'mythic'], [20, 'premium'], [10, 'basic']];   // best box earned by the streak
@@ -5112,6 +5388,7 @@ function survOver() {
 function arcadeStage() { return arcade ? (arcade.surv ? score.p + 1 : arcade.inf || arcade.chaos ? arcade.lvl + 1 : arcade.cycle * 4 + arcade.step + 1) : 0; }
 function arcadeD() {
   if (arcade.krampus) return KR_D;
+  if (arcade.wt) return wtD(arcade.wi);
   // Infinite ramps slower so level 25 feels like a late classic loop, then keeps creeping up
   const lv = arcade.surv ? Math.min(22, score.p * 0.5) : arcade.inf || arcade.chaos ? Math.min(22, arcade.lvl * 0.55) : arcade.cycle * 4 + arcade.step, boss = !arcade.inf && arcade.step === 3;
   return { ...DIFFS[1], ue: Math.max(0.02, 0.09 - lv * 0.007) * (boss ? 0.7 : 1), speed: Math.min(6.2, 4.2 + lv * 0.13 + (boss ? 0.35 : 0)),
@@ -5255,9 +5532,7 @@ function infExtract(kind = 'sprite') {
   }
   SAVE.infBest = Math.max(SAVE.infBest || 0, n);
   SAVE.infExtracts = (SAVE.infExtracts || 0) + 1;
-  const mx = ensureSprites().owned.matrix_3 ? grantSprite('matrix_3') : null;
   persist();
-  if (mx) setTimeout(() => toast(mx.dupe ? `Matrix is maxed: +${mx.dupe} dinks` : `⏪ Matrix levelled up to Lv ${mx.lvl}!`), 2200);
   $('arcM').classList.add('hidden'); toMenu();
   toast(`Extracted at level ${n}!`);
   if (pad) setTimeout(() => {
@@ -5348,7 +5623,7 @@ function update(dtReal) {
     } else { const [hx, hy] = botHome(bot); bot.tx = hx; bot.ty = hy; }
     bot.ty = sd === 'a' ? clamp(bot.ty, -1.8, NET - 0.35) : clamp(bot.ty, NET + 0.35, L + 1.8); bot.tx = clamp(bot.tx, -1.3, W + 1.3);
     if (volleyMom && volleyMom.o === bot) bot.ty = sd === 'a' ? Math.min(bot.ty, NET - K - 0.12) : Math.max(bot.ty, NET + K + 0.12);
-    const slow = sd === 'a' && sprOn() ? (sprIs('frost') ? 1 - 0.04 * spr.m : 1) * (spr.freezeT > 0 ? 0.3 : 1) * (spr.stunT > 0 ? 0 : 1) : 1;
+    const slow = sd === 'a' && sprOn() ? (sprIs('frost') ? 1 - 0.04 * spr.m : 1) * (spr.freezeT > 0 ? 0.3 : 1) * (spr.stunT > 0 ? 0 : 1) * (spr.filmT > 0 ? (Math.floor(clock * 7) % 2 ? 0.95 : 0.05) : 1) : 1;
     moveToward(bot, bot.tx, bot.ty, botD(bot).speed * slow, dt);
   }
 
