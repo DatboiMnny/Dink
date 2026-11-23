@@ -592,7 +592,7 @@
         <div><i>🎮</i><span><b>Controls</b> (pause menu, tap to switch): <b>AUTO</b> is the default: you move with the joystick and your shot angle comes from where you catch the ball, with some randomness. <b>MANUAL</b> adds a pink radar that shows where your shot will land as the ball comes to you: move left or right of the ball to change it, and the faint circle is how far it can wobble. <b>PRO</b> has no joystick: a mini court sits bottom-left. Put your thumb on it and slide: wherever your thumb is on the mini court, your player runs to that spot on the real court (the pink dot is you; lift off and they stop). Tap anywhere on their side with your other thumb to choose where each return goes (tap the kitchen for a dink or drop, deep for a drive). Tap again or drag to change it before you hit. No tap means a normal auto shot. High CTL paddles land closer, and aiming right on the lines can go out. LOB, POWER and SPIN still work in every mode.</span></div>
         <div><i>⚡</i><span><b>LOB</b> lofts your next shot. <b>POWER</b> rips a hard drive (riskier). <b>SPIN</b> curves and dips it, and kicks off the bounce. Paddles with a high SPN stat make it nastier; low-spin paddles make it weak and wild.</span></div>
         <div><i>📏</i><span><b>Rules:</b> serve and return must bounce. No volleys from the kitchen, and if your follow-through after a volley carries you into the kitchen, that's a fault too. Only the server scores. Win by 2. Every game goes to 11. Easy is chill, Medium is faster, Hard is blazing fast.</span></div>
-        <div><i>🌍</i><span><b>World Tour</b> takes you through pickleball history. Every month is a new chapter of 4 cities, and a new city opens every week (on the 1st, 8th, 15th and 22nd). Opened cities stay playable until the month ends. Each city has 10 bosses to beat in order (first to 7, the 10th boss to 11, win by 2) with old-school side-out scoring, all on vintage film. Bosses drop city rewards (boxes, vintage paddles and balls, and in Bainbridge 1965 the <b>Vintage</b> sprites and Pickles). <b>🏆 Beat all 40 bosses of the month</b> to win that month's bonus arena. It's only available that month!</span></div>
+        <div><i>🌍</i><span><b>World Tour</b> takes you through pickleball history. Every month is a new chapter of 4 cities, and a new city opens every week (on the 1st, 8th, 15th and 22nd). Opened cities stay playable until the month ends. Each city has 10 bosses to beat in order (first to 7, the 10th boss to 11, win by 2) with old-school side-out scoring, all on vintage film. Every city has its own rewards: a vintage ball at boss 3, a Premium Box at boss 5, a vintage paddle at boss 7, a Mythic Box at boss 8 and a big prize at boss 10 (the last city of each chapter also gives a vintage character; Bainbridge 1965 gives the <b>Vintage</b> sprites and Pickles). <b>🏆 Beat all 40 bosses of the month</b> to win that month's bonus arena. It's only available that month!</span></div>
         <div><i>✨</i><span><b>Sprites</b> float beside you in CPU matches. Each gives a passive boost and a power. Light powers (Ember, Tide, Zephyr, Stone) charge as you hit. The strong ones need a feat: <b>Volt</b> charges only from volleys, <b>Lumen</b> only from dinks, <b>Frost</b> from winning 6+ shot rallies, <b>Pixel</b> from winning rallies where you volleyed, <b>Bloom</b> from winning rallies while behind, and <b>Nova</b> from a win streak (losing resets it). Strong powers can only be used a few times per match (Bloom and Nova once). Tap the sprite button when its ring is full. Sprites <b>level up (to 5) only by playing with them equipped</b>: win rallies, use their power and finish matches to earn XP. Duplicate drops turn into dinks. New sprites only drop when you win: harder modes and tournaments drop rarer ones.</span></div>
         <div><i>🕹️</i><span><b>Arcade</b> is an endless ladder: beat 3 players to 3 points, then a boss to 5 (rally scoring, win by 2), and keep going as it gets harder. Bosses drop Arcade-exclusive characters, paddles, a ball and an arena that you can't get anywhere else.</span></div>
         <div><i>🐒</i><span><b>Orlando</b> has a special <b>SPIN</b> serve: heavy sidespin that bends and kicks off the bounce, so it's much harder to return (small risk of curling wide).</span></div>
@@ -1632,6 +1632,48 @@ const CHARS = [
       tail(k, g => { const t = k.mk(sph(0.06), '#c98a4b', 0, 0.16, 0, g); t.scale.set(1, 2.6, 1); }, 0.6);
     } },
 ];
+// ---- 🌍 World Tour chapter-finale characters (24 Nov 2026): boss 10 of Tukwila '76, Buckeye '09 and Bainbridge '22
+CHARS.push(
+  { id:'c_champ76', name:'Champ \'76', price:0, exclusive:'wt', group:'wt', rarity:'vintage', shout:'Far out! ✌️',
+    c:{ body:'#f4f1e6', head:'#d39a6a', limb:'#d39a6a', hand:'#d39a6a', legs:'#f4f1e6', foot:'#f4f1e6' },
+    deco: k => {
+      smile(k, '#4a1a10');
+      const hair = k.mk(sph(0.29), k.M('#2b1a10', { roughness: 0.95, clearcoat: 0 }), 0, 0.07, 0.03, k.head); hair.scale.set(1.05, 0.95, 1.02);   // big 70s hair
+      const hb = k.mk(new THREE.TorusGeometry(0.245, 0.03, 8, 28), '#ffffff', 0, 0.08, 0, k.head); hb.rotation.x = Math.PI / 2;
+      for (const [y, col] of [[0.1, '#d62828'], [0.06, '#1d4ed8']]) { const t = k.mk(new THREE.TorusGeometry(0.247, 0.008, 6, 28), col, 0, y, 0, k.head); t.rotation.x = Math.PI / 2; }
+      const mo = k.mk(sph(0.06), '#2b1a10', 0, -0.045, -0.225, k.head); mo.scale.set(1.5, 0.45, 0.6);   // moustache
+      for (const [y, col] of [[0.98, '#d62828'], [0.92, '#1d4ed8']]) k.mk(box(0.5, 0.035, 0.02), col, 0, y, -0.29, k.upper);   // chest stripes
+      for (const s of [-1, 1]) k.mk(cyl(0.065, 0.065, 0.06, 14), '#ffffff', 0, -0.33, 0, k.arms[s < 0 ? 0 : 1]);
+    } },
+  { id:'c_snowbird', name:'Snowbird', price:0, exclusive:'wt', group:'wt', rarity:'vintage', shout:'Dink responsibly 🌵',
+    c:{ body:'#7fd1c7', head:'#f0c9a0', limb:'#f0c9a0', hand:'#f0c9a0', legs:'#d8c49a', foot:'#ffffff' },
+    deco: k => {
+      smile(k, '#5a2a1a');
+      const hair = k.mk(new THREE.SphereGeometry(0.25, 28, 16, 0, Math.PI * 2, 0, Math.PI * 0.45), k.M('#d9d9d9', { roughness: 0.9, clearcoat: 0 }), 0, 0.01, 0.02, k.head);
+      const vb = k.mk(new THREE.TorusGeometry(0.245, 0.025, 8, 28), '#ffffff', 0, 0.1, 0, k.head); vb.rotation.x = Math.PI / 2;
+      const bill = k.mk(new THREE.CylinderGeometry(0.2, 0.2, 0.02, 24, 1, false, Math.PI * 0.5, Math.PI), '#ffffff', 0, 0.1, -0.12, k.head); bill.scale.set(1.1, 1, 0.9);
+      const lens = k.M('#1a1a2e', { roughness: 0.15, metalness: 0.3 });
+      for (const sx of [-1, 1]) { const g = k.mk(sph(0.065), lens, sx * 0.085, 0.03, -0.215, k.head); g.scale.set(1.15, 0.85, 0.35); }
+      k.mk(box(0.06, 0.012, 0.01), '#1a1a2e', 0, 0.04, -0.24, k.head);
+      // palm-print dots on the shirt
+      for (const [x, y] of [[-0.14, 0.95], [0.12, 1.0], [0.0, 0.8], [-0.1, 0.66], [0.15, 0.7]]) k.mk(sph(0.03), '#f4a261', x, y, -0.29, k.upper).scale.set(1, 1, 0.3);
+    } },
+  { id:'c_pop65', name:'Pop \'65', price:0, exclusive:'wt', group:'wt', rarity:'vintage', shout:'Back in my day… 🏓',
+    c:{ body:'#efe2c4', head:'#f0c9a0', limb:'#f0c9a0', hand:'#f0c9a0', legs:'#6b6b6b', foot:'#3b2a1a' },
+    deco: k => {
+      smile(k, '#5a2a1a');
+      // tweed flat cap
+      const cap = k.mk(new THREE.SphereGeometry(0.255, 28, 14, 0, Math.PI * 2, 0, Math.PI * 0.34), k.M('#7a6a52', { roughness: 0.95, clearcoat: 0 }), 0, 0.03, 0.0, k.head); cap.scale.set(1.03, 0.8, 1.06);
+      const bill = k.mk(new THREE.CylinderGeometry(0.16, 0.16, 0.02, 24, 1, false, Math.PI * 0.5, Math.PI), '#6a5a44', 0, 0.12, -0.13, k.head); bill.rotation.x = 0.15;
+      const frame = k.M('#3b2a1a', { roughness: 0.4 });
+      for (const sx of [-1, 1]) { const f = k.mk(new THREE.TorusGeometry(0.05, 0.008, 8, 24), frame, sx * 0.08, 0.03, -0.245, k.head); }
+      k.mk(box(0.05, 0.008, 0.008), frame, 0, 0.035, -0.25, k.head);
+      // cardigan buttons + bow tie
+      for (const y of [0.95, 0.83, 0.71, 0.59]) k.mk(sph(0.022), '#5a3a1e', 0, y, -0.3, k.upper);
+      for (const sx of [-1, 1]) { const b = k.mk(new THREE.ConeGeometry(0.045, 0.08, 4), '#8b1e2d', sx * 0.045, 1.07, -0.27, k.upper); b.rotation.z = sx * Math.PI / 2; }
+      k.mk(sph(0.02), '#8b1e2d', 0, 1.07, -0.28, k.upper);
+    } },
+);
 const OLD_OUTFITS = { c_classic:0, c_royal:60, c_lime:90, c_pink:120, c_ninja:250, c_king:450 };
 
 // ================= shop catalogue =================
@@ -1800,6 +1842,18 @@ const SHOP = {
     { id:'p_cg15', brand:'Casa Grande', name:'Desert Courts \'15', price:0, exclusive:'wt', rarity:'vintage', type:'power', shape:'hybrid', style:'stripes', a:'#2a6f97', b:'#f4d35e', pw:9, ct:8, sp:8 },
     { id:'p_iw18', brand:'Indian Wells', name:'Desert Garden \'18', price:0, exclusive:'wt', rarity:'vintage', type:'power', shape:'long', style:'solid', a:'#e9c46a', b:'#2a9d8f', mark:'2018', pw:9, ct:8, sp:9 },
     { id:'p_state22', brand:'Washington', name:'State Sport \'22', price:0, exclusive:'wt', rarity:'vintage', type:'allround', shape:'std', style:'gold', a:'#ffe08a', b:'#b8860b', mark:'WA', ink:'#5a3d00', metal:true, pw:9, ct:9, sp:9 },
+    // ---- 🌍 World Tour city rewards, wave 2 (24 Nov 2026): one paddle per city, boss 7
+    { id:'p_porch67', brand:'Backyard', name:'Porch Plank \'67', price:0, exclusive:'wt', rarity:'vintage', type:'control', shape:'square', style:'wood', a:'#b07a45', b:'#5a3a1e', pw:7, ct:9, sp:7 },
+    { id:'p_press72', brand:'Puget Press', name:'Front Page \'72', price:0, exclusive:'wt', rarity:'vintage', type:'allround', shape:'std', style:'stripes', a:'#efe9d8', b:'#2b2b2b', pw:7, ct:8, sp:8 },
+    { id:'p_disco76', brand:'South Center', name:'Disco Fever \'76', price:0, exclusive:'wt', rarity:'vintage', type:'spin', shape:'round', style:'stripes', a:'#ff5ec8', b:'#ffd23f', pw:8, ct:7, sp:9 },
+    { id:'p_aero84', brand:'Composite', name:'Aero \'84', price:0, exclusive:'wt', rarity:'vintage', type:'hybrid', shape:'hybrid', style:'carbon', a:'#9aa5ad', b:'#1e3a5f', pw:8, ct:8, sp:9 },
+    { id:'p_rv01', brand:'Snowbird', name:'RV Resort \'01', price:0, exclusive:'wt', rarity:'vintage', type:'control', shape:'wide', style:'stripes', a:'#f4a261', b:'#e9f5f9', pw:7, ct:10, sp:7 },
+    { id:'p_mesa03', brand:'St. George', name:'Mesa Top \'03', price:0, exclusive:'wt', rarity:'vintage', type:'power', shape:'square', style:'solid', a:'#7f4f24', b:'#e6b17e', mark:'2003', pw:9, ct:7, sp:8 },
+    { id:'p_first09', brand:'Buckeye', name:'First Nationals \'09', price:0, exclusive:'wt', rarity:'vintage', type:'allround', shape:'std', style:'solid', a:'#ffe14d', b:'#1d3557', mark:'2009', ink:'#1d3557', pw:9, ct:9, sp:8 },
+    { id:'p_onair17', brand:'Casa Grande', name:'On Air \'17', price:0, exclusive:'wt', rarity:'vintage', type:'power', shape:'long', style:'flames', a:'#141414', b:'#ff3b3b', pw:10, ct:7, sp:8 },
+    { id:'p_pelican16', brand:'Naples', name:'Pelican \'16', price:0, exclusive:'wt', rarity:'vintage', type:'spin', shape:'tear', style:'stripes', a:'#3fd0c9', b:'#ff8fab', pw:8, ct:9, sp:9 },
+    { id:'p_45courts', brand:'Indian Wells', name:'Forty-Five Courts \'18', price:0, exclusive:'wt', rarity:'vintage', type:'spin', shape:'blade', style:'stripes', a:'#264653', b:'#e9c46a', pw:9, ct:8, sp:10 },
+    { id:'p_circle22', brand:'Bainbridge', name:'Full Circle \'22', price:0, exclusive:'wt', rarity:'vintage', type:'allround', shape:'round', style:'wood', a:'#d4a373', b:'#2f5d3a', mark:'1965', pw:9, ct:10, sp:9 },
     { id:'p_ply65', brand:'Bainbridge', name:'Plywood \'65', price:0, exclusive:'wt', rarity:'vintage', type:'control', shape:'square', style:'wood', a:'#c9955a', b:'#6e4220', pw:7, ct:9, sp:7 },
     { id:'p_krampus', brand:'Krampus', name:'Chain Breaker', price:0, exclusive:'krampus', kr:3, rarity:'krampus', type:'power', shape:'blade', style:'flames', a:'#120606', b:'#ff2a2a', mark:'KRAMPUS', pw:10, ct:9, sp:9 },
     // ---- 🎄 Christmas Drop paddles
@@ -1827,6 +1881,18 @@ const SHOP = {
     { id:'b_sun01', name:'Senior Games \'01', price:0, exclusive:'wt', rarity:'vintage', color:'#ff9f43', trail:'#ffd29a' },
     { id:'b_nats09', name:'Nationals \'09', price:0, exclusive:'wt', rarity:'vintage', color:'#ffe14d', trail:'#ffd23f' },
     { id:'b_gulf16', name:'Gulf Coast \'16', price:0, exclusive:'wt', rarity:'vintage', color:'#c7f464', trail:'#3fd0c9' },
+    // ---- 🌍 World Tour city rewards, wave 2: one ball per city, boss 3
+    { id:'b_patio67', name:'Backyard \'67', price:0, exclusive:'wt', rarity:'vintage', color:'#f7f3e3', trail:'#c9a66b' },
+    { id:'b_press75', name:'Headline \'75', price:0, exclusive:'wt', rarity:'vintage', color:'#ece6d6', trail:'#3a3a3a' },
+    { id:'b_disco76', name:'Disco \'76', price:0, exclusive:'wt', rarity:'vintage', color:'#e6e0ff', emissive:'#ff5ec8', glow:true, trail:'#ff5ec8' },
+    { id:'b_rule84', name:'Rulebook \'84', price:0, exclusive:'wt', rarity:'vintage', color:'#ffd23f', trail:'#3a86ff' },
+    { id:'b_snow01', name:'Snowbird \'01', price:0, exclusive:'wt', rarity:'vintage', color:'#9be3ff', trail:'#ffffff' },
+    { id:'b_canyon03', name:'Canyon \'03', price:0, exclusive:'wt', rarity:'vintage', color:'#d9673a', trail:'#f5b971' },
+    { id:'b_buck09', name:'Buckeye Gold \'09', price:0, exclusive:'wt', rarity:'vintage', color:'#ffcc33', emissive:'#ff9f1a', glow:true, trail:'#ff8c1a' },
+    { id:'b_tv17', name:'Prime Time \'17', price:0, exclusive:'wt', rarity:'vintage', color:'#ffffff', emissive:'#ff3b3b', glow:true, trail:'#ff3b3b' },
+    { id:'b_open16', name:'US Open \'16', price:0, exclusive:'wt', rarity:'vintage', color:'#7ee0ff', trail:'#ffe066' },
+    { id:'b_garden18', name:'Garden Glow \'18', price:0, exclusive:'wt', rarity:'vintage', color:'#a3e635', emissive:'#a3e635', glow:true, trail:'#2a9d8f' },
+    { id:'b_ferry22', name:'Ferry Line \'22', price:0, exclusive:'wt', rarity:'vintage', color:'#3a7d44', trail:'#ffffff' },
     { id:'b_wiffle', name:'Wiffle \'65', price:0, exclusive:'wt', rarity:'vintage', color:'#f4ead0', trail:'#d9b98a' },
     { id:'b_bauble',   name:'Bauble',      price:1500, exclusive:'xmas', rarity:'festive', color:'#d61f3c', emissive:'#ff2d55', glow:true, trail:'#ffd23f' },
     { id:'b_snowball', name:'Snowball',    price:1500, exclusive:'xmas', rarity:'festive', color:'#f4fbff', emissive:'#cfeaff', glow:true, trail:'#bfe6ff' },
@@ -5354,6 +5420,11 @@ function showChaosLadder() {
 }
 // ================= What's New: shows once after an update. To announce a feature, add an entry at the TOP with the next v =================
 const NEWS = [
+  { v: 12, date: '24 Nov 2026', items: [
+    ['🎁', '<b>Way more World Tour loot!</b> Every weekly city now has its own vintage <b>ball at boss 3</b>, a <b>paddle at boss 7</b>, a <b>Mythic Box at boss 8</b>, plus the Premium Box and the big prize at boss 10.'],
+    ['🧑‍🦳', '<b>3 new vintage characters</b> for finishing each chapter\'s last city: <b>Champ \'76</b> (Tukwila), <b>Snowbird</b> (Buckeye) and <b>Pop \'65</b> (Bainbridge 2022).'],
+    ['✅', 'Already beaten some bosses? The new balls and paddles for those are added to your Locker automatically.'],
+  ] },
   { v: 11, date: '19 Nov 2026', items: [
     ['🗓️', '<b>World Tour now changes every week!</b> November is Chapter 1, Birth of a Sport: Bainbridge Island 1965, the First Court 1967, Puget Sound 1972 and the first-ever tournament in Tukwila 1976. A new city unlocks every week, with 10 bosses each.'],
     ['🏆', '<b>Monthly bonus reward:</b> beat all 40 bosses before the month ends to win a vintage arena. November\'s prize: <b>Championship \'76</b>, a retro tournament club with wooden bleachers, bunting, a clubhouse and an old scoreboard.'],
@@ -5477,51 +5548,51 @@ const WT_CHAPTERS = [
     { id: 'bain67', city: 'The First Court', place: 'Bainbridge Island, Washington 🇺🇸 · 1967', short: 'First Court<br>1967', arena: 'a_bain',
       story: '1967. Joel Pritchard\'s neighbour Bob O\'Brian built the <b>first permanent pickleball court</b>, right in his backyard. No more borrowing the badminton court: the game finally had a home of its own.',
       bosses: [B_('c_panda', 'Concrete Connie', 'Poured the slab herself'), B_('c_frog', 'Net Post Norm', 'Hasn\'t moved since 1967'), B_('c_penguin', 'Backyard Barb', 'Hosts every Sunday game'), B_('c_fox', 'Hedge Hopper', 'Fetches every ball from the bushes'), B_('c_tiger', 'Lawnmower Larry', 'Always on the move'), B_('c_pirate', 'Salty Sal', 'Sailed in for the opening'), B_('c_samurai', 'Sensei Sato', 'Perfect form, every shot'), B_('c_viking', 'Big Olaf', 'Biggest neighbour on the block'), B_('c_wizard', 'Old Man Cedar', 'Older than the trees'), B_('c_minotaur', 'The Bulldozer', 'Flattened the ground for the court')],
-      rewards: { 5: ['box', 'premium'], 10: ['ball', 'b_court67'] } },
+      rewards: { 3: ['ball', 'b_patio67'], 5: ['box', 'premium'], 7: ['paddle', 'p_porch67'], 8: ['box', 'mythic'], 10: ['ball', 'b_court67'] } },
     { id: 'sea72', city: 'Puget Sound', place: 'Washington, USA 🇺🇸 · 1972–1976', short: 'Puget Sound<br>1972', arena: 'a_park',
       story: '1972. Pritchard, Bell and McCallum formed <b>Pickle Ball, Inc.</b> to protect their new sport, and wooden paddle kits spread around the Sound. A national newspaper wrote about the game in 1975, and in 1976 <i>Tennis</i> magazine called it "America\'s newest racquet sport".',
       bosses: [B_('c_fox', 'Paperboy Pete', 'Delivers the big story'), B_('c_frog', 'Drizzle Ray', 'Rain is his home court'), B_('c_penguin', 'Coffee Carla', 'Three espressos deep'), B_('c_panda', 'Kit Builder Kim', 'Assembles paddles by hand'), B_('c_tiger', 'Typewriter Ted', 'Writes up every rally'), B_('c_samurai', 'Needle Nina', 'Plays from the top of the city'), B_('c_pirate', 'Pier Pat', 'Ferry dock hustler'), B_('c_knight', 'The Lawyer', 'Protects the game\'s name'), B_('c_wizard', 'The Editor', 'Decides what makes the magazine'), B_('c_cyclops', 'The Corporation', 'One eye on the paddle kits')],
-      rewards: { 5: ['box', 'premium'], 10: ['paddle', 'p_kit72'] } },
+      rewards: { 3: ['ball', 'b_press75'], 5: ['box', 'premium'], 7: ['paddle', 'p_press72'], 8: ['box', 'mythic'], 10: ['paddle', 'p_kit72'] } },
     { id: 'tuk76', city: 'Tukwila', place: 'Washington, USA 🇺🇸 · Spring 1976', short: 'Tukwila<br>1976', arena: 'a_champ76',
       story: 'Spring 1976. At South Center Athletic Club in Tukwila, the <b>first known pickleball tournament</b> in the world was held, billed as "The World\'s First Pickleball Championship". Lots of the players were college tennis players still learning the rules.',
       bosses: [B_('c_tiger', 'Tennis Tom', 'College tennis star, pickle rookie'), B_('c_fox', 'Disco Dana', 'It\'s 1976, baby'), B_('c_panda', 'Headband Hank', 'Sweatband on, no fear'), B_('c_frog', 'Lineswoman Lou', 'Calls it like she sees it'), B_('c_penguin', 'Ref Ronnie', 'Strict on the kitchen'), B_('c_viking', 'Bellbottom Bjorn', 'Flares flap on every lunge'), B_('c_samurai', 'Stopwatch Stu', 'Times every single point'), B_('c_knight', 'Sir Top Seed', 'Number one in the draw'), B_('c_wizard', 'The Organiser', 'Drew up the whole bracket'), B_('c_phoenix', 'The First Champion', 'About to win the world\'s first title')],
-      rewards: { 5: ['box', 'premium'], 10: ['ball', 'b_champ76'] } },
+      rewards: { 3: ['ball', 'b_disco76'], 5: ['box', 'premium'], 7: ['paddle', 'p_disco76'], 8: ['box', 'mythic'], 10: [['ball', 'b_champ76'], ['char', 'c_champ76']] } },
   ] },
   { id: '2026-12', y: 2026, m: 11, title: 'Chapter 2 · Going National', bonus: 'a_desert09', cities: [
     { id: 'wa84', city: 'Washington State', place: 'USA 🇺🇸 · 1984', short: 'Rulebook<br>1984', arena: 'a_stadium',
       story: '1984. The <b>USA Pickleball Association</b> was formed to grow the game across the country, and the <b>first official rulebook</b> came out that March. The same year Arlen Paranto, an industrial engineer at Boeing, built the <b>first composite paddle</b>.',
       bosses: [B_('c_frog', 'Rulebook Rita', 'Knows every page by heart'), B_('c_fox', 'Footfault Fred', 'Watch that line'), B_('c_penguin', 'Kitchen Kay', 'Never steps in'), B_('c_panda', 'Clipboard Cal', 'Keeps score in pencil'), B_('c_tiger', 'Two-Bounce Tina', 'Always lets it bounce twice'), B_('c_samurai', 'Engineer Ed', 'Measures everything twice'), B_('c_grey', 'Composite Carl', 'Lighter paddle, faster hands'), B_('c_knight', 'Commissioner Kurt', 'Enforces the brand-new rules'), B_('c_wizard', 'Grand Umpire', 'Final word on every call'), B_('c_crystal', 'The Composite', 'Space-age paddle, space-age game')],
-      rewards: { 5: ['box', 'premium'], 10: ['paddle', 'p_comp84'] } },
+      rewards: { 3: ['ball', 'b_rule84'], 5: ['box', 'premium'], 7: ['paddle', 'p_aero84'], 8: ['box', 'mythic'], 10: ['paddle', 'p_comp84'] } },
     { id: 'surp01', city: 'Surprise', place: 'Arizona, USA 🇺🇸 · 2001', short: 'Surprise, AZ<br>2001', arena: 'a_desert09',
       story: '2001. Thanks to Earl Hill, pickleball joined the <b>Arizona Senior Olympics</b> for the first time. 100 players met at Happy Trails RV Resort in Surprise: the biggest pickleball event ever played up to then. Snowbirds had carried the game south.',
       bosses: [B_('c_penguin', 'Snowbird Sue', 'Flew south for the winter'), B_('c_frog', 'RV Ralph', 'Parked right next to the court'), B_('c_panda', 'Grandma Gloria', 'Will dink you to tears'), B_('c_fox', 'Shuffleboard Sheila', 'Switched sports this year'), B_('c_tiger', 'Sunhat Stan', 'Never without his hat'), B_('c_viking', 'Golf Cart Gus', 'Drives between points'), B_('c_samurai', 'Early Bird Ernie', 'On court at 6am sharp'), B_('c_pirate', 'Captain Cactus', 'Prickly at the net'), B_('c_anubis', 'Desert Dan', 'The heat doesn\'t bother him'), B_('c_dragon', 'The Gold Medalist', 'Takes every gold going')],
-      rewards: { 5: ['box', 'premium'], 10: ['ball', 'b_sun01'] } },
+      rewards: { 3: ['ball', 'b_snow01'], 5: ['box', 'premium'], 7: ['paddle', 'p_rv01'], 8: ['box', 'mythic'], 10: ['ball', 'b_sun01'] } },
     { id: 'stg03', city: 'St. George', place: 'Utah, USA 🇺🇸 · October 2003', short: 'St. George<br>2003', arena: 'a_desert09',
       story: '2003. Pickleball was played for the first time at the <b>Huntsman World Senior Games</b> in St. George, Utah, held among the red rocks every October. Back then there were only 39 known places to play in all of North America.',
       bosses: [B_('c_fox', 'Red Rock Rhonda', 'Climbs before breakfast'), B_('c_frog', 'Canyon Carl', 'Echoes every shot'), B_('c_penguin', 'Trailhead Zoe', 'Hikes before every match'), B_('c_panda', 'Medal Mel', 'Collects them all'), B_('c_tiger', 'Silver Stella', 'Second place? Never again'), B_('c_viking', 'Big Mesa Mike', 'Flat-topped and steady'), B_('c_samurai', 'Sunrise Saul', 'Plays in the golden hour'), B_('c_knight', 'Sir Senior', 'Older, wiser, sneakier'), B_('c_cyclops', 'Arch Rival', 'Lives under the stone arches'), B_('c_medusa', 'The Stone Gaze', 'One look and you freeze')],
-      rewards: { 5: ['box', 'premium'], 10: ['paddle', 'p_rock03'] } },
+      rewards: { 3: ['ball', 'b_canyon03'], 5: ['box', 'premium'], 7: ['paddle', 'p_mesa03'], 8: ['box', 'mythic'], 10: ['paddle', 'p_rock03'] } },
     { id: 'buck09', city: 'Buckeye', place: 'Arizona, USA 🇺🇸 · November 2009', short: 'Buckeye<br>2009', arena: 'a_desert09',
       story: 'November 2009. The <b>first USA Pickleball National Championships</b> for all ages came to Buckeye, Arizona. Almost 400 players arrived from 26 states and several Canadian provinces.',
       bosses: [B_('c_frog', 'Rookie Rick', 'First tournament ever'), B_('c_penguin', 'Maple Leaf Mo', 'Drove all the way from Canada'), B_('c_fox', 'State Champ Sally', 'Best in her state'), B_('c_panda', 'Bracket Betty', 'Knows who you play next'), B_('c_tiger', 'Pool Play Pete', 'Unbeaten in the group'), B_('c_viking', 'Twenty-Six Tim', 'Has played in 26 states'), B_('c_samurai', 'Seed One Sean', 'Top of the rankings'), B_('c_pirate', 'Desert Dash', 'Fastest feet in Arizona'), B_('c_zorp', 'The Out-of-Towner', 'Came from very far away'), B_('c_minotaur', 'The National Champ', 'First crowned at Nationals')],
-      rewards: { 5: ['box', 'premium'], 10: ['ball', 'b_nats09'] } },
+      rewards: { 3: ['ball', 'b_buck09'], 5: ['box', 'premium'], 7: ['paddle', 'p_first09'], 8: ['box', 'mythic'], 10: [['ball', 'b_nats09'], ['char', 'c_snowbird']] } },
   ] },
   { id: '2027-01', y: 2027, m: 0, title: 'Chapter 3 · The Big Boom', bonus: 'a_gulf16', cities: [
     { id: 'cg15', city: 'Casa Grande', place: 'Arizona, USA 🇺🇸 · 2015', short: 'Casa Grande<br>2015', arena: 'a_stadium',
       story: '2015. After six years in Buckeye, the National Championships moved to <b>Casa Grande, Arizona</b>, with championship courts and better facilities. In 2017 the event was shown on national TV for the first time.',
       bosses: [B_('c_frog', 'Moving Van Vic', 'Carried the nets himself'), B_('c_fox', 'Grande Gina', 'Big game, bigger smile'), B_('c_penguin', 'Tumbleweed Tess', 'Rolls in from nowhere'), B_('c_panda', 'Camera Cam', 'Ready for national TV'), B_('c_tiger', 'Smasher Sol', 'Overheads all day'), B_('c_viking', 'Heatwave Hugo', 'Loves 40-degree days'), B_('c_samurai', 'Banger Bo', 'Drives every ball'), B_('c_knight', 'Center Court Cole', 'Lives on the show court'), B_('c_wizard', 'The Veteran', 'Played every Nationals so far'), B_('c_glorb', 'The Crowd Favourite', 'The fans chant his name')],
-      rewards: { 5: ['box', 'premium'], 10: ['paddle', 'p_cg15'] } },
+      rewards: { 3: ['ball', 'b_tv17'], 5: ['box', 'premium'], 7: ['paddle', 'p_onair17'], 8: ['box', 'mythic'], 10: ['paddle', 'p_cg15'] } },
     { id: 'nap16', city: 'Naples', place: 'Florida, USA 🇺🇸 · April 2016', short: 'Naples<br>2016', arena: 'a_gulf16',
       story: 'April 2016. The <b>first US Open Pickleball Championships</b> were held at East Naples Community Park in Florida. Around 800 players came from 39 states and 7 countries, and it has been held there every year since.',
       bosses: [B_('c_penguin', 'Pelican Pam', 'Dives for every ball'), B_('c_frog', 'Gator Gary', 'Snaps up short balls'), B_('c_fox', 'Mangrove Mia', 'Hides in the corners'), B_('c_panda', 'Beach Chair Bea', 'Never seems to move'), B_('c_tiger', 'Seven Countries Sven', 'Flew in from abroad'), B_('c_pirate', 'Gulf Coast Gil', 'Salt air, sharp angles'), B_('c_viking', 'Sunburn Steve', 'Forgot his sunscreen'), B_('c_blaze', 'The Rising Star', 'A teenage phenom'), B_('c_rocket', 'The Banger', 'Hits it harder than anyone'), B_('c_maestro', 'The Open Champion', 'Owns the championship court')],
-      rewards: { 5: ['box', 'premium'], 10: ['ball', 'b_gulf16'] } },
+      rewards: { 3: ['ball', 'b_open16'], 5: ['box', 'premium'], 7: ['paddle', 'p_pelican16'], 8: ['box', 'mythic'], 10: ['ball', 'b_gulf16'] } },
     { id: 'iw18', city: 'Indian Wells', place: 'California, USA 🇺🇸 · November 2018', short: 'Indian Wells<br>2018', arena: 'a_stadium',
       story: '2018. The National Championships moved to the world-famous <b>Indian Wells Tennis Garden</b> in California. Its tennis courts were repainted into 45 pickleball courts, and around 2,300 players showed up.',
       bosses: [B_('c_frog', 'Palm Desert Pia', 'Cool under the palms'), B_('c_fox', 'Valley Val', 'Born in the desert'), B_('c_penguin', 'Pool Party Polly', 'Swims between matches'), B_('c_panda', 'Stadium Sasha', 'Loves a big crowd'), B_('c_tiger', 'Prime Time Tony', 'Plays best at night'), B_('c_samurai', 'The Spin Doctor', 'Every ball curves'), B_('c_viking', 'Windstorm Wes', 'Desert gusts on his side'), B_('c_twister', 'The Twister', 'Serves that bend'), B_('c_rocket', 'Rocket', 'Pure power'), B_('c_blaze', 'The Phenom', 'Too fast for anyone')],
-      rewards: { 5: ['box', 'premium'], 10: ['paddle', 'p_iw18'] } },
+      rewards: { 3: ['ball', 'b_garden18'], 5: ['box', 'premium'], 7: ['paddle', 'p_45courts'], 8: ['box', 'mythic'], 10: ['paddle', 'p_iw18'] } },
     { id: 'bain22', city: 'Bainbridge Island', place: 'Washington, USA 🇺🇸 · March 2022', short: 'Full Circle<br>2022', arena: 'a_bain',
       story: 'March 28, 2022. 57 years after it was invented, pickleball became <b>Washington\'s official state sport</b>. The governor signed the bill standing on the <b>original 1965 court</b> on Bainbridge Island. Full circle.',
       bosses: [B_('c_frog', 'Rain Check Ron', 'Plays through any weather'), B_('c_fox', 'Capitol Cass', 'Drove over for the signing'), B_('c_penguin', 'Ferry Fran Jr.', 'Took over from her mum'), B_('c_panda', 'Bill Signer Bev', 'Brought her own pen'), B_('c_tiger', 'Evergreen Eli', 'Pure Washington pride'), B_('c_viking', 'Lumberjack Lars', 'Chops every ball'), B_('c_wizard', 'The Historian', 'Remembers 1965'), B_('c_knight', 'Governor\'s Guard', 'Protects the original court'), B_('c_hiker', 'Bigfoot Returns', 'Back for the big day'), B_('c_pickles', 'Pickles IV', 'The legend\'s great-grand-pup')],
-      rewards: { 5: ['box', 'premium'], 10: ['paddle', 'p_state22'] } },
+      rewards: { 3: ['ball', 'b_ferry22'], 5: ['box', 'premium'], 7: ['paddle', 'p_circle22'], 8: ['box', 'mythic'], 10: [['paddle', 'p_state22'], ['char', 'c_pop65']] } },
   ] },
 ];
 WT_CHAPTERS.forEach((ch, ci) => ch.cities.forEach((c, w) => { c.ch = ch; c.w = w; c.n = ci * 4 + w; }));
@@ -5535,6 +5606,14 @@ const wtOpensOn = c => new Date(c.ch.y, c.ch.m, 1 + 7 * c.w);
 const wtDaysLeft = () => { const ch = wtChapter(); return Math.max(1, Math.ceil((wtEnd(ch) - new Date()) / 864e5)); };
 const wtNextChapter = () => WT_CHAPTERS.find(ch => wtStart(ch) > new Date());
 const wtBeaten = c => Math.min(10, (SAVE.wt || {})[c.id] || 0);
+// Rewards added to a city later (24 Nov 2026 wave) are handed out for bosses already beaten. Boxes aren't back-paid.
+function wtBackfill() {
+  const got = [];
+  for (const c of WT_CITIES) for (const r of wtRewardList(c)) if (r.cat !== 'box' && r.n <= wtBeaten(c) && !wtGot(r)) { if (r.cat === 'spr') grantSprite(r.id); else SAVE.owned.push(r.id); got.push(r); }
+  if (got.length) { persist(); setTimeout(() => toast(`🌍 ${got.length} new World Tour reward${got.length === 1 ? '' : 's'} added for bosses you'd already beaten! Check the Locker.`), 1500); }
+  return got;
+}
+setTimeout(() => { try { wtBackfill(); } catch (e) { console.warn(e); } }, 2500);
 const wtChapterProg = ch => ch.cities.reduce((a, c) => a + wtBeaten(c), 0);
 const wtRewardList = c => Object.entries(c.rewards).flatMap(([n, r]) => (Array.isArray(r[0]) ? r : [r]).map(([cat, id]) => ({ n: +n, cat, id, c })));
 const wtGot = r => r.cat === 'box' ? wtBeaten(r.c) >= r.n : r.cat === 'spr' ? !!sprLevel(r.id) : SAVE.owned.includes(r.id);
@@ -5649,6 +5728,7 @@ function wtBossInfo(c) {
   else { g.disabled = true; g.textContent = '🔒 LOCKED'; }
 }
 function showWT(keepSel) {
+  wtBackfill();
   const ch = wtChapter(), wk = Math.max(0, wtWeek(ch)), first = $('wtM').classList.contains('hidden');
   if (!keepSel || !wtSelC || wtSelC.ch !== ch || !wtOpen(wtSelC)) wtSelC = ch.cities.find(c => wtOpen(c) && wtBeaten(c) < 10) || ch.cities[wk];
   const c = wtSelC, prog = wtChapterProg(ch), bonus = findItem('arena', ch.bonus), bonusGot = SAVE.owned.includes(ch.bonus);
